@@ -9,7 +9,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get -qq update && \
     apt-get -qqy install \
     ca-certificates nginx php5-fpm=5.* php5-curl php5-readline php5-mcrypt php5-mysql php5-apcu php5-cli \
-    wget sqlite libsqlite3-dev curl supervisor cron php5-pgsql wget newrelic-php5 && \
+    wget sqlite libsqlite3-dev curl supervisor cron php5-pgsql newrelic-php5 && \
     apt-get clean && apt-get autoremove -qq && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
