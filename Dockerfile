@@ -4,10 +4,12 @@ FROM debian:jessie
 RUN DEBIAN_FRONTEND=noninteractive \
     echo "APT::Install-Recommends \"0\";" >> /etc/apt/apt.conf.d/02recommends && \
     echo "APT::Install-Suggests \"0\";" >> /etc/apt/apt.conf.d/02recommends && \
+    echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | tee /etc/apt/sources.list.d/newrelic.list && \
+    wget -O- https://download.newrelic.com/548C16BF.gpg | apt-key add - && \
     apt-get -qq update && \
     apt-get -qq install \
     ca-certificates nginx php5-fpm=5.* php5-curl php5-readline php5-mcrypt php5-mysql php5-apcu php5-cli \
-    wget sqlite libsqlite3-dev curl supervisor cron php5-pgsql wget && \
+    wget sqlite libsqlite3-dev curl supervisor cron php5-pgsql wget newrelic-php5 && \
     apt-get clean && apt-get autoremove -qq && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
