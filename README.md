@@ -1,9 +1,5 @@
-Cachet-Docker
+# Cachet-Docker-Base
 
-Run Cachet in a Docker container.
+Base Image for cachethq/Docker 
 
-# docker-compose
-```bash
-docker-compose up
-```
-
+Contains configured Debian, PHP and NGINX environment
