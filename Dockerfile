@@ -11,9 +11,9 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
-ADD docker/supervisord.conf /etc/supervisor/supervisord.conf
-ADD docker/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
-ADD docker/nginx-site.conf /etc/nginx/conf.d/default.conf
+COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
+COPY docker/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
+COPY docker/nginx-site.conf /etc/nginx/conf.d/default.conf
 # COPY docker/entrypoint.sh /sbin/entrypoint.sh
 WORKDIR /var/www/html/
 
