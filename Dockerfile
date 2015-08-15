@@ -18,13 +18,13 @@ COPY docker/nginx-site.conf /etc/nginx/conf.d/default.conf
 WORKDIR /var/www/html/
 
 # copy the various nginx and supervisor conf (to handle both fpm and nginx)
-RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf ;\
-    echo "daemon off;" >> /etc/nginx/nginx.conf ;\
-    rm -f /etc/nginx/sites-enabled/* ;\
-    rm -f /etc/nginx/conf.d/* ;\
-#    mv /var/www/html/docker/.env.docker /var/www/html/.env ;\
+RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf && \
+    echo "daemon off;" >> /etc/nginx/nginx.conf && \
+    rm -f /etc/nginx/sites-enabled/* && \
+    rm -f /etc/nginx/conf.d/* && \
+#    mv /var/www/html/docker/.env.docker /var/www/html/.env && \
 #   ^ Move this to upper level of image
-    chown -R www-data /var/www/html ;\
+    chown -R www-data /var/www/html && \
     curl -sS https://getcomposer.org/installer | php
 
 # EXPOSE 8000
