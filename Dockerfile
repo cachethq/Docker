@@ -13,7 +13,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
 
 COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
 COPY docker/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
-COPY docker/nginx-site.conf /etc/nginx/conf.d/default.conf
+
 # COPY docker/entrypoint.sh /sbin/entrypoint.sh
 WORKDIR /var/www/html/
 
@@ -27,6 +27,8 @@ RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.co
     chown -R www-data /var/www/html && \
     curl -sS https://getcomposer.org/installer | php
 
+COPY docker/nginx-site.conf /etc/nginx/conf.d/default.conf
+    
 # EXPOSE 8000
 
 # COPY docker/crontab /etc/cron.d/artisan-schedule
