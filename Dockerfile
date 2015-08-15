@@ -1,7 +1,6 @@
-FROM daocloud.io/jsw/cachet-base:master-9f93b3a
+FROM daocloud.io/jsw/cachet-base:master-d3506c1
 
 COPY docker/entrypoint.sh /sbin/entrypoint.sh
-COPY docker/dbinit.sh /var/www/html/dbinit
 RUN cd /var/www/html && \
     wget https://github.com/cachethq/Cachet/archive/v1.1.1.tar.gz && \
     tar xzvf v1.1.1.tar.gz --strip-components=1 && \
