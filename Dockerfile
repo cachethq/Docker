@@ -2,11 +2,11 @@ FROM daocloud.io/jsw/cachet-base:master-9f93b3a
 
 COPY docker/entrypoint.sh /sbin/entrypoint.sh
 COPY docker/dbinit.sh /var/www/html/dbinit
-RUN cd /var/www/html ;\
-    wget https://github.com/cachethq/Cachet/archive/v1.1.1.tar.gz ;\
-    tar xzvf v1.1.1.tar.gz --strip-components=1 ;\
-    rm v1.1.1.tar.gz ;\
-    php composer.phar install --no-dev -o ;\
+RUN cd /var/www/html && \
+    wget https://github.com/cachethq/Cachet/archive/v1.1.1.tar.gz && \
+    tar xzvf v1.1.1.tar.gz --strip-components=1 && \
+    rm v1.1.1.tar.gz && \
+    php composer.phar install --no-dev -o && \
     chmod +x dbinit
 WORKDIR /var/www/html/
 
@@ -14,7 +14,7 @@ WORKDIR /var/www/html/
 COPY docker/.env.docker /var/www/html/.env
 
 COPY docker/crontab /etc/cron.d/artisan-schedule
-RUN chmod 0644 /etc/cron.d/artisan-schedule ;\
+RUN chmod 0644 /etc/cron.d/artisan-schedule &&\
     touch /var/log/cron.log
 
 EXPOSE 8000
