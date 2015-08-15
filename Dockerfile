@@ -5,8 +5,7 @@ RUN cd /var/www/html && \
     wget https://github.com/cachethq/Cachet/archive/v1.1.1.tar.gz && \
     tar xzvf v1.1.1.tar.gz --strip-components=1 && \
     rm v1.1.1.tar.gz && \
-    php composer.phar install --no-dev -o && \
-    chmod +x dbinit
+    php composer.phar install --no-dev -o
 WORKDIR /var/www/html/
 
 # copy the various nginx and supervisor conf (to handle both fpm and nginx)
