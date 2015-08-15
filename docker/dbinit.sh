@@ -57,9 +57,6 @@ sed 's,{{REDIS_HOST}},'"${REDIS_HOST}"',g' -i /var/www/html/.env
 sed 's,{{REDIS_DATABASE}},'"${REDIS_DATABASE}"',g' -i /var/www/html/.env
 sed 's,{{REDIS_PORT}},'"${REDIS_PORT}"',g' -i /var/www/html/.env
 
-#Clear cache
-/usr/bin/php composer.phar install --no-dev -o
-
 php artisan migrate --force
 
 exit 0
