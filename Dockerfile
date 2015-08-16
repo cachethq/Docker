@@ -2,11 +2,12 @@ FROM daocloud.io/jsw/cachet-base:master-d3506c1
 
 COPY docker/entrypoint.sh /sbin/entrypoint.sh
 RUN cd /var/www/html && \
-    wget https://github.com/cachethq/Cachet/archive/v1.1.1.tar.gz && \
-    tar xzvf v1.1.1.tar.gz --strip-components=1 && \
+    wget https://github.com/cachethq/Cachet/archive/1.2.tar.gz && \
+    tar xzvf Cachet-1.2.tar.gz --strip-components=1 && \
+    mv Cachet-1.2/* ./ && \
     chown -R www-data /var/www/html && \
-    rm v1.1.1.tar.gz && \
-    php composer.phar install --no-dev -o
+    rm -r Cachet-1.2.tar.gz Cachet-1.2/ && \
+    php composer.phar install --no-dev -o --no-scripts
 WORKDIR /var/www/html/
 
 # copy the various nginx and supervisor conf (to handle both fpm and nginx)
