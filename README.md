@@ -1,8 +1,10 @@
 Cachet-Docker
 
-Run Cachet in a Docker container.
+Run [Cachet](https://github.com/cachethq/Cachet) in a Docker container.
 
-# docker-compose
+- [Getting started with Cachet in Docker](https://docs.cachethq.io/docs/get-started-with-docker)
+
+# docker-compose quickstart
 ```bash
 docker-compose up
 ```
