@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-APP_ENV=${APP_ENV:-local}
-APP_DEBUG=${APP_DEBUG:-true}
+APP_ENV=${APP_ENV:-production}
+APP_DEBUG=${APP_DEBUG:-false}
 APP_URL=${APP_URL:-http://localhost}
-APP_KEY=${APP_KEY:-8NGdcb4sL46YL0LBKE5WIJaEbizHFr9R}
+APP_KEY=${APP_KEY:-SECRET}
 
 DB_DRIVER=${DB_DRIVER:-mysql}
 DB_HOST=${DB_HOST:-mysql}
