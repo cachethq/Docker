@@ -2,11 +2,11 @@ FROM cachethq/cachet:base-d3506c1
 
 COPY docker/entrypoint.sh /sbin/entrypoint.sh
 RUN cd /var/www/html && \
-    wget https://github.com/cachethq/Cachet/archive/1.2.tar.gz && \
-    tar xzvf 1.2.tar.gz --strip-components=1 && \
+    wget https://github.com/cachethq/Cachet/archive/v1.2.0.tar.gz && \
+    tar xzvf v1.2.0.tar.gz --strip-components=1 && \
     chown -R www-data /var/www/html && \
-    rm -r 1.2.tar.gz && \
-    php composer.phar install --no-dev -o --no-scripts && \
+    rm -r v1.2.0.tar.gz && \
+    php composer.phar install --no-dev -o && \
     cp -n vendor/jenssegers/date/src/Lang/zh.php vendor/jenssegers/date/src/Lang/zh-CN.php 
 WORKDIR /var/www/html/
 
