@@ -1,4 +1,4 @@
-FROM cachethq/cachet:base-d3506c1
+FROM cachethq/docker:base-d3506c1
 
 COPY docker/entrypoint.sh /sbin/entrypoint.sh
 RUN cd /var/www/html && \
