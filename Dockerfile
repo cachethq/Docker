@@ -14,6 +14,7 @@ WORKDIR /var/www/html/
 
 # copy the various nginx and supervisor conf (to handle both fpm and nginx)
 COPY docker/.env.docker /var/www/html/.env
+RUN chown www-data /var/www/html/.env
 
 COPY docker/crontab /etc/cron.d/artisan-schedule
 RUN chmod 0644 /etc/cron.d/artisan-schedule &&\
