@@ -7,7 +7,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get -q -y update && \
     apt-get -q -y install \
     ca-certificates nginx php5-fpm=5.* php5-curl php5-readline php5-mcrypt php5-mysql php5-apcu php5-cli \
-    wget sqlite git libsqlite3-dev curl supervisor cron php5-pgsql php5-sqlite && \
+    wget sqlite git libsqlite3-dev curl supervisor cron php5-pgsql php5-sqlite php5-gd && \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
@@ -22,20 +22,9 @@ RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.co
     echo "daemon off;" >> /etc/nginx/nginx.conf && \
     rm -f /etc/nginx/sites-enabled/* && \
     rm -f /etc/nginx/conf.d/* && \
-#    mv /var/www/html/docker/.env.docker /var/www/html/.env && \
-#   ^ Move this to upper level of image
     chown -R www-data /var/www/html && \
     curl -sS https://getcomposer.org/installer | php
 
 COPY docker/nginx-site.conf /etc/nginx/conf.d/default.conf
-    
-# EXPOSE 8000
-
-# COPY docker/crontab /etc/cron.d/artisan-schedule
-# RUN chmod 0644 /etc/cron.d/artisan-schedule
-# RUN touch /var/log/cron.log
-
-# ^ Also these
 
 CMD ["/bin/bash"]
-# ^ From debian:latest, had better not run it directly
