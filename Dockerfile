@@ -1,10 +1,10 @@
 FROM cachethq/docker:base-5a0320b
 
 RUN cd /var/www/html && \
-    wget https://github.com/cachethq/Cachet/archive/v2.0.1.tar.gz && \
-    tar xzvf v2.0.1.tar.gz --strip-components=1 && \
+    wget https://github.com/cachethq/Cachet/archive/v2.0.2.tar.gz && \
+    tar xzvf v2.0.2.tar.gz --strip-components=1 && \
     chown -R www-data /var/www/html && \
-    rm -r v2.0.1.tar.gz && \
+    rm -r v2.0.2.tar.gz && \
     php composer.phar install --no-dev -o && \
     cp -n vendor/jenssegers/date/src/Lang/zh.php vendor/jenssegers/date/src/Lang/zh-CN.php
 
