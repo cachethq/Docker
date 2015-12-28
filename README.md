@@ -15,7 +15,7 @@ docker pull cachethq/docker:latest
 
 To pull a specific version from the Docker Hub:
 ```bash
-docker pull cachethq/docker:1.2.0
+docker pull cachethq/docker:2.0.4
 ```
 
 # Quickstart
