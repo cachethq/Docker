@@ -26,7 +26,7 @@ Note: Cachet recommends using PostgreSQL over MySQL
 
 ## PostgreSQL
 ```bash
-docker run --name pgsql -e POSTGRES_USER=cachet POSTGRES_PASSWORD=cachet
+docker run --name pgsql -e POSTGRES_USER=cachet -e POSTGRES_PASSWORD=cachet postgres:9.4.4
 docker run -d --name cachet --link pgsql:pgsql -p 80:8000 -e DB_DRIVER=pgsql -e DB_HOST=pgsql -e DB_DATABASE=cachet -e DB_USERNAME=cachet -e DB_PASSWORD=cachet cachethq/docker:latest
 ```
 
