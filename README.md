@@ -1,5 +1,3 @@
-[![nodesource/node](http://dockeri.co/image/cachethq/docker)](https://hub.docker.com/r/cachethq/docker/)
-
 Run [Cachet](https://github.com/cachethq/Cachet) status page in a Docker container.
 
 For full documentation, visit the Cachet Documentation page:
@@ -15,7 +13,7 @@ docker pull cachethq/docker:latest
 
 To pull a specific version from the Docker Hub:
 ```bash
-docker pull cachethq/docker:1.2.0
+docker pull cachethq/docker:2.0
 ```
 
 # Quickstart
