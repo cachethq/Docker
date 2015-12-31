@@ -2,7 +2,7 @@
 
 ## Creating issues
 
-Feature requests and bug reports should be made by using the [issue tracker](https://github.com/cachethq/Cachet/issues). This "Dockerized" version of Cachet is maintained by members the Cachet community, so support issues will be address on a best effort basis.
+Feature requests and bug reports should be made by using the [issue tracker](https://github.com/cachethq/Docker/issues). This "Dockerized" version of Cachet is maintained by members the Cachet community, so support issues will be address on a best effort basis.
 
 **Always be respectful.** Organization members reserve the right to lock topics if they feel necessary.
 
