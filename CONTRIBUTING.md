@@ -17,12 +17,12 @@ The following describes the purpose of each branch within the repository.
 
 # Releasing a new Cachet version
 
-The below example shows creating a `v2.0.4` release based from `master`.
+The below example shows bumping to a `v2.0.4` release from `v2.0.3`.
 
 ```
-git checkout master
+git checkout 2.0
 git checkout -b rel-2.0.4
-sed -i s/master/v2.0.4/g Dockerfile
+sed -i s/v2.0.3/v2.0.4/g Dockerfile
 git commit -am "Cachet v2.0.4 release"
 git push origin rel-2.0.4
 <Submit Merge request to `2.0` branch, continue once merged>
