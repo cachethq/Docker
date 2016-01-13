@@ -5,8 +5,7 @@ RUN cd /var/www/html && \
     tar xzvf master.tar.gz --strip-components=1 && \
     chown -R www-data /var/www/html && \
     rm -r master.tar.gz && \
-    php composer.phar install --no-dev -o && \
-    cp -n vendor/jenssegers/date/src/Lang/zh.php vendor/jenssegers/date/src/Lang/zh-CN.php
+    php composer.phar install --no-dev -o
 
 COPY docker/entrypoint.sh /sbin/entrypoint.sh
 
