@@ -1,7 +1,10 @@
 FROM cachethq/docker:base-5a0320b
 
-RUN cd /var/www/html && \
-    wget https://github.com/cachethq/Cachet/archive/master.tar.gz && \
+MAINTAINER Alt Three <support@alt-three.com>
+
+WORKDIR /var/www/html/
+
+RUN wget https://github.com/cachethq/Cachet/archive/master.tar.gz && \
     tar xzvf master.tar.gz --strip-components=1 && \
     chown -R www-data /var/www/html && \
     rm -r master.tar.gz && \
@@ -9,9 +12,6 @@ RUN cd /var/www/html && \
 
 COPY docker/entrypoint.sh /sbin/entrypoint.sh
 
-WORKDIR /var/www/html/
-
-# copy the various nginx and supervisor conf (to handle both fpm and nginx)
 COPY docker/.env.docker /var/www/html/.env
 
 COPY docker/crontab /etc/cron.d/artisan-schedule
