@@ -59,6 +59,22 @@ sed 's,{{REDIS_PORT}},'"${REDIS_PORT}"',g' -i /var/www/html/.env
 
 php composer.phar install --no-dev -o
 
+# We have to be careful with automated database migrations
+# (especially in cases of version upgrades).
+# So the user can control the migrate command by an env var.
+# If this will be filled with "YES", it will be migrated :)
+if [ "${DB_MIGRATION}" == "YES" ]; then
+  php artisan migrate --force
+fi
+
+# Generate a new APP_KEY for Laravels sensitive information.
+# Only if no APP_KEY env var is set or the default value ("SECRET") is assigned
+if [ "${APP_KEY:-SECRET}" == "SECRET" ]; then
+  php artisan key:generate
+  # Generate Laravels configuration cache after the key generation again
+  php artisan config:cache
+fi
+
 echo "Starting supervisord..."
 exec /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
 
