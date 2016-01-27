@@ -10,7 +10,7 @@ Feature requests and bug reports should be made by using the [issue tracker](htt
 
 The following describes the purpose of each branch within the repository.
 
-* `base`: Base image containing dependancies for running Cachet. Based on official `debian:jessie` Docker image. New versions are tagged as `base-<commit hash>` where `<commit hash>` is the first 7 characters of the commit hash.
+* `base`: Base image containing dependancies for running Cachet. Based on official `debian:jessie` Docker image. New versions are tagged as `base-<commit hash>` where `<commit hash>` is the first 7 characters of the commit hash. __Deprecated as of [#37](https://github.com/CachetHQ/Docker/pull/37)__
 * `master`: Cachet with the upstream Cachet `master` codebase.
 * `1.2`: Used for tagging _v1.2.x_ releases.
 * `2.0`: Used for tagging _v2.0.x_ releases.
