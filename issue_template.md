@@ -6,4 +6,4 @@
 
 ### The docker run or docker-compose command you used to run the image (mask out any sensitive bits).
 
-### Error messages recieved
+### Error messages received
