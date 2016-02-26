@@ -6,8 +6,8 @@ RUN cd /var/www/html && \
     chown -R www-data /var/www/html && \
     rm -r v2.1.2.tar.gz && \
     php composer.phar self-update && \
-    php composer.phar install --no-dev -o && \
-    php composer.phar update --no-dev -o && \
+    php composer.phar install --no-dev --prefer-source -o && \
+    php composer.phar update --no-dev --prefer-source -o && \
     cp -n vendor/jenssegers/date/src/Lang/zh.php vendor/jenssegers/date/src/Lang/zh-CN.php
 
 COPY docker/entrypoint.sh /sbin/entrypoint.sh
