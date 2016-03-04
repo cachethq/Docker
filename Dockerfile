@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:sid
 
 MAINTAINER Alt Three <support@alt-three.com>
 
@@ -9,20 +9,21 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get clean && \
     apt-get -q -y update && \
     apt-get -q -y install \
-    ca-certificates php5-fpm=5.* php5-curl php5-readline php5-mcrypt php5-mysql php5-apcu php5-cli \
-    wget sqlite git libsqlite3-dev curl supervisor cron php5-pgsql php5-sqlite php5-gd && \
+    ca-certificates php7.0-cli php7.0-fpm php7.0-gd php7.0-mbstring php7.0-mysql php7.0-pgsql php7.0-sqlite \
+    wget sqlite git libsqlite3-dev curl supervisor cron unzip && \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
 COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
-COPY docker/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
+COPY docker/php-fpm-pool.conf /etc/php/7.0/fpm/pool.d/www.conf
+
+RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php/7.0/fpm/php-fpm.conf && \
+    mkdir /run/php
 
 WORKDIR /var/www/html/
 
-# Copy the various nginx and supervisor conf (to handle both fpm and nginx)
-RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf && \
-    chown -R www-data /var/www/html && \
-    curl -sS https://getcomposer.org/installer | php
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php
 
 RUN wget https://github.com/cachethq/Cachet/archive/master.tar.gz && \
     tar xzvf master.tar.gz --strip-components=1 && \
