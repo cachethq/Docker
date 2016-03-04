@@ -25,10 +25,10 @@ WORKDIR /var/www/html/
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php
 
-RUN wget https://github.com/CachetHQ/Cachet/archive/v2.1.0.tar.gz && \
-    tar xzvf v2.1.0.tar.gz --strip-components=1 && \
+RUN wget https://github.com/CachetHQ/Cachet/archive/v2.1.1.tar.gz && \
+    tar xzvf v2.1.1.tar.gz --strip-components=1 && \
     chown -R www-data /var/www/html && \
-    rm -r v2.1.0.tar.gz && \
+    rm -r v2.1.1.tar.gz && \
     php composer.phar install --no-dev -o
 
 COPY docker/entrypoint.sh /sbin/entrypoint.sh
