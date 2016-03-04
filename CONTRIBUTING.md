@@ -14,6 +14,7 @@ The following describes the purpose of each branch within the repository.
 * `master`: Cachet with the upstream Cachet `master` codebase.
 * `1.2`: Used for tagging _v1.2.x_ releases.
 * `2.0`: Used for tagging _v2.0.x_ releases.
+* `2.1`: Used for tagging _v2.1.x_ releases.
 
 # Releasing a new Cachet version
 
