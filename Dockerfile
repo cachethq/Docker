@@ -39,6 +39,7 @@ RUN chmod 0644 /etc/cron.d/artisan-schedule &&\
     touch /var/log/cron.log &&\
     chown www-data /var/www/html/.env
 
+VOLUME /var/www
 EXPOSE 8000
 
 CMD ["/sbin/entrypoint.sh"]
