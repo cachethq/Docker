@@ -42,7 +42,7 @@ initialize_system() {
 
   CACHE_DRIVER=${CACHE_DRIVER:-apc}
   SESSION_DRIVER=${SESSION_DRIVER:-apc}
-  QUEUE_DRIVER=${QUEUE_DRIVER:-apc}
+  QUEUE_DRIVER=${QUEUE_DRIVER:-database}
 
   MAIL_DRIVER=${MAIL_DRIVER:-smtp}
   MAIL_HOST=${MAIL_HOST:-mailtrap.io}
