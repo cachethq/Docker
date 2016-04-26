@@ -6,33 +6,22 @@ Feature requests and bug reports should be made by using the [issue tracker](htt
 
 **Always be respectful.** Organization members reserve the right to lock topics if they feel necessary.
 
-## Branch Structure
+## Branch and Tag Structure
 
-The following describes the purpose of each branch within the repository.
-
-* `base`: Base image containing dependancies for running Cachet. Based on official `debian:jessie` Docker image. New versions are tagged as `base-<commit hash>` where `<commit hash>` is the first 7 characters of the commit hash. __Deprecated as of [#37](https://github.com/CachetHQ/Docker/pull/37)__
 * `master`: Cachet with the upstream Cachet `master` codebase.
-* `1.2`: Used for tagging _v1.2.x_ releases.
-* `2.0`: Used for tagging _v2.0.x_ releases.
-* `2.1`: Used for tagging _v2.1.x_ releases.
+* Tags are used to denote a Cachet release, and correspond to Docker Hub automatic builds.
 
-# Releasing a new Cachet version
+# Releasing a new Cachet Docker image version
 
-The below example shows bumping to a `v2.0.4` release from `v2.0.3`.
+The below example shows creating a `v2.2.1` release.
 
 ```
-git checkout 2.0
-git checkout -b rel-2.0.4
-sed -i s/v2.0.3/v2.0.4/g Dockerfile
-git commit -am "Cachet v2.0.4 release"
-git push origin rel-2.0.4
-<Submit Merge request to `2.0` branch, continue once merged>
-git checkout 2.0
-git pull
-git tag -a v2.0.4 -m "Cachet Release v2.0.4"
-git push origin v2.0.4
+git checkout master
+git checkout -b rel-2.2.1
+sed -i s/master/v2.2.1/g Dockerfile
+git commit -am "Cachet v2.2.1 release"
+git tag -a v2.2.1 -m "Cachet Release v2.2.1"
+git push origin v2.2.1
 <Add Release on GitHub>
 <Add automated build for the tag on Docker Hub>
 ```
-
-Releasing new base images follow the same workflow, just using the first 7 characters commit hash rather than a version number.
