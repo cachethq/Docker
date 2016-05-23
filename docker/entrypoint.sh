@@ -61,7 +61,7 @@ initialize_system() {
   sed 's,{{APP_ENV}},'"${APP_ENV}"',g' -i /var/www/html/.env
   sed 's,{{APP_DEBUG}},'"${APP_DEBUG}"',g' -i /var/www/html/.env
   sed 's,{{APP_URL}},'"${APP_URL}"',g' -i /var/www/html/.env
-  sed 's,{{APP_KEY}},'"${APP_KEY}"',g' -i /var/www/html/.env
+  sed 's,{{APP_KEY}},'${APP_KEY}',g' -i /var/www/html/.env
 
   sed 's,{{DB_DRIVER}},'"${DB_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{DB_HOST}},'"${DB_HOST}"',g' -i /var/www/html/.env
