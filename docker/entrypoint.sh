@@ -35,7 +35,7 @@ initialize_system() {
   APP_KEY=${APP_KEY:-SECRET}
 
   DB_DRIVER=${DB_DRIVER:-pgsql}
-  DB_HOST=${DB_HOST:-127.0.0.1}
+  DB_HOST=${DB_HOST:-postgres}
   DB_DATABASE=${DB_DATABASE:-cachet}
   DB_USERNAME=${DB_USERNAME:-postgres}
   DB_PASSWORD=${DB_PASSWORD:-postgres}
