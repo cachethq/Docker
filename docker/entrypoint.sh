@@ -86,7 +86,6 @@ initialize_system() {
   sed 's,{{REDIS_PORT}},'"${REDIS_PORT}"',g' -i /var/www/html/.env
 
   php composer.phar install --no-dev -o
-  php artisan key:generate
   php artisan app:install
   rm -rf bootstrap/cache/*
   touch /.cachet-installed
