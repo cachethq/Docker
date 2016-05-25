@@ -34,11 +34,12 @@ initialize_system() {
   APP_URL=${APP_URL:-http://localhost}
   APP_KEY=${APP_KEY:-SECRET}
 
-  DB_DRIVER=${DB_DRIVER:-mysql}
-  DB_HOST=${DB_HOST:-mysql}
+  DB_DRIVER=${DB_DRIVER:-pgsql}
+  DB_HOST=${DB_HOST:-127.0.0.1}
   DB_DATABASE=${DB_DATABASE:-cachet}
-  DB_USERNAME=${DB_USERNAME:-cachet}
-  DB_PASSWORD=${DB_PASSWORD:-cachet}
+  DB_USERNAME=${DB_USERNAME:-postgres}
+  DB_PASSWORD=${DB_PASSWORD:-postgres}
+  DB_PORT=${DB_PORT:-5432}
 
   CACHE_DRIVER=${CACHE_DRIVER:-apc}
   SESSION_DRIVER=${SESSION_DRIVER:-apc}
