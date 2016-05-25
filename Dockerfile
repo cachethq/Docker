@@ -38,6 +38,7 @@ COPY docker/crontab /etc/cron.d/artisan-schedule
 RUN chmod 0644 /etc/cron.d/artisan-schedule &&\
     touch /var/log/cron.log &&\
     chown www-data /var/www/html/.env
+    php artisan app:install
 
 VOLUME /var/www
 EXPOSE 8000
