@@ -1,7 +1,9 @@
 FROM debian:jessie
 
 MAINTAINER Alt Three <support@alt-three.com>
-ENV cachetversion=master
+
+ARG cachet_ver
+ENV cachet_ver master
 
 # Using debian packages instead of compiling from scratch
 RUN DEBIAN_FRONTEND=noninteractive \
@@ -38,10 +40,10 @@ USER www-data
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php
 
-RUN wget https://github.com/cachethq/Cachet/archive/${cachetversion}.tar.gz && \
-    tar xzvf ${cachetversion}.tar.gz --strip-components=1 && \
+RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
+    tar xzvf ${cachet_ver}.tar.gz --strip-components=1 && \
     chown -R www-data /var/www/html && \
-    rm -r ${cachetversion}.tar.gz && \
+    rm -r ${cachet_ver}.tar.gz && \
     php composer.phar install --no-dev -o
 
 COPY docker/.env.docker /var/www/html/.env
