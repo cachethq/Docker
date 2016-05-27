@@ -1,7 +1,7 @@
 FROM debian:jessie
 
 MAINTAINER Alt Three <support@alt-three.com>
-ENV cachetversion=v2.3.0-RC2
+ENV cachetversion=master
 
 # Using debian packages instead of compiling from scratch
 RUN DEBIAN_FRONTEND=noninteractive \
