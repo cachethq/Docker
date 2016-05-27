@@ -89,15 +89,15 @@ initialize_system() {
   php composer.phar install --no-dev -o
   php artisan app:install
   rm -rf bootstrap/cache/*
-  touch /.cachet-installed
+  touch /var/www/.cachet-installed
   start_system
 }
 
 start_system() {
   check_database_connection
-  [ -f "/.cachet-installed" ] && echo "Starting Cachet" || initialize_system
+  [ -f "/var/www/.cachet-installed" ] && echo "Starting Cachet" || initialize_system
   php artisan config:cache
-  exec /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
+  sudo /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
 }
 
 case ${1} in

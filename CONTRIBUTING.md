@@ -18,14 +18,13 @@ The below example shows creating a `v2.2.1` release.
 ```
 git checkout master
 git checkout -b rel-2.2.1
-sed -i s/master/v2.2.1/g Dockerfile
+Set `ENV cachetversion=v2.2.1` in Dockerfile
 git commit -am "Cachet v2.2.1 release"
 git tag -a v2.2.1 -m "Cachet Release v2.2.1"
 git push origin v2.2.1
 ```
 
-Then to finish the process: 
+Then to finish the process:
 
 * Add [Release on GitHub](https://github.com/CachetHQ/Docker/releases)
 * Add automated build for the new tag on [Docker Hub](https://hub.docker.com/r/cachethq/docker/builds/)
-
