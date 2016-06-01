@@ -18,15 +18,15 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
-COPY docker/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
-COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
+COPY conf/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
+COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
 
 RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf
 RUN mkdir -p /var/www/html && \
     chown -R www-data /var/www
 
-COPY docker/crontab /etc/cron.d/artisan-schedule
-COPY docker/entrypoint.sh /sbin/entrypoint.sh
+COPY conf/crontab /etc/cron.d/artisan-schedule
+COPY conf/entrypoint.sh /sbin/entrypoint.sh
 
 RUN chmod 0644 /etc/cron.d/artisan-schedule && \
         touch /var/log/cron.log
@@ -46,7 +46,7 @@ RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
     rm -r ${cachet_ver}.tar.gz && \
     php composer.phar install --no-dev -o
 
-COPY docker/.env.docker /var/www/html/.env
+COPY conf/.env.docker /var/www/html/.env
 
 VOLUME /var/www
 EXPOSE 8000
