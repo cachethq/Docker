@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eo pipefail
 
 [[ $DEBUG == true ]] && set -x
 
@@ -16,7 +16,7 @@ check_database_connection() {
   timeout=60
   while ! ${prog} >/dev/null 2>&1
   do
-    timeout=$(expr $timeout - 1)
+    timeout=$(( $timeout - 1 ))
     if [[ $timeout -eq 0 ]]; then
       echo
       echo "Could not connect to database server. Aborting..."
