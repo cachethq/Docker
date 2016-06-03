@@ -27,9 +27,11 @@ function curl_container {
 	local -r container=$1
 	local -r path=$2
 	shift 2
+	sleep 5
 	docker run --net=docker_default --label bats-type="curl" appropriate/curl --silent \
 		--connect-timeout 5 \
 		--max-time 20 \
+		--retry 4 --retry-delay 5 \
 		"$@" \
 		http://$(docker_ip $container)${path}
 }

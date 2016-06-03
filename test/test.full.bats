@@ -12,8 +12,17 @@ load "lib/output"
   command docker-compose up -d
 }
 
+@test "[$TEST_FILE] php artisan cachet:seed" {
+  command docker exec docker_cachet_1 php artisan cachet:seed
+}
+
 @test "[$TEST_FILE] curl 200 test" {
-	run curl_container docker_nginx_1 /setup --head
+	run curl_container docker_nginx_1 /auth/login --head
+  assert_output -l 0 $'HTTP/1.1 200 OK\r'
+}
+
+@test "[$TEST_FILE] login test" {
+	run curl_container docker_nginx_1 /auth/login --head --user test:test123
   assert_output -l 0 $'HTTP/1.1 200 OK\r'
 }
 
