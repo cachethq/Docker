@@ -12,6 +12,10 @@ load "lib/output"
   command docker-compose up -d
 }
 
+@test "[$TEST_FILE] wait for Cachet startup" {
+  docker_wait_for_log docker_cachet_1 15 "INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
+}
+
 @test "[$TEST_FILE] php artisan cachet:seed" {
   command docker exec docker_cachet_1 php artisan cachet:seed
 }
