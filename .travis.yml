@@ -1,16 +1,21 @@
 sudo: required
 
-services:  
+services:
     - docker
 
-env:  
+env:
     global:
         - DOCKER_VERSION=1.10.1-0~trusty
         - DOCKER_COMPOSE_VERSION=1.7.1
 
-before_install:  
+before_install:
     # list docker-engine versions
     - apt-cache madison docker-engine
+
+    # add bats repo https://github.com/tkuchiki/bats-travis-ci
+    - sudo add-apt-repository ppa:duggan/bats --yes
+    - sudo apt-get update -qq
+    - sudo apt-get install -qq bats
 
     # upgrade docker-engine to specific version
     - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine=${DOCKER_VERSION}
@@ -20,9 +25,10 @@ before_install:
     - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
     - chmod +x docker-compose
     - sudo mv docker-compose /usr/local/bin
+    - docker pull appropriate/curl:latest
 
-script:  
-    - docker-compose build
+script:
+    - bats test/test.full.bats
 
 notifications:
   email: false
