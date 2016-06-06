@@ -8,3 +8,4 @@ Changelog.md
 Makefile
 docker-compose.yml
 .travis.yml
+test
