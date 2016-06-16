@@ -14,7 +14,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get -q -y install \
     ca-certificates php5-fpm=5.* php5-curl php5-readline php5-mcrypt sudo \
     php5-mysql php5-apcu php5-cli php5-gd php5-mysql php5-pgsql php5-sqlite \
-    wget sqlite git libsqlite3-dev postgresql-client mysql-client curl supervisor cron unzip && \
+    wget sqlite git libsqlite3-dev postgresql-client mysql-client supervisor cron unzip && \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
