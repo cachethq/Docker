@@ -30,6 +30,11 @@ load "lib/output"
   assert_output -l 0 $'HTTP/1.1 200 OK\r'
 }
 
+@test "[$TEST_FILE] curl API ping" {
+	run curl_container docker_nginx_1 /api/v1/ping
+  assert_output -l 0 $'{"data":"Pong!"}'
+}
+
 @test "[$TEST_FILE] stop all bats containers" {
 	stop_bats_containers
 }
