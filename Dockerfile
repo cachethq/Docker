@@ -14,7 +14,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get -q -y install \
     ca-certificates php5-fpm=5.* php5-curl php5-readline php5-mcrypt sudo \
     php5-mysql php5-apcu php5-cli php5-gd php5-mysql php5-pgsql php5-sqlite \
-    wget sqlite git libsqlite3-dev postgresql-client mysql-client curl supervisor cron unzip && \
+    wget sqlite git libsqlite3-dev postgresql-client mysql-client supervisor cron unzip && \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
@@ -38,13 +38,17 @@ WORKDIR /var/www/html/
 USER www-data
 
 # Install composer
-RUN curl -sS https://getcomposer.org/installer | php
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    php -r "if (hash_file('SHA384', 'composer-setup.php') === '070854512ef404f16bac87071a6db9fd9721da1684cd4589b1196c3faf71b9a2682e2311b36a5079825e155ac7ce150d') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
+    php composer-setup.php --version=1.1.2 && \
+    php -r "unlink('composer-setup.php');"
 
 RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
     tar xzvf ${cachet_ver}.tar.gz --strip-components=1 && \
     chown -R www-data /var/www/html && \
     rm -r ${cachet_ver}.tar.gz && \
-    php composer.phar install --no-dev -o
+    php composer.phar install --no-dev -o && \
+    rm -rf bootstrap/cache/*
 
 COPY conf/.env.docker /var/www/html/.env
 
