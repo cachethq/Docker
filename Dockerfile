@@ -26,7 +26,7 @@ RUN mkdir -p /var/www/html && \
     chown -R www-data /var/www
 
 COPY conf/crontab /etc/cron.d/artisan-schedule
-COPY conf/entrypoint.sh /sbin/entrypoint.sh
+COPY entrypoint.sh /sbin/entrypoint.sh
 
 RUN chmod 0644 /etc/cron.d/artisan-schedule && \
         touch /var/log/cron.log
