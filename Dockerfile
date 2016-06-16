@@ -12,9 +12,13 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get clean && \
     apt-get -q -y update && \
     apt-get -q -y install \
-    ca-certificates php5-fpm=5.* php5-curl php5-readline php5-mcrypt sudo \
-    php5-mysql php5-apcu php5-cli php5-gd php5-mysql php5-pgsql php5-sqlite \
-    wget sqlite git libsqlite3-dev postgresql-client mysql-client supervisor cron unzip && \
+    ca-certificates=20141019+deb8u1 php5-fpm=5.6.22+dfsg-0+deb8u1 php5-curl=5.6.22+dfsg-0+deb8u1 \
+    php5-readline=5.6.22+dfsg-0+deb8u1 php5-mcrypt=5.6.22+dfsg-0+deb8u1 sudo=1.8.10p3-1+deb8u3 \
+    php5-mysql=5.6.22+dfsg-0+deb8u1 php5-apcu=4.0.7-1 php5-cli=5.6.22+dfsg-0+deb8u1 \
+    php5-gd=5.6.22+dfsg-0+deb8u1 php5-mysql=5.6.22+dfsg-0+deb8u1 php5-pgsql=5.6.22+dfsg-0+deb8u1 \
+    php5-sqlite=5.6.22+dfsg-0+deb8u1 wget=1.16-1 sqlite=2.8.17-12 git=1:2.1.4-2.1+deb8u2 \
+    libsqlite3-dev=3.8.7.1-1+deb8u1 postgresql-client=9.4+165+deb8u1 mysql-client=5.5.49-0+deb8u1 \
+    supervisor=3.0r1-1 cron=3.0pl1-127+deb8u1 && \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
