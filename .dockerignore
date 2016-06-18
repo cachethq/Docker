@@ -9,3 +9,4 @@ Makefile
 docker-compose.yml
 .travis.yml
 test
+Makefile
