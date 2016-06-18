@@ -5,7 +5,7 @@ load "lib/batslib"
 load "lib/output"
 
 @test "[$TEST_FILE] testing Cachet Docker image build" {
-  command docker-compose build cachet
+  command docker-compose build --no-cache cachet
 }
 
 @test "[$TEST_FILE] testing Cachet docker-compose up" {
@@ -14,6 +14,10 @@ load "lib/output"
 
 @test "[$TEST_FILE] wait for Cachet startup" {
   docker_wait_for_log docker_cachet_1 15 "INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
+}
+
+@test "[$TEST_FILE] wait for postgres startup" {
+  docker_wait_for_log docker_postgres_1 15 "LOG:  autovacuum launcher started"
 }
 
 @test "[$TEST_FILE] php artisan cachet:seed" {
@@ -37,4 +41,10 @@ load "lib/output"
 
 @test "[$TEST_FILE] stop all bats containers" {
 	stop_bats_containers
+}
+
+@test "[$TEST_FILE] Cleanup containers" {
+	docker_clean docker_cachet_1
+  docker_clean docker_nginx_1
+  docker_clean docker_postgres_1
 }
