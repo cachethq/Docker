@@ -16,9 +16,9 @@ Cachet is a BSD-3-licensed open source project. If you'd like to support future 
 
 For a full list of Cachet versions released as Docker images  please see the [list of Docker hub tags](https://hub.docker.com/r/cachethq/docker/tags/).
 
-The master branch and `cachethq/docker:latest` Docker automated build are a work in progress / development version of the upstream [Cachet](https://github.com/CachetHQ/Cachet) project. This should not be used in a production environment as it may change at any time.
+The master branch and `cachethq/docker:latest` Docker automated build are a work in progress / development version of the upstream [Cachet](https://github.com/CachetHQ/Cachet) project. Use of `master` or `:latest` in a production environment is not recommended as it may change at any time.
 
-Please use a [tagged Cachet Docker image release](https://github.com/CachetHQ/Docker/releases) or utilize one of the tagged builds from https://hub.docker.com/r/cachethq/docker/tags/ with `docker pull cachethq/docker:2.2.1`.
+Please use a [tagged Cachet Docker image release](https://github.com/CachetHQ/Docker/releases) or one of the tagged builds from https://hub.docker.com/r/cachethq/docker/tags/ with `docker pull cachethq/docker:2.2.1`.
 
 # Testing
 
