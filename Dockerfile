@@ -12,13 +12,13 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get clean && \
     apt-get -q -y update && \
     apt-get -q -y install \
-    ca-certificates=20141019+deb8u1 php5-fpm=5.6.22+dfsg-0+deb8u1 php5-curl=5.6.22+dfsg-0+deb8u1 \
-    php5-readline=5.6.22+dfsg-0+deb8u1 php5-mcrypt=5.6.22+dfsg-0+deb8u1 sudo=1.8.10p3-1+deb8u3 \
-    php5-mysql=5.6.22+dfsg-0+deb8u1 php5-apcu=4.0.7-1 php5-cli=5.6.22+dfsg-0+deb8u1 \
-    php5-gd=5.6.22+dfsg-0+deb8u1 php5-mysql=5.6.22+dfsg-0+deb8u1 php5-pgsql=5.6.22+dfsg-0+deb8u1 \
-    php5-sqlite=5.6.22+dfsg-0+deb8u1 wget=1.16-1 sqlite=2.8.17-12 git=1:2.1.4-2.1+deb8u2 \
-    libsqlite3-dev=3.8.7.1-1+deb8u1 postgresql-client=9.4+165+deb8u1 mysql-client=5.5.49-0+deb8u1 \
-    supervisor=3.0r1-1 cron=3.0pl1-127+deb8u1 && \
+    ca-certificates php5-fpm php5-curl \
+    php5-readline php5-mcrypt sudo \
+    php5-mysql php5-apcu php5-cli \
+    php5-gd php5-mysql php5-pgsql \
+    php5-sqlite wget sqlite git \
+    libsqlite3-dev postgresql-client mysql-client \
+    supervisor cron && \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
@@ -42,9 +42,10 @@ WORKDIR /var/www/html/
 USER www-data
 
 # Install composer
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-    php -r "if (hash_file('SHA384', 'composer-setup.php') === 'e115a8dc7871f15d853148a7fbac7da27d6c0030b848d9b3dc09e2a0388afed865e6a3d6b3c0fad45c48e2b5fc1196ae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
-    php composer-setup.php --version=1.1.2 && \
+RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" && \
+    php -r "copy('https://composer.github.io/installer.sig', '/tmp/composer-setup.sig');" && \ 
+    php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !== trim(file_get_contents('/tmp/composer-setup.sig'))) { unlink('/tmp/composer-setup.php'); echo 'Invalid installer' . PHP_EOL; exit(1); }" && \
+    php /tmp/composer-setup.php --version=1.1.2 && \
     php -r "unlink('composer-setup.php');"
 
 RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
