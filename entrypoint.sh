@@ -40,6 +40,8 @@ initialize_system() {
   DB_USERNAME=${DB_USERNAME:-postgres}
   DB_PASSWORD=${DB_PASSWORD:-postgres}
   DB_PORT=${DB_PORT:-5432}
+  
+  DOCKER=true
 
   CACHE_DRIVER=${CACHE_DRIVER:-apc}
   SESSION_DRIVER=${SESSION_DRIVER:-apc}
