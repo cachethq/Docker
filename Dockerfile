@@ -3,7 +3,7 @@ FROM debian:jessie
 MAINTAINER Alt Three <support@alt-three.com>
 
 ARG cachet_ver
-ENV cachet_ver v2.3.5
+ENV cachet_ver v2.3.6
 
 # Using debian packages instead of compiling from scratch
 RUN DEBIAN_FRONTEND=noninteractive \
