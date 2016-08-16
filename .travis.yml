@@ -2,8 +2,7 @@ sudo: required
 
 env:
     global:
-        - DOCKER_VERSION=1.12.0-0~trusty
-        - DOCKER_COMPOSE_VERSION=1.7.1
+        - DOCKER_COMPOSE_VERSION=1.8.0
 
 before_install:
     # install docker-compose at specific version
