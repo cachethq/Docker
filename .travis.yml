@@ -3,6 +3,8 @@ sudo: required
 env:
     global:
         - DOCKER_COMPOSE_VERSION=1.8.0
+services:
+        - docker
 
 before_install:
     # install docker-compose at specific version
