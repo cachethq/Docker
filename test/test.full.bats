@@ -5,6 +5,7 @@ load "lib/batslib"
 load "lib/output"
 
 @test "[$TEST_FILE] testing Cachet Docker image build" {
+  skip
   command docker-compose build --no-cache cachet
 }
 
@@ -37,6 +38,11 @@ load "lib/output"
 @test "[$TEST_FILE] curl API ping" {
 	run curl_container docker_nginx_1 /api/v1/ping
   assert_output -l 0 $'{"data":"Pong!"}'
+}
+
+@test "[$TEST_FILE] check for pg_dump version mismatch" {
+  run docker exec docker_cachet_1 php artisan app:update
+  refute_output -l 5 $'pg_dump: aborting because of server version mismatch'
 }
 
 @test "[$TEST_FILE] stop all bats containers" {
