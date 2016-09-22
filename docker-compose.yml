@@ -1,18 +1,6 @@
 version: "2"
 
 services:
-  nginx:
-    image: nginx:stable-alpine
-    volumes:
-      - ./conf/nginx-site.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - 80:80
-    links:
-      - cachet
-    volumes_from:
-      - cachet
-    depends_on:
-      - cachet
   postgres:
     image: postgres:9.5
     volumes:
@@ -22,8 +10,8 @@ services:
       - POSTGRES_PASSWORD=postgres
   cachet:
     build: .
-    expose:
-      - 9000
+    ports:
+      - 80:80
     links:
       - postgres:postgres
     environment:
@@ -32,7 +20,5 @@ services:
       - DB_DATABASE=postgres
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
-    volumes:
-      - /var/www
     depends_on:
       - postgres

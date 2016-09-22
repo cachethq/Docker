@@ -21,6 +21,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     ca-certificates \
     postgresql-client-$PG_MAJOR \
     mysql-client \
+    nginx \
     php5-fpm php5-curl \
     php5-readline php5-mcrypt sudo \
     php5-mysql php5-apcu php5-cli \
@@ -33,7 +34,9 @@ RUN DEBIAN_FRONTEND=noninteractive \
 
 COPY conf/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
 COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
+COPY conf/nginx-site.conf /etc/nginx/sites-available/default
 
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN mkdir -p /var/www/html && \
     chown -R www-data /var/www
 
@@ -66,7 +69,7 @@ RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
 COPY conf/.env.docker /var/www/html/.env
 
 VOLUME /var/www
-EXPOSE 8000
+EXPOSE 80
 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
 CMD ["start"]

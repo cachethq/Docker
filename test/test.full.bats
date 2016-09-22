@@ -12,11 +12,15 @@ load "lib/output"
   command docker-compose up -d
 }
 
-@test "[$TEST_FILE] wait for Cachet startup" {
+@test "[$TEST_FILE] check for nginx startup" {
+  docker_wait_for_log docker_cachet_1 15 "INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
+}
+
+@test "[$TEST_FILE] check for php-fpm startup" {
   docker_wait_for_log docker_cachet_1 15 "INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
 }
 
-@test "[$TEST_FILE] wait for postgres startup" {
+@test "[$TEST_FILE] check for postgres startup" {
   docker_wait_for_log docker_postgres_1 15 "LOG:  autovacuum launcher started"
 }
 
@@ -25,18 +29,18 @@ load "lib/output"
   assert_output -l 0 $'Database seeded with demo data successfully!'
 }
 
-@test "[$TEST_FILE] curl 200 test" {
-	run curl_container docker_nginx_1 /auth/login --head
+@test "[$TEST_FILE] curl 200 response test" {
+	run curl_container docker_cachet_1 /auth/login --head
   assert_output -l 0 $'HTTP/1.1 200 OK\r'
 }
 
 @test "[$TEST_FILE] login test" {
-	run curl_container docker_nginx_1 /auth/login --head --user test:test123
+	run curl_container docker_cachet_1 /auth/login --head --user test:test123
   assert_output -l 0 $'HTTP/1.1 200 OK\r'
 }
 
 @test "[$TEST_FILE] curl API ping" {
-	run curl_container docker_nginx_1 /api/v1/ping
+	run curl_container docker_cachet_1 /api/v1/ping
   assert_output -l 0 $'{"data":"Pong!"}'
 }
 
@@ -45,12 +49,11 @@ load "lib/output"
   refute_output -l 5 $'pg_dump: aborting because of server version mismatch'
 }
 
-@test "[$TEST_FILE] stop all bats containers" {
+@test "[$TEST_FILE] stop all test containers" {
 	stop_bats_containers
 }
 
-@test "[$TEST_FILE] Cleanup containers" {
+@test "[$TEST_FILE] Cleanup test containers" {
 	docker_clean docker_cachet_1
-  docker_clean docker_nginx_1
   docker_clean docker_postgres_1
 }
