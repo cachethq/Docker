@@ -1,12 +1,3 @@
-.git
-.gitignore
-LICENSE
-VERSION
-README.md
-CONTRIBUTING.md
-Changelog.md
-Makefile
-docker-compose.yml
-.travis.yml
-test
-Makefile
+*
+!entrypoint.sh
+!conf
