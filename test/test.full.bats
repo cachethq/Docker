@@ -5,7 +5,6 @@ load "lib/batslib"
 load "lib/output"
 
 @test "[$TEST_FILE] testing Cachet Docker image build" {
-  skip
   command docker-compose build --no-cache cachet
 }
 
@@ -22,7 +21,8 @@ load "lib/output"
 }
 
 @test "[$TEST_FILE] php artisan cachet:seed" {
-  command docker exec docker_cachet_1 php artisan cachet:seed
+  run docker exec docker_cachet_1 php artisan cachet:seed
+  assert_output -l 0 $'Database seeded with demo data successfully!'
 }
 
 @test "[$TEST_FILE] curl 200 test" {

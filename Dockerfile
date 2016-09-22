@@ -5,6 +5,12 @@ MAINTAINER Alt Three <support@alt-three.com>
 ARG cachet_ver
 ENV cachet_ver master
 
+ENV PG_MAJOR 9.5
+
+RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
+
+RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main' $PG_MAJOR > /etc/apt/sources.list.d/pgdg.list
+
 # Using debian packages instead of compiling from scratch
 RUN DEBIAN_FRONTEND=noninteractive \
     echo "APT::Install-Recommends \"0\";" >> /etc/apt/apt.conf.d/02recommends && \
@@ -12,12 +18,15 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get clean && \
     apt-get -q -y update && \
     apt-get -q -y install \
-    ca-certificates php5-fpm php5-curl \
+    ca-certificates \
+    postgresql-client-$PG_MAJOR \
+    mysql-client \
+    php5-fpm php5-curl \
     php5-readline php5-mcrypt sudo \
     php5-mysql php5-apcu php5-cli \
     php5-gd php5-mysql php5-pgsql \
     php5-sqlite wget sqlite git \
-    libsqlite3-dev postgresql-client mysql-client \
+    libsqlite3-dev \
     supervisor cron && \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
@@ -43,7 +52,7 @@ USER www-data
 
 # Install composer
 RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" && \
-    php -r "copy('https://composer.github.io/installer.sig', '/tmp/composer-setup.sig');" && \ 
+    php -r "copy('https://composer.github.io/installer.sig', '/tmp/composer-setup.sig');" && \
     php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !== trim(file_get_contents('/tmp/composer-setup.sig'))) { unlink('/tmp/composer-setup.php'); echo 'Invalid installer' . PHP_EOL; exit(1); }" && \
     php /tmp/composer-setup.php --version=1.1.2 && \
     php -r "unlink('composer-setup.php');"
