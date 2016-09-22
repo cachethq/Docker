@@ -34,7 +34,6 @@ RUN DEBIAN_FRONTEND=noninteractive \
 COPY conf/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
 COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
 
-RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.conf
 RUN mkdir -p /var/www/html && \
     chown -R www-data /var/www
 
