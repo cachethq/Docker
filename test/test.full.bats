@@ -21,7 +21,8 @@ load "lib/output"
 }
 
 @test "[$TEST_FILE] php artisan cachet:seed" {
-  command docker exec docker_cachet_1 php artisan cachet:seed
+  run docker exec docker_cachet_1 php artisan cachet:seed
+  assert_output -l 0 $'Database seeded with demo data successfully!'
 }
 
 @test "[$TEST_FILE] curl 200 test" {
@@ -37,6 +38,11 @@ load "lib/output"
 @test "[$TEST_FILE] curl API ping" {
 	run curl_container docker_nginx_1 /api/v1/ping
   assert_output -l 0 $'{"data":"Pong!"}'
+}
+
+@test "[$TEST_FILE] check for pg_dump version mismatch" {
+  run docker exec docker_cachet_1 php artisan app:update
+  refute_output -l 5 $'pg_dump: aborting because of server version mismatch'
 }
 
 @test "[$TEST_FILE] stop all bats containers" {
