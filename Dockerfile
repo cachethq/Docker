@@ -42,6 +42,8 @@ RUN mkdir -p /var/www/html && \
 
 COPY conf/crontab /etc/cron.d/artisan-schedule
 COPY entrypoint.sh /sbin/entrypoint.sh
+RUN chown www-data /sbin/entrypoint.sh && \
+    chmod 755 /sbin/entrypoint.sh
 
 RUN chmod 0644 /etc/cron.d/artisan-schedule && \
         touch /var/log/cron.log
