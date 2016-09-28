@@ -2,7 +2,6 @@ SILENT :
 .PHONY : test
 
 update-dependencies:
-	docker pull nginx:stable-alpine
 	docker pull appropriate/curl:latest
 	docker pull postgres:9.5
 
