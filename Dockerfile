@@ -63,8 +63,7 @@ RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php')
     php -r "copy('https://composer.github.io/installer.sig', '/tmp/composer-setup.sig');" && \
     php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !== trim(file_get_contents('/tmp/composer-setup.sig'))) { unlink('/tmp/composer-setup.php'); echo 'Invalid installer' . PHP_EOL; exit(1); }" && \
     php /tmp/composer-setup.php --version=1.1.2 && \
-    php -r "unlink('/tmp/composer-setup.php');"
-    && \
+    php -r "unlink('/tmp/composer-setup.php');" && \
     php composer.phar global require "hirak/prestissimo:^0.3"
 
 RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
