@@ -6,9 +6,12 @@ ARG cachet_ver
 ENV cachet_ver master
 
 ENV PG_MAJOR 9.5
+ENV NGINX_VERSION 1.10.1-1~jessie
 
 RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
+RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62
 
+RUN echo "deb http://nginx.org/packages/debian/ jessie nginx" >> /etc/apt/sources.list 
 RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main' $PG_MAJOR > /etc/apt/sources.list.d/pgdg.list
 
 # Using debian packages instead of compiling from scratch
@@ -21,7 +24,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     ca-certificates \
     postgresql-client-$PG_MAJOR \
     mysql-client \
-    nginx \
+    nginx=${NGINX_VERSION} \
     php5-fpm php5-curl \
     php5-readline php5-mcrypt sudo \
     php5-mysql php5-apcu php5-cli \
@@ -34,7 +37,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
 
 COPY conf/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
 COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
-COPY conf/nginx-site.conf /etc/nginx/sites-available/default
+COPY conf/nginx-site.conf /etc/nginx/conf.d/default.conf
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN mkdir -p /var/www/html && \
