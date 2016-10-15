@@ -7,6 +7,7 @@ ENV cachet_ver master
 
 ENV PG_MAJOR 9.5
 ENV NGINX_VERSION 1.10.1-1~jessie
+ENV COMPOSER_VERSION 1.2.1
 
 RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
 RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62
@@ -64,7 +65,7 @@ USER www-data
 RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" && \
     php -r "copy('https://composer.github.io/installer.sig', '/tmp/composer-setup.sig');" && \
     php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !== trim(file_get_contents('/tmp/composer-setup.sig'))) { unlink('/tmp/composer-setup.php'); echo 'Invalid installer' . PHP_EOL; exit(1); }" && \
-    php /tmp/composer-setup.php --version=1.1.2 && \
+    php /tmp/composer-setup.php --version=$COMPOSER_VERSION && \
     php -r "unlink('/tmp/composer-setup.php');" && \
     php composer.phar global require "hirak/prestissimo:^0.3"
 
