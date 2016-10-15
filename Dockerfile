@@ -27,10 +27,9 @@ RUN DEBIAN_FRONTEND=noninteractive \
     nginx=${NGINX_VERSION} \
     php5-fpm php5-curl \
     php5-readline php5-mcrypt sudo \
-    php5-mysql php5-apcu php5-cli \
-    php5-gd php5-mysql php5-pgsql \
-    php5-sqlite wget sqlite git \
-    libsqlite3-dev \
+    php5-apcu php5-cli php5-gd \
+    php5-mysql php5-pgsql php5-sqlite \
+    wget sqlite libsqlite3-dev git \
     supervisor cron && \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
