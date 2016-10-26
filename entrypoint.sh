@@ -58,6 +58,7 @@ initialize_system() {
   REDIS_HOST=${REDIS_HOST:-null}
   REDIS_DATABASE=${REDIS_DATABASE:-null}
   REDIS_PORT=${REDIS_PORT:-null}
+  REDIS_PASSWORD=${REDIS_PASSWORD:-null}
 
   # configure env file
 
@@ -87,6 +88,7 @@ initialize_system() {
   sed 's,{{REDIS_HOST}},'"${REDIS_HOST}"',g' -i /var/www/html/.env
   sed 's,{{REDIS_DATABASE}},'"${REDIS_DATABASE}"',g' -i /var/www/html/.env
   sed 's,{{REDIS_PORT}},'"${REDIS_PORT}"',g' -i /var/www/html/.env
+  sed 's,{{REDIS_PASSWORD}},'"${REDIS_PASSWORD}"',g' -i /var/www/html/.env
 
   php artisan app:install
   rm -rf bootstrap/cache/*
