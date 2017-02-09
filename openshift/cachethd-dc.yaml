@@ -41,35 +41,89 @@ spec:
               protocol: TCP
           env:
             -
-              name: DB_DATABASE
-              value: cachethd
+              name: APP_ENV
+              value: nonProd
+            -
+              name: APP_DEBUG
+              value: 'true'
+            -
+              name: APP_URL
+              value: 'https://demo.cachethq.io/api/v1'
+            -
+              name: APP_KEY
+              value: 'base64:KEY'
             -
               name: DB_DRIVER
-              value: pgsql
+              value: pgsql #pqsql mysql
             -
               name: DB_HOST
-              value: crunchy-postgres
+              value: db_hostname
             -
-              name: DB_PASSWORD
-              value: cachethd!
+              name: DB_DATABASE
+              value: cachethq
             -
               name: DB_USERNAME
-              value: cachethd
+              value: cachethq
+            -
+              name: DB_PASSWORD
+              value: mypassword
+            -
+              name: DB_PORT
+              value: 'null'
+            -
+              name: DB_PREFIX
+              value: 'null'
+            -
+              name: DOCKER #this is need so when the container restarts it will not have you do setup again.
+              value: 'true'
+            -
+              name: CACHE_DRIVER
+              value: apc
+            -
+              name: SESSION_DRIVER
+              value: apc
+            -
+              name: QUEUE_DRIVER
+              value: database
+            -
+              name: CACHET_EMOJI
+              value: 'false'
             -
               name: MAIL_DRIVER
               value: smtp
             -
               name: MAIL_HOST
-              value: mailout.com
+              value: smtp.hostname.com
             -
               name: MAIL_PORT
               value: '25'
             -
-              name: APP_ENV
-              value: nonProd
+              name: MAIL_USERNAME
+              value: 'null'
             -
-              name: APP_DEBUG
-              value: 'false'
+              name: MAIL_PASSWORD
+              value: 'null'
+            -
+              name: MAIL_ADDRESS
+              value: 'null'
+            -
+              name: MAIL_NAME
+              value: 'null'
+            -
+              name: MAIL_ENCRYPTION
+              value: 'null'
+            -
+              name: REDIS_HOST
+              value: 'null'
+            -
+              name: REDIS_DATABASE
+              value: 'null'
+            -
+              name: REDIS_PORT
+              value: 'null'
+            -
+              name: GITHUB_TOKEN
+              value: 'null'
           resources:
           terminationMessagePath: /dev/termination-log
           imagePullPolicy: Always
