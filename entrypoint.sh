@@ -46,7 +46,6 @@ initialize_system() {
   CACHE_DRIVER=${CACHE_DRIVER:-apc}
   SESSION_DRIVER=${SESSION_DRIVER:-apc}
   QUEUE_DRIVER=${QUEUE_DRIVER:-database}
-
   CACHET_EMOJI=${CACHET_EMOJI:-false}
 
   MAIL_DRIVER=${MAIL_DRIVER:-smtp}
@@ -61,7 +60,6 @@ initialize_system() {
   REDIS_HOST=${REDIS_HOST:-null}
   REDIS_DATABASE=${REDIS_DATABASE:-null}
   REDIS_PORT=${REDIS_PORT:-null}
-
   REDIS_PASSWORD=${REDIS_PASSWORD:-null}
 
   GITHUB_TOKEN=${GITHUB_TOKEN:-null}
