@@ -3,7 +3,8 @@ FROM debian:jessie
 MAINTAINER Alt Three <support@alt-three.com>
 
 ARG cachet_ver
-ENV cachet_ver v2.3.10
+ENV cachet_ver ${cachet_ver:-master}
+
 ENV PG_MAJOR 9.5
 ENV NGINX_VERSION 1.10.1-1~jessie
 ENV COMPOSER_VERSION 1.2.1
@@ -44,7 +45,6 @@ RUN mkdir -p /var/www/html && \
 
 COPY conf/crontab /etc/cron.d/artisan-schedule
 COPY entrypoint.sh /sbin/entrypoint.sh
-
 RUN chown www-data /sbin/entrypoint.sh && \
     chmod 755 /sbin/entrypoint.sh
 
