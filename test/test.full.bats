@@ -12,12 +12,16 @@ load "lib/output"
   command docker-compose up -d
 }
 
+@test "[$TEST_FILE] check for container init" {
+  docker_wait_for_log docker_cachet_1 15 "Initializing Cachet container ..."
+}
+
 @test "[$TEST_FILE] check for empty sessions table" {
   docker_wait_for_log docker_cachet_1 15 "Table sessions does not exist! ..."
 }
 
-@test "[$TEST_FILE] check for container init" {
-  docker_wait_for_log docker_cachet_1 15 "Initializing Cachet container ..."
+@test "[$TEST_FILE] check for DB init" {
+  docker_wait_for_log docker_cachet_1 15 "Initializing Cachet database ..."
 }
 
 @test "[$TEST_FILE] check for populated sessions table" {

@@ -37,7 +37,7 @@ checkdbinitmysql() {
         start_system;
     else
         echo "Table ${table} does not exist! ..."
-        initialize_system
+        init_db
     fi
 
 }
@@ -49,7 +49,7 @@ checkdbinitpsql() {
         echo "Table ${table} exists! ..."
     else
         echo "Table ${table} does not exist! ..."
-        initialize_system
+        init_db
     fi
 
 }
@@ -70,7 +70,7 @@ initialize_system() {
   APP_ENV=${APP_ENV:-development}
   APP_DEBUG=${APP_DEBUG:-true}
   APP_URL=${APP_URL:-http://localhost}
-  APP_KEY=${APP_KEY:-SECRET}
+  APP_KEY=${APP_KEY:-base64:SGZXUdds0Qnbf55/7diaHMPPM2TXfOSxHtUAXz6POSw=}
 
   DB_DRIVER=${DB_DRIVER:-pgsql}
   DB_HOST=${DB_HOST:-postgres}
@@ -135,13 +135,18 @@ initialize_system() {
 
   sed 's,{{GITHUB_TOKEN}},'"${GITHUB_TOKEN}"',g' -i /var/www/html/.env
 
-  php artisan app:install
   rm -rf bootstrap/cache/*
   chmod -R 777 storage
+}
+
+init_db() {
+  echo "Initializing Cachet database ..."
+  php artisan app:install
   check_configured
 }
 
 start_system() {
+  initialize_system
   check_database_connection
   check_configured
   echo "Starting Cachet! ..."
@@ -149,28 +154,6 @@ start_system() {
   sudo /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
 }
 
-case ${1} in
-  init|start)
-
-    case ${1} in
-      start)
-        start_system
-        ;;
-      init)
-        initialize_system
-        ;;
-    esac
-    ;;
-  help)
-    echo "Available options:"
-    echo " start        - Starts the Cachet server (default)"
-    echo " init         - Initialize the Cachet server (e.g. create databases, compile assets)."
-    echo " help         - Displays the help"
-    echo " [command]        - Execute the specified command, eg. bash."
-    ;;
-  *)
-    exec "$@"
-    ;;
-esac
+start_system
 
 exit 0

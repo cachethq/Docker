@@ -79,4 +79,3 @@ COPY entrypoint.sh /sbin/entrypoint.sh
 EXPOSE 80
 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
-CMD ["start"]
