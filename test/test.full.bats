@@ -55,7 +55,7 @@ load "lib/output"
   assert_output -l 0 $'HTTP/1.1 200 OK\r'
 }
 
-@test "[$TEST_FILE] curl API ping" {
+@test "[$TEST_FILE] check for curl API pong" {
 	run curl_container docker_cachet_1 /api/v1/ping
   assert_output -l 0 $'{"data":"Pong!"}'
 }
@@ -75,6 +75,11 @@ load "lib/output"
   command docker-compose rm -f cachet
   command docker-compose up -d
   docker_wait_for_log docker_cachet_1 15 "INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
+}
+
+@test "[$TEST_FILE] post-restart API pong" {
+	run curl_container docker_cachet_1 /api/v1/ping
+  assert_output -l 0 $'{"data":"Pong!"}'
 }
 
 @test "[$TEST_FILE] post-restart login test" {
