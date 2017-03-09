@@ -78,7 +78,6 @@ RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
 
 COPY conf/.env.docker /var/www/html/.env
 
-VOLUME /var/www
 EXPOSE 80
 
 ENTRYPOINT ["/sbin/entrypoint.sh"]
