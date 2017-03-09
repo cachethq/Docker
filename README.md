@@ -25,3 +25,55 @@ Please use a [tagged Cachet Docker image release](https://github.com/CachetHQ/Do
 Pull requests must pass the [Bash Automated Testing System](https://github.com/sstephenson/bats) tests, which run on [Travis CI](https://travis-ci.org/CachetHQ/Docker) via located in the [test](test) directory.
 
 Use `make test` to manually run the tests.
+
+# Development of Cachet using this docker environment
+
+1.  Clone the official repo of CachetHQ/Docker
+  
+  ```shell
+  git clone https://github.com/cachethq/Docker.git cachet-docker
+  cd cachet-docker
+  git tag -l
+  git checkout $LATEST_TAG
+  ```
+2. Clone the official repo of CachetHQ/Cachet here and do composer install
+  
+  ```shell
+  git clone https://github.com/CachetHQ/Cachet.git
+  ```
+
+3. Setup the Cachet project
+ 
+ ```shell
+ cd Cachet
+composer install
+cp ../conf/.env.docker ./.env
+cd ..
+```
+
+4. Edit the docker-compose.yml file
+
+  ```yaml
+  replace 
+    build: . 
+  with 
+    image: cachethq/docker
+
+  replace
+    - /var/www 
+  with 
+    - ./Cachet/:/var/www/html/
+  ```
+
+5. Build and run the docker compose
+  
+  ```shell
+  docker-compose up
+  ```
+  
+6. Open new terminal and execute the following commands after getting container name via `docker ps`:
+  
+  ```shell
+  docker exec -i docker_cachet_1  php artisan key:generate
+  docker exec -i docker_cachet_1  php artisan app:install
+  ```

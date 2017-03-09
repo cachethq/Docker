@@ -31,3 +31,26 @@ Then to finish the process:
 * Add automated build for the new tag on [Docker Hub](https://hub.docker.com/r/cachethq/docker/builds/)
 
 Periodically back-port changes from most recent minor version branch to `master`.
+
+## Multiple releases
+
+Sometimes we get a little behind the upstream Cachet project, and need to make a few releases at once. 
+
+```
+gsed s/v2.3.7/v2.3.8/g -i Dockerfile
+git commit -am "Cachet v2.3.8 release"
+git tag -a v2.3.8 -m "Cachet Release v2.3.8"
+git push origin v2.3.8
+
+gsed s/v2.3.8/v2.3.9/g -i Dockerfile
+git commit -am "Cachet v2.3.9 release"
+git tag -a v2.3.9 -m "Cachet Release v2.3.9"
+git push origin v2.3.9
+
+gsed s/v2.3.9/v2.3.10/g -i Dockerfile
+git commit -am "Cachet v2.3.10 release"
+git tag -a v2.3.10 -m "Cachet Release v2.3.10"
+git push origin v2.3.10
+```
+
+Then setup releases on GitHub.

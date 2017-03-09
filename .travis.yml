@@ -1,20 +1,13 @@
 sudo: required
 
-services:
-    - docker
-
 env:
     global:
-        - DOCKER_COMPOSE_VERSION=1.7.1
+        - DOCKER_COMPOSE_VERSION=1.8.0
+services:
+        - docker
 
 before_install:
-    # add bats repo https://github.com/tkuchiki/bats-travis-ci
-    - sudo add-apt-repository ppa:duggan/bats --yes
-    - sudo apt-get update -qq
-    - sudo apt-get install -qq bats
-
-    # reinstall docker-compose at specific version
-    - sudo rm /usr/local/bin/docker-compose
+    # install docker-compose at specific version
     - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
     - chmod +x docker-compose
     - sudo mv docker-compose /usr/local/bin

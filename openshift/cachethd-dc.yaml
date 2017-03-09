@@ -1,0 +1,135 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  name: cachet
+  labels:
+    app: cachet
+  annotations:
+spec:
+  strategy:
+    type: Rolling
+    rollingParams:
+      updatePeriodSeconds: 1
+      intervalSeconds: 1
+      timeoutSeconds: 600
+      maxUnavailable: 25%
+      maxSurge: 25%
+    resources:
+  triggers:
+    -
+      type: ConfigChange
+  replicas: 1
+  test: false
+  selector:
+    app: cachet
+    deploymentconfig: cachet
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: cachet
+        deploymentconfig: cachet
+      annotations:
+    spec:
+      containers:
+        -
+          name: cachet
+          image: cachethq/docker:2.3.10
+          ports:
+            -
+              containerPort: 80
+              protocol: TCP
+          env:
+            -
+              name: APP_ENV
+              value: nonProd
+            -
+              name: APP_DEBUG
+              value: 'true'
+            -
+              name: APP_URL
+              value: 'https://demo.cachethq.io/api/v1'
+            -
+              name: APP_KEY
+              value: 'base64:KEY'
+            -
+              name: DB_DRIVER
+              value: pgsql #pqsql mysql
+            -
+              name: DB_HOST
+              value: db_hostname
+            -
+              name: DB_DATABASE
+              value: cachethq
+            -
+              name: DB_USERNAME
+              value: cachethq
+            -
+              name: DB_PASSWORD
+              value: mypassword
+            -
+              name: DB_PORT
+              value: 'null'
+            -
+              name: DB_PREFIX
+              value: 'null'
+            -
+              name: DOCKER #this is need so when the container restarts it will not have you do setup again.
+              value: 'true'
+            -
+              name: CACHE_DRIVER
+              value: apc
+            -
+              name: SESSION_DRIVER
+              value: apc
+            -
+              name: QUEUE_DRIVER
+              value: database
+            -
+              name: CACHET_EMOJI
+              value: 'false'
+            -
+              name: MAIL_DRIVER
+              value: smtp
+            -
+              name: MAIL_HOST
+              value: smtp.hostname.com
+            -
+              name: MAIL_PORT
+              value: '25'
+            -
+              name: MAIL_USERNAME
+              value: 'null'
+            -
+              name: MAIL_PASSWORD
+              value: 'null'
+            -
+              name: MAIL_ADDRESS
+              value: 'null'
+            -
+              name: MAIL_NAME
+              value: 'null'
+            -
+              name: MAIL_ENCRYPTION
+              value: 'null'
+            -
+              name: REDIS_HOST
+              value: 'null'
+            -
+              name: REDIS_DATABASE
+              value: 'null'
+            -
+              name: REDIS_PORT
+              value: 'null'
+            -
+              name: GITHUB_TOKEN
+              value: 'null'
+          resources:
+          terminationMessagePath: /dev/termination-log
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext:
+        runAsUser: 0
+status:
