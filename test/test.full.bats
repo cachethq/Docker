@@ -49,6 +49,16 @@ load "lib/output"
   refute_output -l 5 $'pg_dump: aborting because of server version mismatch'
 }
 
+@test "[$TEST_FILE] restart containers" {
+  command docker-compose restart
+  docker_wait_for_log docker_cachet_1 15 "INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
+}
+
+@test "[$TEST_FILE] post-restart login test" {
+	run curl_container docker_cachet_1 /auth/login --head --user test:test123
+  assert_output -l 0 $'HTTP/1.1 200 OK\r'
+}
+
 @test "[$TEST_FILE] stop all test containers" {
 	stop_bats_containers
 }
