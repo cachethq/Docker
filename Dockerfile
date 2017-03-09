@@ -4,6 +4,7 @@ MAINTAINER Alt Three <support@alt-three.com>
 
 ARG cachet_ver
 ENV cachet_ver ${cachet_ver:-master}
+
 ENV PG_MAJOR 9.5
 ENV NGINX_VERSION 1.10.1-1~jessie
 ENV COMPOSER_VERSION 1.2.1

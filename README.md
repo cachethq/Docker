@@ -26,6 +26,7 @@ Pull requests must pass the [Bash Automated Testing System](https://github.com/s
 
 Use `make test` to manually run the tests.
 
+
 # Development of Cachet using this docker environment
 
 1.  Clone the official repo of CachetHQ/Docker
