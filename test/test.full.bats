@@ -12,6 +12,22 @@ load "lib/output"
   command docker-compose up -d
 }
 
+@test "[$TEST_FILE] check for empty sessions table" {
+  docker_wait_for_log docker_cachet_1 15 "Table sessions does not exist! ..."
+}
+
+@test "[$TEST_FILE] check for container init" {
+  docker_wait_for_log docker_cachet_1 15 "Initializing Cachet container ..."
+}
+
+@test "[$TEST_FILE] check for populated sessions table" {
+  docker_wait_for_log docker_cachet_1 15 "Table sessions exists! ..."
+}
+
+@test "[$TEST_FILE] check for container start message" {
+  docker_wait_for_log docker_cachet_1 15 "Starting Cachet! ..."
+}
+
 @test "[$TEST_FILE] check for nginx startup" {
   docker_wait_for_log docker_cachet_1 15 "INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
 }
@@ -49,8 +65,15 @@ load "lib/output"
   refute_output -l 5 $'pg_dump: aborting because of server version mismatch'
 }
 
-@test "[$TEST_FILE] restart containers" {
-  command docker-compose restart
+@test "[$TEST_FILE] ensure there are no volumes" {
+	run docker inspect -f '{{ .Mounts }}' docker_cachet_1
+  assert_output -l 0 $'[]'
+}
+
+@test "[$TEST_FILE] restart cachet" {
+  command docker-compose stop cachet
+  command docker-compose rm -f cachet
+  command docker-compose up -d
   docker_wait_for_log docker_cachet_1 15 "INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
 }
 
