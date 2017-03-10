@@ -64,7 +64,7 @@ initialize_system() {
 
   GITHUB_TOKEN=${GITHUB_TOKEN:-null}
 
-  MAX_CHILDREN=${MAX_CHILDREN:-5}
+  PHP_MAX_CHILDREN=${PHP_MAX_CHILDREN:-5}
 
   # configure env file
 
@@ -101,8 +101,8 @@ initialize_system() {
   
   sed 's,{{GITHUB_TOKEN}},'"${GITHUB_TOKEN}"',g' -i /var/www/html/.env
 
-  sudo sed 's,{{MAX_CHILDREN}},'"${MAX_CHILDREN}"',g' -i /etc/php5/fpm/pool.d/www.conf
-  
+  sudo sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php5/fpm/pool.d/www.conf
+
   php artisan app:install
   rm -rf bootstrap/cache/*
   chmod -R 777 storage
