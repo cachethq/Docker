@@ -63,7 +63,9 @@ initialize_system() {
   REDIS_PASSWORD=${REDIS_PASSWORD:-null}
 
   GITHUB_TOKEN=${GITHUB_TOKEN:-null}
-  
+
+  PHP_MAX_CHILDREN=${PHP_MAX_CHILDREN:-5}
+
   # configure env file
 
   sed 's,{{APP_ENV}},'"${APP_ENV}"',g' -i /var/www/html/.env
@@ -99,12 +101,16 @@ initialize_system() {
   
   sed 's,{{GITHUB_TOKEN}},'"${GITHUB_TOKEN}"',g' -i /var/www/html/.env
 
+  sudo sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php5/fpm/pool.d/www.conf
+
   php artisan app:install
   rm -rf bootstrap/cache/*
   chmod -R 777 storage
   touch /var/www/.cachet-installed
   start_system
 }
+
+
 
 start_system() {
   check_database_connection
