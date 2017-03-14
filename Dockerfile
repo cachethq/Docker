@@ -44,9 +44,6 @@ RUN mkdir -p /var/www/html && \
     chown -R www-data /var/www
 
 COPY conf/crontab /etc/cron.d/artisan-schedule
-COPY entrypoint.sh /sbin/entrypoint.sh
-RUN chown www-data /sbin/entrypoint.sh && \
-    chmod 755 /sbin/entrypoint.sh
 
 RUN chmod 0644 /etc/cron.d/artisan-schedule && \
         touch /var/log/cron.log
@@ -77,8 +74,8 @@ RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
     rm -rf bootstrap/cache/*
 
 COPY conf/.env.docker /var/www/html/.env
+COPY entrypoint.sh /sbin/entrypoint.sh
 
 EXPOSE 80
 
-ENTRYPOINT ["/sbin/entrypoint.sh"]
-CMD ["start"]
+CMD ["/sbin/entrypoint.sh"]
