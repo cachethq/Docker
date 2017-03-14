@@ -4,6 +4,7 @@ set -eo pipefail
 [[ $DEBUG == true ]] && set -x
 
 check_database_connection() {
+  echo "Attempting to connect to database ..."
   case ${DB_DRIVER} in
     mysql)
       prog="mysqladmin -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} status"
@@ -19,8 +20,8 @@ check_database_connection() {
     timeout=$(( $timeout - 1 ))
     if [[ $timeout -eq 0 ]]; then
       echo
-      echo "Could not connect to database server. Aborting..."
-      return 1
+      echo "Could not connect to database server! Aborting..."
+      exit 1
     fi
     echo -n "."
     sleep 1
@@ -28,20 +29,64 @@ check_database_connection() {
   echo
 }
 
+checkdbinitmysql() {
+    table=sessions
+    if [ $(mysql -N -s -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} -e \
+        "select count(*) from information_schema.tables where \
+            table_schema='${DB_DATABASE}' and table_name='${table}';") -eq 1 ]; then
+        echo "Table ${table} exists! ..."
+    else
+        echo "Table ${table} does not exist! ..."
+        init_db
+    fi
+
+}
+
+checkdbinitpsql() {
+    table=sessions
+    export PGPASSWORD=${DB_PASSWORD}
+    if [ "$(psql -h ${DB_HOST} -U ${DB_USERNAME} -c "SELECT to_regclass('${table}');" | grep -c "${table}")" -eq 1 ]; then
+        echo "Table ${table} exists! ..."
+    else
+        echo "Table ${table} does not exist! ..."
+        init_db
+    fi
+
+}
+
+check_configured() {
+  case ${DB_DRIVER} in
+    mysql)
+      checkdbinitmysql
+      ;;
+    pgsql)
+      checkdbinitpsql
+      ;;
+  esac
+}
+
 initialize_system() {
+  echo "Initializing Cachet container ..."
   APP_ENV=${APP_ENV:-development}
   APP_DEBUG=${APP_DEBUG:-true}
   APP_URL=${APP_URL:-http://localhost}
-  APP_KEY=${APP_KEY:-SECRET}
+  APP_KEY=${APP_KEY:-base64:SGZXUdds0Qnbf55/7diaHMPPM2TXfOSxHtUAXz6POSw=}
 
   DB_DRIVER=${DB_DRIVER:-pgsql}
   DB_HOST=${DB_HOST:-postgres}
   DB_DATABASE=${DB_DATABASE:-cachet}
   DB_USERNAME=${DB_USERNAME:-postgres}
   DB_PASSWORD=${DB_PASSWORD:-postgres}
-  DB_PORT=${DB_PORT:-5432}
-  
-  DOCKER=true
+
+  if [ ${DB_DRIVER} = "pgsql" ]; then
+    DB_PORT=${DB_PORT:-5432}
+  fi
+
+  if [ ${DB_DRIVER} = "mysql" ]; then
+    DB_PORT=${DB_PORT:-3306}
+  fi
+
+  DB_PORT=${DB_PORT}
 
   CACHE_DRIVER=${CACHE_DRIVER:-apc}
   SESSION_DRIVER=${SESSION_DRIVER:-apc}
@@ -79,12 +124,12 @@ initialize_system() {
   sed 's,{{DB_USERNAME}},'"${DB_USERNAME}"',g' -i /var/www/html/.env
   sed 's,{{DB_PASSWORD}},'"${DB_PASSWORD}"',g' -i /var/www/html/.env
   sed 's,{{DB_PORT}},'"${DB_PORT}"',g' -i /var/www/html/.env
-  
+
   sed 's,{{CACHE_DRIVER}},'"${CACHE_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{SESSION_DRIVER}},'"${SESSION_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{QUEUE_DRIVER}},'"${QUEUE_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{CACHET_EMOJI}},'"${CACHET_EMOJI}"',g' -i /var/www/html/.env
-  
+
   sed 's,{{MAIL_DRIVER}},'"${MAIL_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{MAIL_HOST}},'"${MAIL_HOST}"',g' -i /var/www/html/.env
   sed 's,{{MAIL_PORT}},'"${MAIL_PORT}"',g' -i /var/www/html/.env
@@ -98,49 +143,31 @@ initialize_system() {
   sed 's,{{REDIS_DATABASE}},'${REDIS_DATABASE}',g' -i /var/www/html/.env
   sed 's,{{REDIS_PORT}},'${REDIS_PORT}',g' -i /var/www/html/.env
   sed 's,{{REDIS_PASSWORD}},'${REDIS_PASSWORD}',g' -i /var/www/html/.env
-  
-  sed 's,{{GITHUB_TOKEN}},'"${GITHUB_TOKEN}"',g' -i /var/www/html/.env
 
+  sed 's,{{GITHUB_TOKEN}},'"${GITHUB_TOKEN}"',g' -i /var/www/html/.env
   sudo sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php5/fpm/pool.d/www.conf
 
-  php artisan app:install
   rm -rf bootstrap/cache/*
   chmod -R 777 storage
-  touch /var/www/.cachet-installed
-  start_system
+}
+
+init_db() {
+  echo "Initializing Cachet database ..."
+  php artisan app:install
+  check_configured
 }
 
 
 
 start_system() {
+  initialize_system
   check_database_connection
-  [ -f "/var/www/.cachet-installed" ] && echo "Starting Cachet" || initialize_system
+  check_configured
+  echo "Starting Cachet! ..."
   php artisan config:cache
   sudo /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
 }
 
-case ${1} in
-  init|start)
-
-    case ${1} in
-      start)
-        start_system
-        ;;
-      init)
-        initialize_system
-        ;;
-    esac
-    ;;
-  help)
-    echo "Available options:"
-    echo " start        - Starts the Cachet server (default)"
-    echo " init         - Initialize the Cachet server (e.g. create databases, compile assets)."
-    echo " help         - Displays the help"
-    echo " [command]        - Execute the specified command, eg. bash."
-    ;;
-  *)
-    exec "$@"
-    ;;
-esac
+start_system
 
 exit 0

@@ -43,10 +43,6 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN mkdir -p /var/www/html && \
     chown -R www-data /var/www
 
-COPY entrypoint.sh /sbin/entrypoint.sh
-RUN chown www-data /sbin/entrypoint.sh && \
-    chmod 755 /sbin/entrypoint.sh
-
 RUN adduser www-data sudo && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
@@ -73,8 +69,8 @@ RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
     rm -rf bootstrap/cache/*
 
 COPY conf/.env.docker /var/www/html/.env
+COPY entrypoint.sh /sbin/entrypoint.sh
 
 EXPOSE 80
 
-ENTRYPOINT ["/sbin/entrypoint.sh"]
-CMD ["start"]
+CMD ["/sbin/entrypoint.sh"]
