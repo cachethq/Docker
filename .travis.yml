@@ -2,7 +2,7 @@ sudo: required
 
 env:
     global:
-        - DOCKER_VERSION=1.13.0-0~trusty
+        - DOCKER_VERSION=1.13.1-0~ubuntu-trusty
         - DOCKER_COMPOSE_VERSION=1.11.2
 services:
         - docker
