@@ -77,11 +77,16 @@ initialize_system() {
   DB_DATABASE=${DB_DATABASE:-cachet}
   DB_USERNAME=${DB_USERNAME:-postgres}
   DB_PASSWORD=${DB_PASSWORD:-postgres}
-  DB_PORT=${DB_PORT:-5432}
+
+  if [ ${DB_DRIVER} = "pgsql" ]; then
+    DB_PORT=${DB_PORT:-5432}
+  fi
 
   if [ ${DB_DRIVER} = "mysql" ]; then
-    DB_PORT=3306
+    DB_PORT=${DB_PORT:-3306}
   fi
+
+  DB_PORT=${DB_PORT}
 
   CACHE_DRIVER=${CACHE_DRIVER:-apc}
   SESSION_DRIVER=${SESSION_DRIVER:-apc}
