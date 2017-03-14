@@ -2,11 +2,18 @@ sudo: required
 
 env:
     global:
-        - DOCKER_COMPOSE_VERSION=1.8.0
+        - DOCKER_VERSION=1.13.1-0~ubuntu-trusty
+        - DOCKER_COMPOSE_VERSION=1.11.2
 services:
         - docker
 
 before_install:
+    # list docker-engine versions
+    - apt-cache madison docker-engine
+
+    # upgrade docker-engine to specific version
+    - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine=${DOCKER_VERSION}
+
     # install docker-compose at specific version
     - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
     - chmod +x docker-compose
