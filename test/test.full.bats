@@ -44,6 +44,10 @@ load "lib/output"
   docker_wait_for_log docker_cachet_1 15 "INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
 }
 
+@test "[$TEST_FILE] check for queue-worker startup" {
+  docker_wait_for_log docker_cachet_1 15 "INFO success: queue-worker entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
+}
+
 @test "[$TEST_FILE] php artisan cachet:seed" {
   run docker exec docker_cachet_1 php artisan cachet:seed
   assert_output -l 0 $'Database seeded with demo data successfully!'
