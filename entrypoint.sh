@@ -4,6 +4,7 @@ set -eo pipefail
 [[ $DEBUG == true ]] && set -x
 
 check_database_connection() {
+  echo "Attempting to connect to database ..."
   case ${DB_DRIVER} in
     mysql)
       prog="mysqladmin -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} status"
@@ -20,7 +21,7 @@ check_database_connection() {
     if [[ $timeout -eq 0 ]]; then
       echo
       echo "Could not connect to database server! Aborting..."
-      return 1
+      exit 1
     fi
     echo -n "."
     sleep 1
@@ -32,9 +33,8 @@ checkdbinitmysql() {
     table=sessions
     if [ $(mysql -N -s -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} -e \
         "select count(*) from information_schema.tables where \
-            table_schema='${table}' and table_name='${DB}';") -eq 1 ]; then
+            table_schema='${DB_DATABASE}' and table_name='${table}';") -eq 1 ]; then
         echo "Table ${table} exists! ..."
-        start_system;
     else
         echo "Table ${table} does not exist! ..."
         init_db
@@ -78,6 +78,10 @@ initialize_system() {
   DB_USERNAME=${DB_USERNAME:-postgres}
   DB_PASSWORD=${DB_PASSWORD:-postgres}
   DB_PORT=${DB_PORT:-5432}
+
+  if [ ${DB_DRIVER} = "mysql" ]; then
+    DB_PORT=3306
+  fi
 
   CACHE_DRIVER=${CACHE_DRIVER:-apc}
   SESSION_DRIVER=${SESSION_DRIVER:-apc}

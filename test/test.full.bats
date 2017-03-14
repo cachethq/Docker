@@ -16,6 +16,10 @@ load "lib/output"
   docker_wait_for_log docker_cachet_1 15 "Initializing Cachet container ..."
 }
 
+@test "[$TEST_FILE] check for postgres database startup" {
+  docker_wait_for_log docker_postgres_1 120 "LOG:  autovacuum launcher started"
+}
+
 @test "[$TEST_FILE] check for empty sessions table" {
   docker_wait_for_log docker_cachet_1 15 "Table sessions does not exist! ..."
 }
@@ -38,10 +42,6 @@ load "lib/output"
 
 @test "[$TEST_FILE] check for php-fpm startup" {
   docker_wait_for_log docker_cachet_1 15 "INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
-}
-
-@test "[$TEST_FILE] check for postgres startup" {
-  docker_wait_for_log docker_postgres_1 15 "LOG:  autovacuum launcher started"
 }
 
 @test "[$TEST_FILE] php artisan cachet:seed" {
