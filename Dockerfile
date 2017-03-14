@@ -31,7 +31,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     php5-apcu php5-cli php5-gd \
     php5-mysql php5-pgsql php5-sqlite \
     wget sqlite libsqlite3-dev git \
-    supervisor cron && \
+    supervisor && \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
@@ -43,13 +43,9 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN mkdir -p /var/www/html && \
     chown -R www-data /var/www
 
-COPY conf/crontab /etc/cron.d/artisan-schedule
 COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chown www-data /sbin/entrypoint.sh && \
     chmod 755 /sbin/entrypoint.sh
-
-RUN chmod 0644 /etc/cron.d/artisan-schedule && \
-        touch /var/log/cron.log
 
 RUN adduser www-data sudo && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
