@@ -50,6 +50,13 @@ RUN adduser www-data sudo && \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 
+RUN touch /var/run/nginx.pid && \
+  chown -R www-data:www-data /var/run/nginx.pid && \
+  chown -R www-data:www-data /var/cache/nginx
+  
+RUN touch /var/run/php5-fpm.pid && \
+  chown -R www-data:www-data /var/run/php5-fpm.pid
+
 WORKDIR /var/www/html/
 USER www-data
 
