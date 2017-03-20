@@ -31,7 +31,7 @@ check_database_connection() {
 
 checkdbinitmysql() {
     table=sessions
-    if [ $(mysql -N -s -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} -e \
+    if [ $(mysql -N -s -h ${DB_HOST} -d ${DB_DATABASE} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} -e \
         "select count(*) from information_schema.tables where \
             table_schema='${DB_DATABASE}' and table_name='${table}';") -eq 1 ]; then
         echo "Table ${table} exists! ..."
@@ -45,7 +45,7 @@ checkdbinitmysql() {
 checkdbinitpsql() {
     table=sessions
     export PGPASSWORD=${DB_PASSWORD}
-    if [ "$(psql -h ${DB_HOST} -U ${DB_USERNAME} -c "SELECT to_regclass('${table}');" | grep -c "${table}")" -eq 1 ]; then
+    if [ "$(psql -h ${DB_HOST} -U ${DB_USERNAME} -d ${DB_DATABASE} -c "SELECT to_regclass('${table}');" | grep -c "${table}")" -eq 1 ]; then
         echo "Table ${table} exists! ..."
     else
         echo "Table ${table} does not exist! ..."
