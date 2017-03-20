@@ -165,7 +165,7 @@ start_system() {
   check_configured
   echo "Starting Cachet! ..."
   php artisan config:cache
-  sudo /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
+  /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
 }
 
 start_system
