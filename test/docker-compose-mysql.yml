@@ -9,7 +9,7 @@ services:
       - MYSQL_PASSWORD=mysql
       - MYSQL_DATABASE=mysql
   cachet:
-    image: docker_cachet
+    build: .
     ports:
       - 80:80
     links:
