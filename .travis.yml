@@ -1,11 +1,12 @@
 sudo: required
 
 env:
-    global:
-        - DOCKER_VERSION=1.13.1-0~ubuntu-trusty
-        - DOCKER_COMPOSE_VERSION=1.11.2
+  matrix:
         - TEST_SUITE=full
         - TEST_SUITE=mysql
+  global:
+        - DOCKER_VERSION=1.13.1-0~ubuntu-trusty
+        - DOCKER_COMPOSE_VERSION=1.11.2
 services:
         - docker
 
