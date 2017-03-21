@@ -31,7 +31,7 @@ check_database_connection() {
 
 checkdbinitmysql() {
     table=sessions
-    if [ $(mysql -N -s -h ${DB_HOST} -d ${DB_DATABASE} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} -e \
+    if [ $(mysql -N -s -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} ${DB_DATABASE} -e \
         "select count(*) from information_schema.tables where \
             table_schema='${DB_DATABASE}' and table_name='${table}';") -eq 1 ]; then
         echo "Table ${table} exists! ..."
