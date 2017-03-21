@@ -4,6 +4,10 @@ load docker_helpers
 load "lib/batslib"
 load "lib/output"
 
+@test "[$TEST_FILE] testing Cachet Docker image build" {
+  command docker-compose -f test/docker-compose-mysql.yml build --no-cache cachet
+}
+
 @test "[$TEST_FILE] docker-compose up" {
   command docker-compose -f test/docker-compose-mysql.yml up -d
 }
