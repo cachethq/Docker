@@ -22,3 +22,8 @@ services:
       - DB_PASSWORD=mysql
     depends_on:
       - mysql
+      
+networks:
+  default:
+    external:
+      name: docker_default
