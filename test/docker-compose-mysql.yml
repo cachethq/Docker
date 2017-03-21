@@ -9,7 +9,7 @@ services:
       - MYSQL_PASSWORD=mysql
       - MYSQL_DATABASE=mysql
   cachet:
-    build: .
+    build: ../.
     ports:
       - 80:80
     links:
