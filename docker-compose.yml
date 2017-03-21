@@ -11,7 +11,7 @@ services:
   cachet:
     build: .
     ports:
-      - 80:80
+      - 80:8000
     links:
       - postgres:postgres
     environment:
