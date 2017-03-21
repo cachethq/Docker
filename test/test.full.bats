@@ -54,17 +54,17 @@ load "lib/output"
 }
 
 @test "[$TEST_FILE] curl 200 response test" {
-	run curl_container docker_cachet_1 /auth/login --head
+	run curl_container docker_cachet_1 :8000/auth/login --head
   assert_output -l 0 $'HTTP/1.1 200 OK\r'
 }
 
 @test "[$TEST_FILE] login test" {
-	run curl_container docker_cachet_1 /auth/login --head --user test:test123
+	run curl_container docker_cachet_1 :8000/auth/login --head --user test:test123
   assert_output -l 0 $'HTTP/1.1 200 OK\r'
 }
 
 @test "[$TEST_FILE] check for curl API pong" {
-	run curl_container docker_cachet_1 /api/v1/ping
+	run curl_container docker_cachet_1 :8000/api/v1/ping
   assert_output -l 0 $'{"data":"Pong!"}'
 }
 
@@ -86,12 +86,12 @@ load "lib/output"
 }
 
 @test "[$TEST_FILE] post-restart API pong" {
-	run curl_container docker_cachet_1 /api/v1/ping
+	run curl_container docker_cachet_1 :8000/api/v1/ping
   assert_output -l 0 $'{"data":"Pong!"}'
 }
 
 @test "[$TEST_FILE] post-restart login test" {
-	run curl_container docker_cachet_1 /auth/login --head --user test:test123
+	run curl_container docker_cachet_1 :8000/auth/login --head --user test:test123
   assert_output -l 0 $'HTTP/1.1 200 OK\r'
 }
 

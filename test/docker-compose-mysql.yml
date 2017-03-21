@@ -11,7 +11,7 @@ services:
   cachet:
     image: docker_cachet
     ports:
-      - 80:80
+      - 80:8000
     links:
       - mysql:mysql
     environment:
