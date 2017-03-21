@@ -5,7 +5,7 @@ load "lib/batslib"
 load "lib/output"
 
 @test "[$TEST_FILE] testing Cachet Docker image build" {
-  command docker-compose -f test/docker-compose-mysql.yml build --no-cache cachet
+  command docker-compose -f test/docker-compose-mysql.yml build --no-cache
 }
 
 @test "[$TEST_FILE] docker-compose up" {
