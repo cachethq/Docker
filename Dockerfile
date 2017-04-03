@@ -44,9 +44,12 @@ RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php')
 
 COPY conf/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
 COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
+COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY conf/nginx-site.conf /etc/nginx/conf.d/default.conf
 
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN mkdir -p /usr/share/nginx/cache && \
+    chown -R www-data /usr/share/nginx/cache
+    
 RUN mkdir -p /var/www/html && \
     chown -R www-data /var/www
 
