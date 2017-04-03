@@ -20,7 +20,11 @@ Cachet is a BSD-3-licensed open source project. If you'd like to support future 
 
 2. Edit the docker-compose.yml file to specify your [ENV variables](/conf/.env.docker).
 
-3. To build image containing a specific Cachet release, set the [`cachet_ver` ARG in the docker-compose.yml](/docker-compose.yml)
+3. To build an image containing a specific Cachet release, set the [`cachet_ver` ARG in the docker-compose.yml](/docker-compose.yml)
+
+  The *master* branch and *cachethq/docker:latest* Docker automated build are a work in progress / development version of the upstream https://github.com/CachetHQ/Cachet project. As such, *master* or *latest* should not be used in a production environment as it can change at anytime.
+
+  We strongly recommend specifying a stable [Cachet Release](https://github.com/CachetHQ/Cachet/releases) at build time as mentioned above.
 
 4. Build and run the image
 
@@ -36,8 +40,6 @@ Cachet is a BSD-3-licensed open source project. If you'd like to support future 
 `cachethq/docker` is available as a [Docker Hub Trusted Build](https://hub.docker.com/r/cachethq/docker/).
 
 For a full list of Cachet versions released as Docker images  please see the [list of Docker hub tags](https://hub.docker.com/r/cachethq/docker/tags/).
-
-The master branch and `cachethq/docker:latest` Docker automated build are a work in progress / development version of the upstream [Cachet](https://github.com/CachetHQ/Cachet) project. Use of `master` or `:latest` in a production environment is not recommended as it may change at any time.
 
 Please use a [tagged Cachet Docker image release](https://github.com/CachetHQ/Docker/releases) or one of the tagged builds from https://hub.docker.com/r/cachethq/docker/tags/ with `docker pull cachethq/docker:2.3.10`.
 
