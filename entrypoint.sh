@@ -92,6 +92,7 @@ initialize_system() {
   SESSION_DRIVER=${SESSION_DRIVER:-apc}
   QUEUE_DRIVER=${QUEUE_DRIVER:-database}
   CACHET_EMOJI=${CACHET_EMOJI:-false}
+  CACHET_BEACON=${CACHET_BEACON:-true}
 
   MAIL_DRIVER=${MAIL_DRIVER:-smtp}
   MAIL_HOST=${MAIL_HOST:-mailtrap.io}
