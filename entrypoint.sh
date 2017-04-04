@@ -1,11 +1,11 @@
 #!/bin/bash
 set -eo pipefail
 
-[[ $DEBUG == true ]] && set -x
+[[ "${DEBUG}" == true ]] && set -x
 
 check_database_connection() {
   echo "Attempting to connect to database ..."
-  case ${DB_DRIVER} in
+  case "${DB_DRIVER}" in
     mysql)
       prog="mysqladmin -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} status"
       ;;
@@ -18,7 +18,7 @@ check_database_connection() {
   while ! ${prog} >/dev/null 2>&1
   do
     timeout=$(( $timeout - 1 ))
-    if [[ $timeout -eq 0 ]]; then
+    if [[ "$timeout" -eq 0 ]]; then
       echo
       echo "Could not connect to database server! Aborting..."
       exit 1
@@ -31,9 +31,9 @@ check_database_connection() {
 
 checkdbinitmysql() {
     table=sessions
-    if [ $(mysql -N -s -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} ${DB_DATABASE} -e \
+    if [[ "$(mysql -N -s -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} ${DB_DATABASE} -e \
         "select count(*) from information_schema.tables where \
-            table_schema='${DB_DATABASE}' and table_name='${DB_PREFIX}${table}';") -eq 1 ]; then
+            table_schema='${DB_DATABASE}' and table_name='${DB_PREFIX}${table}';")" -eq 1 ]]; then
         echo "Table ${DB_PREFIX}${table} exists! ..."
     else
         echo "Table ${DB_PREFIX}${table} does not exist! ..."
@@ -45,7 +45,7 @@ checkdbinitmysql() {
 checkdbinitpsql() {
     table=sessions
     export PGPASSWORD=${DB_PASSWORD}
-    if [ "$(psql -h ${DB_HOST} -U ${DB_USERNAME} -d ${DB_DATABASE} -c "SELECT to_regclass('${DB_PREFIX}${table}');" | grep -c "${DB_PREFIX}${table}")" -eq 1 ]; then
+    if [[ "$(psql -h ${DB_HOST} -U ${DB_USERNAME} -d ${DB_DATABASE} -c "SELECT to_regclass('${DB_PREFIX}${table}');" | grep -c "${DB_PREFIX}${table}")" -eq 1 ]]; then
         echo "Table ${DB_PREFIX}${table} exists! ..."
     else
         echo "Table ${DB_PREFIX}${table} does not exist! ..."
@@ -55,7 +55,7 @@ checkdbinitpsql() {
 }
 
 check_configured() {
-  case ${DB_DRIVER} in
+  case "${DB_DRIVER}" in
     mysql)
       checkdbinitmysql
       ;;
@@ -67,10 +67,11 @@ check_configured() {
 
 initialize_system() {
   echo "Initializing Cachet container ..."
+
+  APP_KEY=${APP_KEY:-null}
   APP_ENV=${APP_ENV:-development}
   APP_DEBUG=${APP_DEBUG:-true}
   APP_URL=${APP_URL:-http://localhost}
-  APP_KEY=${APP_KEY:-base64:SGZXUdds0Qnbf55/7diaHMPPM2TXfOSxHtUAXz6POSw=}
 
   DB_DRIVER=${DB_DRIVER:-pgsql}
   DB_HOST=${DB_HOST:-postgres}
@@ -79,11 +80,11 @@ initialize_system() {
   DB_USERNAME=${DB_USERNAME:-postgres}
   DB_PASSWORD=${DB_PASSWORD:-postgres}
 
-  if [ ${DB_DRIVER} = "pgsql" ]; then
+  if [[ "${DB_DRIVER}" = "pgsql" ]]; then
     DB_PORT=${DB_PORT:-5432}
   fi
 
-  if [ ${DB_DRIVER} = "mysql" ]; then
+  if [[ "${DB_DRIVER}" = "mysql" ]]; then
     DB_PORT=${DB_PORT:-3306}
   fi
 
@@ -97,8 +98,8 @@ initialize_system() {
   CACHET_AUTO_TWITTER=${CACHET_AUTO_TWITTER:-true}
 
   MAIL_DRIVER=${MAIL_DRIVER:-smtp}
-  MAIL_HOST=${MAIL_HOST:-mailtrap.io}
-  MAIL_PORT=${MAIL_PORT:-2525}
+  MAIL_HOST=${MAIL_HOST:-localhost}
+  MAIL_PORT=${MAIL_PORT:-25}
   MAIL_USERNAME=${MAIL_USERNAME:-null}
   MAIL_PASSWORD=${MAIL_PASSWORD:-null}
   MAIL_ADDRESS=${MAIL_ADDRESS:-null}
@@ -119,11 +120,19 @@ initialize_system() {
   PHP_MAX_CHILDREN=${PHP_MAX_CHILDREN:-5}
 
   # configure env file
+  if [[ "${APP_KEY}" == null ]]; then
+    keygen="$(sudo php artisan key:generate)"
+    echo "${keygen}"
+    appkey=$(echo ${keygen} | grep -oP '(?<=\[).*(?=\])')
+    echo "Please set ${appkey} as your APP_KEY variable in the environment or docker-compose.yml and re-launch"
+    exit 1
+  fi
+
+  sed 's,{{APP_KEY}},'${APP_KEY}',g' -i /var/www/html/.env
 
   sed 's,{{APP_ENV}},'"${APP_ENV}"',g' -i /var/www/html/.env
   sed 's,{{APP_DEBUG}},'"${APP_DEBUG}"',g' -i /var/www/html/.env
   sed 's,{{APP_URL}},'"${APP_URL}"',g' -i /var/www/html/.env
-  sed 's,{{APP_KEY}},'${APP_KEY}',g' -i /var/www/html/.env
 
   sed 's,{{DB_DRIVER}},'"${DB_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{DB_HOST}},'"${DB_HOST}"',g' -i /var/www/html/.env
@@ -137,6 +146,7 @@ initialize_system() {
   sed 's,{{SESSION_DRIVER}},'"${SESSION_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{QUEUE_DRIVER}},'"${QUEUE_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{CACHET_EMOJI}},'"${CACHET_EMOJI}"',g' -i /var/www/html/.env
+  sed 's,{{CACHET_BEACON}},'"${CACHET_BEACON}"',g' -i /var/www/html/.env
   sed 's,{{CACHET_AUTO_TWITTER}},'"${CACHET_AUTO_TWITTER}"',g' -i /var/www/html/.env
 
   sed 's,{{MAIL_DRIVER}},'"${MAIL_DRIVER}"',g' -i /var/www/html/.env
@@ -170,8 +180,6 @@ init_db() {
   php artisan app:install
   check_configured
 }
-
-
 
 start_system() {
   initialize_system

@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 
 services:
   mysql:
@@ -21,6 +21,7 @@ services:
       - DB_USERNAME=mysql
       - DB_PASSWORD=mysql
       - DB_PREFIX=chq_
+      - APP_KEY=${APP_KEY:-null}
     depends_on:
       - mysql
 
