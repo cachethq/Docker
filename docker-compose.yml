@@ -25,6 +25,7 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
       - DB_PREFIX=chq_
+      - APP_KEY=${APP_KEY:-null}
       - DEBUG=true
     depends_on:
       - postgres

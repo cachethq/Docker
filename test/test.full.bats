@@ -4,6 +4,8 @@ load docker_helpers
 load "lib/batslib"
 load "lib/output"
 
+export APP_KEY="base64:v2LwHrdgnE+RavEXdnF8LgWIibjvEcFkU2qaX5Ji708="
+
 @test "[$TEST_FILE] testing Cachet Docker image build" {
   command docker-compose build --no-cache cachet
 }
