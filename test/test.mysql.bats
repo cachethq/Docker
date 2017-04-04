@@ -4,6 +4,15 @@ load docker_helpers
 load "lib/batslib"
 load "lib/output"
 
+if [ "$(docker network ls | grep -o docker_default)" != docker_default ]; then
+    docker network create docker_default
+fi
+
+@test "[$TEST_FILE] testing Cachet Docker image build" {
+
+  command docker-compose -f test/docker-compose-mysql.yml build --no-cache
+}
+
 @test "[$TEST_FILE] docker-compose up" {
   command docker-compose -f test/docker-compose-mysql.yml up -d
 }

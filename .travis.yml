@@ -1,7 +1,10 @@
 sudo: required
 
 env:
-    global:
+  matrix:
+        - TEST_SUITE=full
+        - TEST_SUITE=mysql
+  global:
         - DOCKER_VERSION=1.13.1-0~ubuntu-trusty
         - DOCKER_COMPOSE_VERSION=1.11.2
 services:
@@ -21,8 +24,7 @@ before_install:
     - docker pull appropriate/curl:latest
 
 script:
-    - bats test/test.full.bats
-    - bats test/test.mysql.bats
+    - bats test/test.$TEST_SUITE.bats
 
 notifications:
   email: false
