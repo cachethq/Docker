@@ -31,13 +31,12 @@ check_database_connection() {
 
 checkdbinitmysql() {
     table=sessions
-    if [ $(mysql -N -s -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} ${DB_DATABASE} -e \
+    if [ "$(mysql -N -s -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} ${DB_DATABASE} -e \
         "select count(*) from information_schema.tables where \
-            table_schema='${DB_DATABASE}' and table_name='${DB_PREFIX}${table}';") -eq 1 ]; then
+            table_schema='${DB_DATABASE}' and table_name='${DB_PREFIX}${table}';")" -eq 1 ]; then
         echo "Table ${DB_PREFIX}${table} exists! ..."
     else
         echo "Table ${DB_PREFIX}${table} does not exist! ..."
-        php artisan key:generate
         init_db
     fi
 
@@ -50,7 +49,6 @@ checkdbinitpsql() {
         echo "Table ${DB_PREFIX}${table} exists! ..."
     else
         echo "Table ${DB_PREFIX}${table} does not exist! ..."
-        php artisan key:generate
         init_db
     fi
 
@@ -69,10 +67,10 @@ check_configured() {
 
 initialize_system() {
   echo "Initializing Cachet container ..."
+
   APP_ENV=${APP_ENV:-development}
   APP_DEBUG=${APP_DEBUG:-true}
   APP_URL=${APP_URL:-http://localhost}
-  APP_KEY=${APP_KEY:-null}
 
   DB_DRIVER=${DB_DRIVER:-pgsql}
   DB_HOST=${DB_HOST:-postgres}
@@ -121,11 +119,14 @@ initialize_system() {
   PHP_MAX_CHILDREN=${PHP_MAX_CHILDREN:-5}
 
   # configure env file
+  keygen="$(sudo php artisan key:generate)"
+  echo ${keygen}
+  appkey=$(echo ${keygen} | grep -oP '(?<=\[).*(?=\])')
+  sed 's,{{APP_KEY}},'${appkey}',g' -i /var/www/html/.env
 
   sed 's,{{APP_ENV}},'"${APP_ENV}"',g' -i /var/www/html/.env
   sed 's,{{APP_DEBUG}},'"${APP_DEBUG}"',g' -i /var/www/html/.env
   sed 's,{{APP_URL}},'"${APP_URL}"',g' -i /var/www/html/.env
-  sed 's,{{APP_KEY}},'${APP_KEY}',g' -i /var/www/html/.env
 
   sed 's,{{DB_DRIVER}},'"${DB_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{DB_HOST}},'"${DB_HOST}"',g' -i /var/www/html/.env
@@ -173,8 +174,6 @@ init_db() {
   php artisan app:install
   check_configured
 }
-
-
 
 start_system() {
   initialize_system
