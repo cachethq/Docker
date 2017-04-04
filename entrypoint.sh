@@ -37,6 +37,7 @@ checkdbinitmysql() {
         echo "Table ${DB_PREFIX}${table} exists! ..."
     else
         echo "Table ${DB_PREFIX}${table} does not exist! ..."
+        php artisan key:generate
         init_db
     fi
 
@@ -49,6 +50,7 @@ checkdbinitpsql() {
         echo "Table ${DB_PREFIX}${table} exists! ..."
     else
         echo "Table ${DB_PREFIX}${table} does not exist! ..."
+        php artisan key:generate
         init_db
     fi
 
@@ -70,7 +72,7 @@ initialize_system() {
   APP_ENV=${APP_ENV:-development}
   APP_DEBUG=${APP_DEBUG:-true}
   APP_URL=${APP_URL:-http://localhost}
-  APP_KEY=${APP_KEY:-base64:SGZXUdds0Qnbf55/7diaHMPPM2TXfOSxHtUAXz6POSw=}
+  APP_KEY=${APP_KEY:-null}
 
   DB_DRIVER=${DB_DRIVER:-pgsql}
   DB_HOST=${DB_HOST:-postgres}
@@ -97,8 +99,8 @@ initialize_system() {
   CACHET_AUTO_TWITTER=${CACHET_AUTO_TWITTER:-true}
 
   MAIL_DRIVER=${MAIL_DRIVER:-smtp}
-  MAIL_HOST=${MAIL_HOST:-mailtrap.io}
-  MAIL_PORT=${MAIL_PORT:-2525}
+  MAIL_HOST=${MAIL_HOST:-localhost}
+  MAIL_PORT=${MAIL_PORT:-25}
   MAIL_USERNAME=${MAIL_USERNAME:-null}
   MAIL_PASSWORD=${MAIL_PASSWORD:-null}
   MAIL_ADDRESS=${MAIL_ADDRESS:-null}
@@ -137,6 +139,7 @@ initialize_system() {
   sed 's,{{SESSION_DRIVER}},'"${SESSION_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{QUEUE_DRIVER}},'"${QUEUE_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{CACHET_EMOJI}},'"${CACHET_EMOJI}"',g' -i /var/www/html/.env
+  sed 's,{{CACHET_BEACON}},'"${CACHET_BEACON}"',g' -i /var/www/html/.env
   sed 's,{{CACHET_AUTO_TWITTER}},'"${CACHET_AUTO_TWITTER}"',g' -i /var/www/html/.env
 
   sed 's,{{MAIL_DRIVER}},'"${MAIL_DRIVER}"',g' -i /var/www/html/.env
