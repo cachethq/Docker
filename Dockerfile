@@ -49,7 +49,7 @@ COPY conf/nginx-site.conf /etc/nginx/conf.d/default.conf
 
 RUN mkdir -p /usr/share/nginx/cache && \
     chown -R www-data /usr/share/nginx/cache
-    
+
 RUN mkdir -p /var/www/html && \
     chown -R www-data /var/www
 
