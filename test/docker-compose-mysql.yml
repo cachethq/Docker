@@ -20,6 +20,7 @@ services:
       - DB_DATABASE=mysql
       - DB_USERNAME=mysql
       - DB_PASSWORD=mysql
+      - DB_PREFIX=chq_
     depends_on:
       - mysql
 
