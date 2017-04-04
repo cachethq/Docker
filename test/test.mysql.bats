@@ -17,7 +17,7 @@ load "lib/output"
 }
 
 @test "[$TEST_FILE] check for empty sessions table" {
-  docker_wait_for_log test_cachet_1 15 "Table sessions does not exist! ..."
+  docker_wait_for_log test_cachet_1 15 "Table chq_sessions does not exist! ..."
 }
 
 @test "[$TEST_FILE] check for DB init" {
@@ -25,7 +25,7 @@ load "lib/output"
 }
 
 @test "[$TEST_FILE] check for populated sessions table" {
-  docker_wait_for_log test_cachet_1 15 "Table sessions exists! ..."
+  docker_wait_for_log test_cachet_1 15 "Table chq_sessions exists! ..."
 }
 
 @test "[$TEST_FILE] check for container start message" {

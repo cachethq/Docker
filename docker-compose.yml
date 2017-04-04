@@ -23,5 +23,6 @@ services:
       - DB_DATABASE=postgres
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
+      - DB_PREFIX=chq_
     depends_on:
       - postgres
