@@ -9,7 +9,7 @@ ARG cachet_ver
 ENV cachet_ver ${cachet_ver:-master}
 
 ENV PG_MAJOR 9.5
-ENV NGINX_VERSION 1.10.1-1~jessie
+ENV NGINX_VERSION 1.12.0-1~jessie
 ENV COMPOSER_VERSION 1.4.1
 
 RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
