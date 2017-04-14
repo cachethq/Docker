@@ -8,6 +8,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    restart: always
   cachet:
     build:
       context: .
@@ -29,3 +30,4 @@ services:
       - DEBUG=false
     depends_on:
       - postgres
+    restart: always
