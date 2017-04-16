@@ -2,11 +2,14 @@ FROM debian:jessie
 
 MAINTAINER Alt Three <support@alt-three.com>
 
+EXPOSE 8000
+CMD ["/sbin/entrypoint.sh"]
+
 ARG cachet_ver
-ENV cachet_ver ${cachet_ver:-v2.3.10}
+ENV cachet_ver ${cachet_ver:-v2.3.11}
 
 ENV PG_MAJOR 9.5
-ENV NGINX_VERSION 1.10.1-1~jessie
+ENV NGINX_VERSION 1.12.0-1~jessie
 ENV COMPOSER_VERSION 1.4.1
 
 RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
@@ -35,37 +38,25 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
+# forward request and error logs to docker log collector
+RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
+    ln -sf /dev/stderr /var/log/nginx/error.log
+
+RUN touch /var/run/nginx.pid /var/run/php5-fpm.pid && \
+    chown -R www-data:www-data /var/run/nginx.pid /var/run/php5-fpm.pid
+
+RUN adduser www-data sudo && \
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+RUN mkdir -p /var/www/html /usr/share/nginx/cache && \
+    chown -R www-data:www-data /var/www /usr/share/nginx/cache /var/cache/nginx
+
 # Install composer
 RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" && \
     php -r "copy('https://composer.github.io/installer.sig', '/tmp/composer-setup.sig');" && \
     php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !== trim(file_get_contents('/tmp/composer-setup.sig'))) { unlink('/tmp/composer-setup.php'); echo 'Invalid installer' . PHP_EOL; exit(1); }" && \
     php /tmp/composer-setup.php --version=$COMPOSER_VERSION --install-dir=bin && \
     php -r "unlink('/tmp/composer-setup.php');"
-
-COPY conf/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
-COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
-COPY conf/nginx.conf /etc/nginx/nginx.conf
-COPY conf/nginx-site.conf /etc/nginx/conf.d/default.conf
-
-RUN mkdir -p /usr/share/nginx/cache && \
-    chown -R www-data /usr/share/nginx/cache
-
-RUN mkdir -p /var/www/html && \
-    chown -R www-data /var/www
-
-# forward request and error logs to docker log collector
-RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
-    ln -sf /dev/stderr /var/log/nginx/error.log
-
-RUN touch /var/run/nginx.pid && \
-  chown -R www-data:www-data /var/run/nginx.pid && \
-  chown -R www-data:www-data /var/cache/nginx
-
-RUN touch /var/run/php5-fpm.pid && \
-  chown -R www-data:www-data /var/run/php5-fpm.pid
-
-RUN adduser www-data sudo && \
-    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 WORKDIR /var/www/html/
 USER www-data
@@ -78,9 +69,9 @@ RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
     php /bin/composer.phar install --no-dev -o && \
     rm -rf bootstrap/cache/*
 
+COPY conf/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
+COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
+COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY conf/nginx-site.conf /etc/nginx/conf.d/default.conf
 COPY conf/.env.docker /var/www/html/.env
 COPY entrypoint.sh /sbin/entrypoint.sh
-
-EXPOSE 8000
-
-CMD ["/sbin/entrypoint.sh"]

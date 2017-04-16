@@ -8,6 +8,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    restart: always
   cachet:
     build:
       context: .
@@ -20,8 +21,13 @@ services:
     environment:
       - DB_DRIVER=pgsql
       - DB_HOST=postgres
+      - DB_PORT=5432
       - DB_DATABASE=postgres
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
+      - DB_PREFIX=chq_
+      - APP_KEY=${APP_KEY:-null}
+      - DEBUG=false
     depends_on:
       - postgres
+    restart: always
