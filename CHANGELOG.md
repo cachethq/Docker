@@ -1,11 +1,11 @@
 # Change Log
 
-## [Unreleased](https://github.com/CachetHQ/Docker/tree/HEAD)
-
-[Full Changelog](https://github.com/CachetHQ/Docker/compare/v2.3.10...HEAD)
+## [v2.3.11](https://github.com/CachetHQ/Docker/tree/v2.3.11) (2017-04-16)
+[Full Changelog](https://github.com/CachetHQ/Docker/compare/v2.3.10...v2.3.11)
 
 **Implemented enhancements:**
 
+- Add "restart: always" property [\#194](https://github.com/CachetHQ/Docker/issues/194)
 - Nginx max\_children [\#162](https://github.com/CachetHQ/Docker/issues/162)
 - New ENV vars for notifications in 2.4 [\#149](https://github.com/CachetHQ/Docker/issues/149)
 - Support all possible ENV vars [\#135](https://github.com/CachetHQ/Docker/issues/135)
@@ -15,6 +15,7 @@
 - Consider whitelisting on .dockerignore instead of blacklisting [\#116](https://github.com/CachetHQ/Docker/issues/116)
 - Beacons in 2.4 [\#114](https://github.com/CachetHQ/Docker/issues/114)
 - single container for PaaS deployment [\#103](https://github.com/CachetHQ/Docker/issues/103)
+- Add CHANGELOG.md [\#191](https://github.com/CachetHQ/Docker/pull/191) ([djdefi](https://github.com/djdefi))
 - APP\_KEY ENV [\#190](https://github.com/CachetHQ/Docker/pull/190) ([djdefi](https://github.com/djdefi))
 - Add more ENV vars [\#189](https://github.com/CachetHQ/Docker/pull/189) ([djdefi](https://github.com/djdefi))
 - Add Cachet Beacon env var [\#186](https://github.com/CachetHQ/Docker/pull/186) ([djdefi](https://github.com/djdefi))
@@ -40,6 +41,7 @@
 
 **Closed issues:**
 
+- How to install Cachethq on synology [\#197](https://github.com/CachetHQ/Docker/issues/197)
 - Release with NGINX [\#170](https://github.com/CachetHQ/Docker/issues/170)
 - Download cachet to /usr/src [\#161](https://github.com/CachetHQ/Docker/issues/161)
 - Do you have a verison of the docker cachet code for deployment in kubernetes/minikube? [\#159](https://github.com/CachetHQ/Docker/issues/159)
@@ -55,6 +57,8 @@
 
 **Merged pull requests:**
 
+- Added "restart: always" property [\#195](https://github.com/CachetHQ/Docker/pull/195) ([felixoi](https://github.com/felixoi))
+- Updated Nginx to latest stable release [\#192](https://github.com/CachetHQ/Docker/pull/192) ([Madhu1512](https://github.com/Madhu1512))
 - Backport master to 2.3 [\#188](https://github.com/CachetHQ/Docker/pull/188) ([djdefi](https://github.com/djdefi))
 - Update container name in dev guide README.md [\#181](https://github.com/CachetHQ/Docker/pull/181) ([djdefi](https://github.com/djdefi))
 - DB init w/ custom DB name fixes [\#179](https://github.com/CachetHQ/Docker/pull/179) ([djdefi](https://github.com/djdefi))
