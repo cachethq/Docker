@@ -10,7 +10,7 @@ check_database_connection() {
       prog="mysqladmin -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} status"
       ;;
     pgsql)
-      prog=$(find /usr/lib/postgresql/ -name pg_isready)
+      prog="/usr/bin/pg_isready"
       prog="${prog} -h ${DB_HOST} -U ${DB_USERNAME} -d ${DB_DATABASE} -t 1"
       ;;
   esac
@@ -169,7 +169,7 @@ initialize_system() {
   sed 's,{{NEXMO_SECRET}},'${NEXMO_SECRET}',g' -i /var/www/html/.env
   sed 's,{{NEXMO_SMS_FROM}},'${NEXMO_SMS_FROM}',g' -i /var/www/html/.env
 
-  sudo sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php5/fpm/pool.d/www.conf
+  sudo sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php7/php-fpm.d/www.conf
 
   rm -rf bootstrap/cache/*
   chmod -R 777 storage

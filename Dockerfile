@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM alpine:3.5
 
 MAINTAINER Alt Three <support@alt-three.com>
 
@@ -8,48 +8,64 @@ CMD ["/sbin/entrypoint.sh"]
 ARG cachet_ver
 ENV cachet_ver ${cachet_ver:-master}
 
-ENV PG_MAJOR 9.5
-ENV NGINX_VERSION 1.12.0-1~jessie
+ENV NGINX_VERSION 1.10.3-r0
 ENV COMPOSER_VERSION 1.4.1
 
-RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
-RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62
+RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
 
-RUN echo "deb http://nginx.org/packages/debian/ jessie nginx" > /etc/apt/sources.list.d/nginx.list
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" $PG_MAJOR > /etc/apt/sources.list.d/pgdg.list
-
-# Using debian packages instead of compiling from scratch
-RUN DEBIAN_FRONTEND=noninteractive \
-    echo "APT::Install-Recommends \"0\";" >> /etc/apt/apt.conf.d/02recommends && \
-    echo "APT::Install-Suggests \"0\";" >> /etc/apt/apt.conf.d/02recommends && \
-    apt-get clean && \
-    apt-get -q -y update && \
-    apt-get -q -y install \
-    ca-certificates \
-    postgresql-client-$PG_MAJOR \
+# Using repo packages instead of compiling from scratch
+RUN apk add --no-cache --update \
+    postgresql-client \
+    postgresql \
     mysql-client \
     nginx=${NGINX_VERSION} \
-    php5-fpm php5-curl \
-    php5-readline php5-mcrypt sudo \
-    php5-apcu php5-cli php5-gd \
-    php5-mysql php5-pgsql php5-sqlite \
-    wget sqlite libsqlite3-dev git \
-    supervisor && \
-    apt-get clean && apt-get autoremove -q && \
-    rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
+    php7 \
+    php7-apcu \
+    php7-bcmath \
+    php7-dom \
+    php7-ctype \
+    php7-curl \
+    php7-fpm \
+    php7-gd \
+    php7-iconv \
+    php7-intl \
+    php7-json \
+    php7-mbstring \
+    php7-mcrypt \
+    php7-mysqlnd \
+    php7-opcache \
+    php7-openssl \
+    php7-pdo \
+    php7-pdo_mysql \
+    php7-pdo_pgsql \
+    php7-pdo_sqlite \
+    php7-phar \
+    php7-posix \
+    php7-session \
+    php7-soap \
+    php7-xml \
+    php7-zip \
+    php7-zlib \
+    wget sqlite git sudo curl bash grep \
+    supervisor
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
-    ln -sf /dev/stderr /var/log/nginx/error.log
+    ln -sf /dev/stderr /var/log/nginx/error.log && \
+    ln -sf /dev/stdout /var/log/php7/error.log && \
+    ln -sf /dev/stderr /var/log/php7/error.log
+
+RUN adduser -S -g www-data www-data
 
 RUN touch /var/run/nginx.pid /var/run/php5-fpm.pid && \
     chown -R www-data:www-data /var/run/nginx.pid /var/run/php5-fpm.pid
 
-RUN adduser www-data sudo && \
-    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN echo 'www-data ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-RUN mkdir -p /var/www/html /usr/share/nginx/cache && \
-    chown -R www-data:www-data /var/www /usr/share/nginx/cache /var/cache/nginx
+RUN mkdir -p /var/www/html /usr/share/nginx/cache /var/cache/nginx && \
+    chown -R www-data:www-data /var/www /usr/share/nginx/cache /var/cache/nginx /var/lib/nginx/
+
+RUN ln -s /usr/bin/php7 /usr/bin/php
 
 # Install composer
 RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" && \
@@ -69,7 +85,7 @@ RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
     php /bin/composer.phar install --no-dev -o && \
     rm -rf bootstrap/cache/*
 
-COPY conf/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
+COPY conf/php-fpm-pool.conf /etc/php7/php-fpm.d/www.conf
 COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY conf/nginx-site.conf /etc/nginx/conf.d/default.conf

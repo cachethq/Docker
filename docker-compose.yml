@@ -27,7 +27,7 @@ services:
       - DB_PASSWORD=postgres
       - DB_PREFIX=chq_
       - APP_KEY=${APP_KEY:-null}
-      - DEBUG=false
+      - DEBUG=true
     depends_on:
       - postgres
     restart: always
