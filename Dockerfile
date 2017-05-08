@@ -10,7 +10,7 @@ ENV cachet_ver ${cachet_ver:-master}
 #ENV NGINX_VERSION 1.12.0-r1
 ENV COMPOSER_VERSION 1.4.1
 
-RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
+#RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
 
 # Using repo packages instead of compiling from scratch
 RUN apk add --no-cache --update \
@@ -53,14 +53,18 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stdout /var/log/php7/error.log && \
     ln -sf /dev/stderr /var/log/php7/error.log
 
-RUN adduser -S -g www-data www-data
+RUN addgroup -S www-data 
+RUN adduser -S -s /bin/bash -G www-data www-data
 
 RUN touch /var/run/nginx.pid /var/run/php5-fpm.pid && \
     chown -R www-data:www-data /var/run/nginx.pid /var/run/php5-fpm.pid
 
 RUN echo 'www-data ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-RUN mkdir -p /var/www/html /usr/share/nginx/cache /var/cache/nginx && \
+RUN mkdir -p /var/www/html 
+RUN mkdir -p /usr/share/nginx/cache 
+RUN mkdir -p /var/cache/nginx && \
+    mkdir -p /var/lib/nginx && \
     chown -R www-data:www-data /var/www /usr/share/nginx/cache /var/cache/nginx /var/lib/nginx/
 
 RUN ln -s /usr/bin/php7 /usr/bin/php
