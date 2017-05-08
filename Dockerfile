@@ -1,14 +1,13 @@
-FROM alpine:latest
+FROM nginx:1.13.0-alpine
 
 MAINTAINER Alt Three <support@alt-three.com>
 
 EXPOSE 8000
 CMD ["/sbin/entrypoint.sh"]
-
 ARG cachet_ver
 ENV cachet_ver ${cachet_ver:-master}
 
-ENV NGINX_VERSION 1.12.0
+#ENV NGINX_VERSION 1.12.0-r1
 ENV COMPOSER_VERSION 1.4.1
 
 RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
@@ -18,7 +17,6 @@ RUN apk add --no-cache --update \
     postgresql-client \
     postgresql \
     mysql-client \
-    nginx=${NGINX_VERSION} \
     php7 \
     php7-apcu \
     php7-bcmath \
