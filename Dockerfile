@@ -7,10 +7,7 @@ CMD ["/sbin/entrypoint.sh"]
 ARG cachet_ver
 ENV cachet_ver ${cachet_ver:-master}
 
-#ENV NGINX_VERSION 1.12.0-r1
 ENV COMPOSER_VERSION 1.4.1
-
-#RUN echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
 
 # Using repo packages instead of compiling from scratch
 RUN apk add --no-cache --update \
