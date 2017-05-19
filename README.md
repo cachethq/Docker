@@ -15,7 +15,7 @@ Cachet is a BSD-3-licensed open source project. If you'd like to support future 
 1. Clone this repository
 
   ```shell
-  git clone https://github.com/CachetHQ/Cachet.git
+  git clone https://github.com/CachetHQ/Docker.git
   ```
 
 2. Edit the docker-compose.yml file to specify your [ENV variables](/conf/.env.docker).
