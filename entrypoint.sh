@@ -7,7 +7,7 @@ check_database_connection() {
   echo "Attempting to connect to database ..."
   case "${DB_DRIVER}" in
     mysql)
-      prog="mysqladmin -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} status"
+      prog="mysqladmin -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} -P ${DB_PORT} status"
       ;;
     pgsql)
       prog="/usr/bin/pg_isready"
@@ -31,7 +31,7 @@ check_database_connection() {
 
 checkdbinitmysql() {
     table=sessions
-    if [[ "$(mysql -N -s -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} ${DB_DATABASE} -e \
+    if [[ "$(mysql -N -s -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} ${DB_DATABASE} -P ${DB_PORT} -e \
         "select count(*) from information_schema.tables where \
             table_schema='${DB_DATABASE}' and table_name='${DB_PREFIX}${table}';")" -eq 1 ]]; then
         echo "Table ${DB_PREFIX}${table} exists! ..."
