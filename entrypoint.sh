@@ -7,7 +7,7 @@ check_database_connection() {
   echo "Attempting to connect to database ..."
   case "${DB_DRIVER}" in
     mysql)
-      prog="mysqladmin -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} status"
+      prog="mysqladmin -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} -P ${DB_PORT} status"
       ;;
     pgsql)
       prog="/usr/bin/pg_isready"
