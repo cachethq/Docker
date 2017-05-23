@@ -81,6 +81,7 @@ RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
     chown -R www-data /var/www/html && \
     rm -r ${cachet_ver}.tar.gz && \
     php /bin/composer.phar global require "hirak/prestissimo:^0.3" && \
+    php /bin/composer.phar global require "predis/predis:^1.1" && \
     php /bin/composer.phar install --no-dev -o && \
     rm -rf bootstrap/cache/*
 
