@@ -76,7 +76,7 @@ RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php')
 WORKDIR /var/www/html/
 USER www-data
 
-RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
+RUN wget https://codeload.github.com/CachetHQ/Cachet/tar.gz/v${cachet_ver} -O ${cachet_ver}.tar.gz && \
     tar xzvf ${cachet_ver}.tar.gz --strip-components=1 && \
     chown -R www-data /var/www/html && \
     rm -r ${cachet_ver}.tar.gz && \
