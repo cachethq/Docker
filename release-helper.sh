@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # GitHub API Token
-token=30d74415c476ae115107fbf17bb8144b8af2abbd
+token=null
 
 #curl -H "Authorization: token $token" -s https://api.github.com/rate_limit
 
