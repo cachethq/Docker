@@ -1,35 +1,5 @@
 # Change Log
 
-## [v2.3.12](https://github.com/CachetHQ/Docker/tree/v2.3.12) (2017-06-29)
-[Full Changelog](https://github.com/CachetHQ/Docker/compare/v2.3.11...v2.3.12)
-
-**Implemented enhancements:**
-
-- Switch to Alpine Linux [\#200](https://github.com/CachetHQ/Docker/pull/200) ([djdefi](https://github.com/djdefi))
-
-**Fixed bugs:**
-
-- PGSQL ignores DB\_PORT [\#206](https://github.com/CachetHQ/Docker/issues/206)
-
-**Closed issues:**
-
-- Enable seedfile for auto-deploy in pipelines [\#212](https://github.com/CachetHQ/Docker/issues/212)
-- error 500 connection refused fastcgi [\#208](https://github.com/CachetHQ/Docker/issues/208)
-- 500 error during setup [\#207](https://github.com/CachetHQ/Docker/issues/207)
-- Error 500 after installation [\#199](https://github.com/CachetHQ/Docker/issues/199)
-- Set the default port to 8000 in the documentation [\#198](https://github.com/CachetHQ/Docker/issues/198)
-- Question: Why not use different Dockerfiles? [\#196](https://github.com/CachetHQ/Docker/issues/196)
-- Create new tag with Nginx in app container [\#148](https://github.com/CachetHQ/Docker/issues/148)
-
-**Merged pull requests:**
-
-- Remove docker version pin in CI [\#215](https://github.com/CachetHQ/Docker/pull/215) ([djdefi](https://github.com/djdefi))
-- Fixes \#206 by using psql port defined in env var [\#211](https://github.com/CachetHQ/Docker/pull/211) ([gottfrois](https://github.com/gottfrois))
-- fixing mysql ignores DB\_PORT envvar at connection [\#205](https://github.com/CachetHQ/Docker/pull/205) ([naorlivne](https://github.com/naorlivne))
-- Revert "The right git repo" [\#204](https://github.com/CachetHQ/Docker/pull/204) ([jbrooksuk](https://github.com/jbrooksuk))
-- The right git repo [\#203](https://github.com/CachetHQ/Docker/pull/203) ([riemers](https://github.com/riemers))
-- Update Nginx 1.12 [\#202](https://github.com/CachetHQ/Docker/pull/202) ([butuh](https://github.com/butuh))
-
 ## [v2.3.11](https://github.com/CachetHQ/Docker/tree/v2.3.11) (2017-04-16)
 [Full Changelog](https://github.com/CachetHQ/Docker/compare/v2.3.10...v2.3.11)
 
