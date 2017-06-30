@@ -17,6 +17,9 @@ if [ "$CACHET_APP_LATEST_REL" == "$CACHET_DOCKER_LATEST_REL" ]
   then
     echo "Releases up to date!"
   else
+    # Generate changelog (requires https://github.com/skywinder/github-changelog-generator)
+    github_changelog_generator --token $token --future-release $CACHET_APP_LATEST_REL
+
     # Modify Dockerfile, commit, tag, and push
     echo "Creating tag for $CACHET_APP_LATEST_REL"
     gsed s/$CACHET_DOCKER_LATEST_REL/$CACHET_APP_LATEST_REL/g -i Dockerfile
