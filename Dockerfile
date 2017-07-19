@@ -9,6 +9,11 @@ ENV cachet_ver ${cachet_ver:-master}
 
 ENV COMPOSER_VERSION 1.4.1
 
+ADD https://php.codecasts.rocks/php-alpine.rsa.pub /etc/apk/keys/php-alpine.rsa.pub
+
+RUN echo "http://php.codecasts.rocks/7.1" >> /etc/apk/repositories && \
+    apk add --update php7 php7-mbstring
+
 # Using repo packages instead of compiling from scratch
 RUN apk add --no-cache --update \
     postgresql-client \
