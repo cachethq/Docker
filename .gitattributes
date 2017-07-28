@@ -1,0 +1,2 @@
+# Force Linux line endings to fix issues on Windows
+/entrypoint.sh text eol=lf
