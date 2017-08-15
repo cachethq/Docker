@@ -134,16 +134,16 @@ initialize_system() {
   sed 's,{{MAIL_DRIVER}},'"${MAIL_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{MAIL_HOST}},'"${MAIL_HOST}"',g' -i /var/www/html/.env
   sed 's,{{MAIL_PORT}},'"${MAIL_PORT}"',g' -i /var/www/html/.env
-  sed 's,{{MAIL_USERNAME}},'${MAIL_USERNAME}',g' -i /var/www/html/.env
-  sed 's,{{MAIL_PASSWORD}},'${MAIL_PASSWORD}',g' -i /var/www/html/.env
-  sed 's,{{MAIL_ADDRESS}},'${MAIL_ADDRESS}',g' -i /var/www/html/.env
-  sed 's,{{MAIL_NAME}},'${MAIL_NAME}',g' -i /var/www/html/.env
-  sed 's,{{MAIL_ENCRYPTION}},'${MAIL_ENCRYPTION}',g' -i /var/www/html/.env
+  sed 's,{{MAIL_USERNAME}},'"${MAIL_USERNAME}"',g' -i /var/www/html/.env
+  sed 's,{{MAIL_PASSWORD}},'"${MAIL_PASSWORD}"',g' -i /var/www/html/.env
+  sed 's,{{MAIL_ADDRESS}},'"${MAIL_ADDRESS}"',g' -i /var/www/html/.env
+  sed 's,{{MAIL_NAME}},'"${MAIL_NAME}"',g' -i /var/www/html/.env
+  sed 's,{{MAIL_ENCRYPTION}},'"${MAIL_ENCRYPTION}"',g' -i /var/www/html/.env
 
-  sed 's,{{REDIS_HOST}},'${REDIS_HOST}',g' -i /var/www/html/.env
-  sed 's,{{REDIS_DATABASE}},'${REDIS_DATABASE}',g' -i /var/www/html/.env
-  sed 's,{{REDIS_PORT}},'${REDIS_PORT}',g' -i /var/www/html/.env
-  sed 's,{{REDIS_PASSWORD}},'${REDIS_PASSWORD}',g' -i /var/www/html/.env
+  sed 's,{{REDIS_HOST}},'"${REDIS_HOST}"',g' -i /var/www/html/.env
+  sed 's,{{REDIS_DATABASE}},'"${REDIS_DATABASE}"',g' -i /var/www/html/.env
+  sed 's,{{REDIS_PORT}},'"${REDIS_PORT}"',g' -i /var/www/html/.env
+  sed 's,{{REDIS_PASSWORD}},'"${REDIS_PASSWORD}"',g' -i /var/www/html/.env
 
   sed 's,{{GITHUB_TOKEN}},'"${GITHUB_TOKEN}"',g' -i /var/www/html/.env
   sudo sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php5/fpm/pool.d/www.conf
