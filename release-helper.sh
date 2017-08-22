@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # GitHub API Token
-token=null
+token=${GITHUB_TOKEN}
 
 #curl -H "Authorization: token $token" -s https://api.github.com/rate_limit
 
@@ -17,6 +17,9 @@ if [ "$CACHET_APP_LATEST_REL" == "$CACHET_DOCKER_LATEST_REL" ]
   then
     echo "Releases up to date!"
   else
+    # Generate changelog (requires https://github.com/skywinder/github-changelog-generator)
+    github_changelog_generator --token $token --future-release $CACHET_APP_LATEST_REL
+
     # Modify Dockerfile, commit, tag, and push
     echo "Creating tag for $CACHET_APP_LATEST_REL"
     gsed s/$CACHET_DOCKER_LATEST_REL/$CACHET_APP_LATEST_REL/g -i Dockerfile
@@ -25,5 +28,5 @@ if [ "$CACHET_APP_LATEST_REL" == "$CACHET_DOCKER_LATEST_REL" ]
     git push origin $CACHET_APP_LATEST_REL
 
     # Create GitHub release
-    curl -H "Authorization: token $token" -s -H "Content-Type: application/json" -d '{"tag_name":"$CACHET_APP_LATEST_REL","name":"$CACHET_APP_LATEST_REL","body":"Cachet Release $CACHET_APP_LATEST_REL","draft":false,"prerelease":false}' -X POST https://api.github.com/repos/cachethq/docker/releases
+    curl -H "Authorization: token $token" -s -H "Content-Type: application/json" -d '{"tag_name":"'${CACHET_APP_LATEST_REL}'","name":"'${CACHET_APP_LATEST_REL}'","body":"Cachet Release '${CACHET_APP_LATEST_REL}'","draft":false,"prerelease":false}' -X POST https://api.github.com/repos/cachethq/docker/releases
 fi

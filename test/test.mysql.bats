@@ -4,6 +4,8 @@ load docker_helpers
 load "lib/batslib"
 load "lib/output"
 
+export APP_KEY="base64:v2LwHrdgnE+RavEXdnF8LgWIibjvEcFkU2qaX5Ji708="
+
 @test "[$TEST_FILE] docker-compose up" {
   command docker-compose -f test/docker-compose-mysql.yml up -d
 }
@@ -17,7 +19,7 @@ load "lib/output"
 }
 
 @test "[$TEST_FILE] check for empty sessions table" {
-  docker_wait_for_log test_cachet_1 15 "Table sessions does not exist! ..."
+  docker_wait_for_log test_cachet_1 15 "Table chq_sessions does not exist! ..."
 }
 
 @test "[$TEST_FILE] check for DB init" {
@@ -25,7 +27,7 @@ load "lib/output"
 }
 
 @test "[$TEST_FILE] check for populated sessions table" {
-  docker_wait_for_log test_cachet_1 15 "Table sessions exists! ..."
+  docker_wait_for_log test_cachet_1 15 "Table chq_sessions exists! ..."
 }
 
 @test "[$TEST_FILE] check for container start message" {

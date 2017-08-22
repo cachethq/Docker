@@ -33,7 +33,7 @@ Cachet is a BSD-3-licensed open source project. If you'd like to support future 
   docker-compose up
   ```
 
-5. `cachethq/docker` runs on port 80 by default
+5. `cachethq/docker`  runs on port 8000 by default. This is exposed on host port 80 when using docker-compose.
 
 # Docker Hub Automated build
 
