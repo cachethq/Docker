@@ -10,7 +10,10 @@ ENV cachet_ver ${cachet_ver:-master}
 ENV COMPOSER_VERSION 1.4.1
 
 # Using repo packages instead of compiling from scratch
-RUN apk add --no-cache --update \
+RUN wget -O /etc/apk/keys/php-alpine.rsa.pub http://php.codecasts.rocks/php-alpine.rsa.pub \
+    echo "@php http://php.codecasts.rocks/v3.5/php-7.0" >> /etc/apk/repositories \
+    apk add --update php7-redis@php
+    apk add --no-cache --update \
     postgresql-client \
     postgresql \
     mysql-client \
