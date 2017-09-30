@@ -12,12 +12,12 @@ ENV COMPOSER_VERSION 1.4.1
 # Using repo packages instead of compiling from scratch
 ADD https://php.codecasts.rocks/php-alpine.rsa.pub /etc/apk/keys/php-alpine.rsa.pub
 RUN echo "@php http://php.codecasts.rocks/v3.5/php-7.0" >> /etc/apk/repositories \
-    apk add --update php7-redis@php \
     apk add --no-cache --update \
     postgresql-client \
     postgresql \
     mysql-client \
     php7 \
+    php7-redis@php \
     php7-apcu \
     php7-bcmath \
     php7-dom \
