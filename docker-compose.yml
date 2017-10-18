@@ -30,4 +30,4 @@ services:
       - DEBUG=false
     depends_on:
       - postgres
-    restart: always
+    restart: on-failure
