@@ -125,7 +125,7 @@ initialize_system() {
     echo "${keygen}"
     appkey=$(echo ${keygen} | grep -oP '(?<=\[).*(?=\])')
     echo "Please set 'APP_KEY=${appkey}' environment variable at runtime or in docker-compose.yml and re-launch"
-    exit 1
+    exit 0
   fi
 
   sed 's,{{APP_KEY}},'${APP_KEY}',g' -i /var/www/html/.env
