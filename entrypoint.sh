@@ -124,8 +124,8 @@ initialize_system() {
     keygen="$(sudo php artisan key:generate)"
     echo "${keygen}"
     appkey=$(echo ${keygen} | grep -oP '(?<=\[).*(?=\])')
-    echo "Please set ${appkey} as your APP_KEY variable in the environment or docker-compose.yml and re-launch"
-    exit 1
+    echo "Please set the 'APP_KEY=${appkey}' environment variable at runtime or in docker-compose.yml and re-launch"
+    exit 0
   fi
 
   sed 's,{{APP_KEY}},'${APP_KEY}',g' -i /var/www/html/.env

@@ -13,7 +13,7 @@ services:
     build:
       context: .
       args:
-        - cachet_ver=v2.3.10
+        - cachet_ver=v2.3.12
     ports:
       - 80:8000
     links:
@@ -30,4 +30,4 @@ services:
       - DEBUG=false
     depends_on:
       - postgres
-    restart: always
+    restart: on-failure
