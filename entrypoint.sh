@@ -72,7 +72,7 @@ initialize_system() {
   APP_ENV=${APP_ENV:-development}
   APP_DEBUG=${APP_DEBUG:-true}
   APP_URL=${APP_URL:-http://localhost}
-  APP_LOG=${APP_LOG:-syslog}
+  APP_LOG=${APP_LOG:-errorlog}
 
   DB_DRIVER=${DB_DRIVER:-pgsql}
   DB_HOST=${DB_HOST:-postgres}
