@@ -92,7 +92,11 @@ initialize_system() {
   DB_PORT=${DB_PORT}
 
   CACHE_DRIVER=${CACHE_DRIVER:-apc}
-  SESSION_DRIVER=${SESSION_DRIVER:-apc}
+
+  SESSION_DRIVER=${SESSION_DRIVER:-cookie}
+  SESSION_DOMAIN=${SESSION_DOMAIN:-$APP_URL}
+  SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE:-false}
+
   QUEUE_DRIVER=${QUEUE_DRIVER:-database}
   CACHET_EMOJI=${CACHET_EMOJI:-false}
   CACHET_BEACON=${CACHET_BEACON:-true}
@@ -136,7 +140,11 @@ initialize_system() {
   sed 's,{{DB_PORT}},'"${DB_PORT}"',g' -i /var/www/html/.env
 
   sed 's,{{CACHE_DRIVER}},'"${CACHE_DRIVER}"',g' -i /var/www/html/.env
+
   sed 's,{{SESSION_DRIVER}},'"${SESSION_DRIVER}"',g' -i /var/www/html/.env
+  sed 's,{{SESSION_DOMAIN}},'"${SESSION_DOMAIN}"',g' -i /var/www/html/.env
+  sed 's,{{SESSION_SECURE_COOKIE}},'"${SESSION_SECURE_COOKIE}"',g' -i /var/www/html/.env
+
   sed 's,{{QUEUE_DRIVER}},'"${QUEUE_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{CACHET_EMOJI}},'"${CACHET_EMOJI}"',g' -i /var/www/html/.env
   sed 's,{{CACHET_BEACON}},'"${CACHET_BEACON}"',g' -i /var/www/html/.env
