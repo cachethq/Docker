@@ -13,6 +13,9 @@ check_database_connection() {
       prog="/usr/bin/pg_isready"
       prog="${prog} -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USERNAME} -d ${DB_DATABASE} -t 1"
       ;;
+    sqlite)
+      prog="touch ${DB_DATABASE}"
+      ;;
   esac
   timeout=60
   while ! ${prog} >/dev/null 2>&1
@@ -54,6 +57,17 @@ checkdbinitpsql() {
 
 }
 
+checkdbinitsqlite() {
+    table=sessions
+    if [[ "$(sqlite3 ${DB_DATABASE} .tables | grep -c ${table})" -eq 1 ]]; then
+        echo "Table ${table} exists! ..."
+    else
+        echo "Table ${table} does not exist! ..."
+        init_db
+    fi
+
+}
+
 check_configured() {
   case "${DB_DRIVER}" in
     mysql)
@@ -61,6 +75,9 @@ check_configured() {
       ;;
     pgsql)
       checkdbinitpsql
+      ;;
+    sqlite)
+      checkdbinitsqlite
       ;;
   esac
 }
@@ -81,6 +98,8 @@ initialize_system() {
   DB_USERNAME=${DB_USERNAME:-postgres}
   DB_PASSWORD=${DB_PASSWORD:-postgres}
 
+  QUEUE_DRIVER=${QUEUE_DRIVER:-database}
+
   if [[ "${DB_DRIVER}" = "pgsql" ]]; then
     DB_PORT=${DB_PORT:-5432}
   fi
@@ -89,15 +108,20 @@ initialize_system() {
     DB_PORT=${DB_PORT:-3306}
   fi
 
+  if [[ "${DB_DRIVER}" = "sqlite" ]]; then
+    DB_DATABASE=/var/www/html/sqlite/${DB_DATABASE}.sqlite
+    QUEUE_DRIVER=sync
+    DB_PREFIX=""
+  fi
+
   DB_PORT=${DB_PORT}
 
   CACHE_DRIVER=${CACHE_DRIVER:-apc}
 
   SESSION_DRIVER=${SESSION_DRIVER:-cookie}
-  SESSION_DOMAIN=${SESSION_DOMAIN:-$APP_URL}
+  SESSION_DOMAIN=$APP_URL
   SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE:-false}
 
-  QUEUE_DRIVER=${QUEUE_DRIVER:-database}
   CACHET_EMOJI=${CACHET_EMOJI:-false}
   CACHET_BEACON=${CACHET_BEACON:-true}
   CACHET_AUTO_TWITTER=${CACHET_AUTO_TWITTER:-true}
@@ -187,7 +211,9 @@ initialize_system() {
 }
 
 init_db() {
+  echo "${DB_DRIVER} database accepting connections ..."
   echo "Initializing Cachet database ..."
+  php artisan migrate
   php artisan app:install
   check_configured
 }

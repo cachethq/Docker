@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  cachet:
+    image: docker_cachet
+    ports:
+      - 80:8000
+    environment:
+      - DB_DRIVER=sqlite
+      - APP_KEY=${APP_KEY:-null}
+      - DEBUG=true
+    volumes:
+      - ./sqlite:/var/www/html/sqlite
+
+networks:
+  default:
+    external:
+      name: docker_default
