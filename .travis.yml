@@ -6,7 +6,6 @@ env:
         - TEST_SUITE=full
         - TEST_SUITE=mysql
         - TEST_SUITE=sqlite
-        - TRAVIS_WORKER_DOCKER_BINDS='./sqlite:/var/www/html/sqlite'
 services:
         - docker
 

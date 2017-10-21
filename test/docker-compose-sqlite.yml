@@ -10,7 +10,7 @@ services:
       - APP_KEY=${APP_KEY:-null}
       - DEBUG=false
     volumes:
-      - ./sqlite:/var/www/html/sqlite
+      - /var/www/html/sqlite
 
 networks:
   default:
