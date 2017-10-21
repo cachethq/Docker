@@ -61,7 +61,6 @@ docker volume create sqlite
 
 @test "[$TEST_FILE] restart cachet" {
   command docker-compose -f test/docker-compose-sqlite.yml stop cachet
-  command docker-compose -f test/docker-compose-sqlite.yml rm -f cachet
   command docker-compose -f test/docker-compose-sqlite.yml up -d
   docker_wait_for_log test_cachet_1 15 "INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
 }
