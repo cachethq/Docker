@@ -17,6 +17,7 @@ before_install:
     - chmod +x docker-compose
     - sudo mv docker-compose /usr/local/bin
     - docker pull appropriate/curl:latest
+    - docker network create docker_default
 
 script:
     - docker-compose build --no-cache cachet
