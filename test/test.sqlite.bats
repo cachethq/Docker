@@ -14,10 +14,6 @@ export APP_KEY="base64:v2LwHrdgnE+RavEXdnF8LgWIibjvEcFkU2qaX5Ji708="
   docker_wait_for_log test_cachet_1 15 "Initializing Cachet container ..."
 }
 
-@test "[$TEST_FILE] check for database startup" {
-  docker_wait_for_log test_cachet_1 120 "sqlite database accepting connections ..."
-}
-
 @test "[$TEST_FILE] check for empty sessions table" {
   docker_wait_for_log test_cachet_1 15 "Table sessions does not exist! ..."
 }

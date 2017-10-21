@@ -22,14 +22,12 @@ check_database_connection() {
   do
     timeout=$(( $timeout - 1 ))
     if [[ "$timeout" -eq 0 ]]; then
-      echo
       echo "Could not connect to database server! Aborting..."
       exit 1
     fi
     echo -n "."
     sleep 1
   done
-  echo
 }
 
 checkdbinitmysql() {
@@ -110,7 +108,6 @@ initialize_system() {
 
   if [[ "${DB_DRIVER}" = "sqlite" ]]; then
     DB_DATABASE=/var/www/html/sqlite/${DB_DATABASE}.sqlite
-    touch ${DB_DATABASE}
     QUEUE_DRIVER=sync
     DB_PREFIX=""
   fi

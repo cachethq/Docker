@@ -3,6 +3,8 @@ sudo: required
 env:
     global:
         - DOCKER_COMPOSE_VERSION=1.11.2
+        - TEST_SUITE=mysql
+        - TEST_SUITE=sqlite
 services:
         - docker
 
@@ -16,8 +18,7 @@ before_install:
 
 script:
     - bats test/test.full.bats
-    - bats test/test.mysql.bats
-    - bats test/test.sqlite.bats
+    - bats test/test.$TEST_SUITE.bats
 
 notifications:
   email: false
