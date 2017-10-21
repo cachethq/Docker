@@ -3,6 +3,7 @@ sudo: required
 env:
     global:
         - DOCKER_COMPOSE_VERSION=1.11.2
+        - TEST_SUITE=full
         - TEST_SUITE=mysql
         - TEST_SUITE=sqlite
 services:
@@ -17,7 +18,7 @@ before_install:
     - docker pull appropriate/curl:latest
 
 script:
-    - bats test/test.full.bats
+    - docker-compose build --no-cache cachet
     - bats test/test.$TEST_SUITE.bats
 
 notifications:
