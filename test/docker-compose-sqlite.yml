@@ -8,7 +8,7 @@ services:
     environment:
       - DB_DRIVER=sqlite
       - APP_KEY=${APP_KEY:-null}
-      - DEBUG=true
+      - DEBUG=false
     volumes:
       - ./sqlite:/var/www/html/sqlite
 
