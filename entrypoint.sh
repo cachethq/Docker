@@ -14,7 +14,7 @@ check_database_connection() {
       prog="${prog} -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USERNAME} -d ${DB_DATABASE} -t 1"
       ;;
     sqlite)
-      prog="touch ${DB_DATABASE}"
+      prog="true"
       ;;
   esac
   timeout=60
