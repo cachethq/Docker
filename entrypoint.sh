@@ -211,7 +211,10 @@ initialize_system() {
 }
 
 init_db() {
-  echo "${DB_DRIVER} database accepting connections ..."
+  echo "${DB_DRIVER} ready ..."
+  if [[ "${DB_DRIVER}" = "sqlite" ]]; then
+    touch ${DB_DATABASE}
+  fi
   echo "Initializing Cachet database ..."
   php artisan migrate
   php artisan app:install
