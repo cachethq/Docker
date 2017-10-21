@@ -110,6 +110,7 @@ initialize_system() {
 
   if [[ "${DB_DRIVER}" = "sqlite" ]]; then
     DB_DATABASE=/var/www/html/sqlite/${DB_DATABASE}.sqlite
+    touch ${DB_DATABASE}
     QUEUE_DRIVER=sync
     DB_PREFIX=""
   fi
@@ -212,9 +213,6 @@ initialize_system() {
 
 init_db() {
   echo "${DB_DRIVER} ready ..."
-  if [[ "${DB_DRIVER}" = "sqlite" ]]; then
-    touch ${DB_DATABASE}
-  fi
   echo "Initializing Cachet database ..."
   php artisan migrate
   php artisan app:install
