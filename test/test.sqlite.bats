@@ -5,9 +5,9 @@ load "lib/batslib"
 load "lib/output"
 
 export APP_KEY="base64:v2LwHrdgnE+RavEXdnF8LgWIibjvEcFkU2qaX5Ji708="
-docker volume create sqlite
 
 @test "[$TEST_FILE] docker-compose up" {
+  command docker volume create --name=cachet-sqlite
   command docker-compose -f test/docker-compose-sqlite.yml up -d
 }
 
@@ -65,8 +65,17 @@ docker volume create sqlite
   docker_wait_for_log test_cachet_1 15 "INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
 }
 
-@test "[$TEST_FILE] check for populated sessions table on restart" {
+@test "[$TEST_FILE] check for php-fpm startup after restart" {
+  docker_wait_for_log test_cachet_1 15 "INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)"
+}
+
+@test "[$TEST_FILE] check for populated sessions table after restart" {
   docker_wait_for_log test_cachet_1 15 "Table sessions exists! ..."
+}
+
+@test "[$TEST_FILE] curl 200 response test after restart" {
+	run curl_container test_cachet_1 :8000/auth/login --head
+  assert_output -l 0 $'HTTP/1.1 200 OK\r'
 }
 
 @test "[$TEST_FILE] post-restart API pong" {
@@ -85,5 +94,5 @@ docker volume create sqlite
 
 @test "[$TEST_FILE] Cleanup test containers" {
 	docker_clean test_cachet_1
-  rm -rf test/sqlite
+  command docker volume rm cachet-sqlite
 }

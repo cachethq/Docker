@@ -10,9 +10,12 @@ services:
       - APP_KEY=${APP_KEY:-null}
       - DEBUG=false
     volumes:
-      - /var/www/html/sqlite
+      - cachet-sqlite:/var/www/html/sqlite
 
 networks:
   default:
     external:
       name: docker_default
+volumes:
+    cachet-sqlite:
+        external: true
