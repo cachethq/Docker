@@ -53,7 +53,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stdout /var/log/php7/error.log && \
     ln -sf /dev/stderr /var/log/php7/error.log
 
-RUN addgroup -S www-data 
+RUN addgroup -S www-data
 RUN adduser -S -s /bin/bash -G www-data www-data
 
 RUN touch /var/run/nginx.pid /var/run/php5-fpm.pid && \
@@ -61,8 +61,8 @@ RUN touch /var/run/nginx.pid /var/run/php5-fpm.pid && \
 
 RUN echo 'www-data ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-RUN mkdir -p /var/www/html 
-RUN mkdir -p /usr/share/nginx/cache 
+RUN mkdir -p /var/www/html && mkdir -p /var/www/html/sqlite
+RUN mkdir -p /usr/share/nginx/cache
 RUN mkdir -p /var/cache/nginx && \
     mkdir -p /var/lib/nginx && \
     chown -R www-data:www-data /var/www /usr/share/nginx/cache /var/cache/nginx /var/lib/nginx/
