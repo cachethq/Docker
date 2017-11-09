@@ -1,7 +1,14 @@
 #!/bin/bash
+set -e
 
 # GitHub API Token
 token=${GITHUB_TOKEN}
+
+if [ -z $token ]
+  then
+    echo "Please set GITHUB_TOKEN in your local environment."
+    exit 1
+fi
 
 #curl -H "Authorization: token $token" -s https://api.github.com/rate_limit
 
@@ -22,7 +29,7 @@ if [ "$CACHET_APP_LATEST_REL" == "$CACHET_DOCKER_LATEST_REL" ]
 
     # Modify Dockerfile, commit, tag, and push
     echo "Creating tag for $CACHET_APP_LATEST_REL"
-    gsed s/$CACHET_DOCKER_LATEST_REL/$CACHET_APP_LATEST_REL/g -i Dockerfile
+    sed s/$CACHET_DOCKER_LATEST_REL/$CACHET_APP_LATEST_REL/g -i Dockerfile
     git commit -am "Cachet $CACHET_APP_LATEST_REL release"
     git tag -a $CACHET_APP_LATEST_REL -m "Cachet Release $CACHET_APP_LATEST_REL"
     git push origin $CACHET_APP_LATEST_REL
