@@ -125,6 +125,15 @@ initialize_system() {
   PHP_MAX_CHILDREN=${PHP_MAX_CHILDREN:-5}
 
   # configure env file
+  if [[ "${APP_KEY}" == null ]]; then
+    keygen="$(sudo php artisan key:generate)"
+    echo "${keygen}"
+    appkey=$(echo ${keygen} | grep -oP '(?<=\[).*(?=\])')
+    echo "Please set the 'APP_KEY=${appkey}' environment variable at runtime or in docker-compose.yml and re-launch"
+    exit 0
+  fi
+
+  sed 's,{{APP_KEY}},'${APP_KEY}',g' -i /var/www/html/.env
 
   sed 's,{{APP_ENV}},'"${APP_ENV}"',g' -i /var/www/html/.env
   sed 's,{{APP_DEBUG}},'"${APP_DEBUG}"',g' -i /var/www/html/.env
@@ -171,16 +180,6 @@ initialize_system() {
   sed 's,{{NEXMO_SMS_FROM}},'"${NEXMO_SMS_FROM}"',g' -i /var/www/html/.env
 
   sudo sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php7/php-fpm.d/www.conf
-
-  if [[ "${APP_KEY}" == null ]]; then
-    keygen="$(sudo php artisan key:generate)"
-    echo "${keygen}"
-    appkey=$(echo ${keygen} | grep -oP '(?<=\[).*(?=\])')
-    echo "Please set the 'APP_KEY=${appkey}' environment variable at runtime or in docker-compose.yml and re-launch"
-    exit 0
-  fi
-
-  sed 's,{{APP_KEY}},'${APP_KEY}',g' -i /var/www/html/.env
 
   rm -rf bootstrap/cache/*
   chmod -R 777 storage
