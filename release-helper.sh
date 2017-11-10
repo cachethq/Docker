@@ -42,10 +42,10 @@ delete_release () {
       exit 1
     fi
     echo "Removing release $cachet_version"
-    git tag -d $cachet_version
-    git push origin :$cachet_version
     release_id=$(curl -H "Authorization: token $token" -s -X GET https://api.github.com/repos/CachetHQ/Docker/releases/tags/$cachet_version | jq -r .id)
     curl -H "Authorization: token $token" -s -X DELETE https://api.github.com/repos/CachetHQ/Docker/releases/$release_id
+    git tag -d $cachet_version
+    git push origin :$cachet_version
 }
 
 # GitHub API Token
