@@ -96,7 +96,6 @@ fi
 #curl -H "Authorization: token $token" -s https://api.github.com/rate_limit
 
 # Make sure we are on clean branch
-git checkout master
 git checkout -b cachet-$cachet_version
     
 # Generate changelog (requires https://github.com/skywinder/github-changelog-generator)
