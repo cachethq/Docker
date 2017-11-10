@@ -20,7 +20,7 @@ echo "Latest Cachet release: $CACHET_APP_LATEST_REL"
 echo "Latest Docker release: $CACHET_DOCKER_LATEST_REL"
 
 # Compare versions
-if [ "$CACHET_APP_LATEST_REL" == "$CACHET_DOCKER_LATEST_REL" ]
+if [ "$CACHET_APP_LATEST_REL" = "$CACHET_DOCKER_LATEST_REL" ]
   then
     echo "Releases up to date!"
   else
@@ -35,5 +35,5 @@ if [ "$CACHET_APP_LATEST_REL" == "$CACHET_DOCKER_LATEST_REL" ]
     git push origin $CACHET_APP_LATEST_REL
 
     # Create GitHub release
-    curl -H "Authorization: token $token" -s -H "Content-Type: application/json" -d '{"tag_name":"'${CACHET_APP_LATEST_REL}'","name":"'${CACHET_APP_LATEST_REL}'","body":"Cachet Release '${CACHET_APP_LATEST_REL}'","draft":false,"prerelease":false}' -X POST https://api.github.com/repos/cachethq/docker/releases
+    curl -H "Authorization: token $token" -s -H "Content-Type: application/json" -d '{"tag_name":"'${CACHET_APP_LATEST_REL}'","name":"'${CACHET_APP_LATEST_REL}'","body":"Cachet Release '${CACHET_APP_LATEST_REL}'","draft":false,"prerelease":false}' -X POST https://api.github.com/repos/CachetHQ/Docker/releases
 fi
