@@ -20,6 +20,43 @@ usage () {
 
 cachet_version=
 
+check_releases () {
+# Get latest releases
+CACHET_APP_LATEST_REL=$(curl -H "Authorization: token $token" -s https://api.github.com/repos/cachethq/cachet/releases/latest | jq -r .name)
+CACHET_DOCKER_LATEST_REL=$(curl -H "Authorization: token $token" -s https://api.github.com/repos/cachethq/docker/releases/latest | jq -r .name)
+
+echo "Latest Cachet release: $CACHET_APP_LATEST_REL"
+echo "Latest Docker release: $CACHET_DOCKER_LATEST_REL"
+
+# Compare versions
+if [ "$CACHET_APP_LATEST_REL" = "$CACHET_DOCKER_LATEST_REL" ]
+  then
+    echo "Releases on GitHub are up to date!"
+fi
+
+}
+
+delete_release () {
+    if [ -z $cachet_version ]; then
+      echo 1>&2 "error: no version specified."
+      exit 1
+    fi
+    echo "Removing release $cachet_version"
+    git tag -d $cachet_version
+    git push origin :$cachet_version
+    release_id=$(curl -H "Authorization: token $token" -s -X GET https://api.github.com/repos/CachetHQ/Docker/releases/tags/$cachet_version | jq -r .id)
+    curl -H "Authorization: token $token" -s -X DELETE https://api.github.com/repos/CachetHQ/Docker/releases/$release_id
+}
+
+# GitHub API Token
+token=${GITHUB_TOKEN}
+
+if [ -z "$token" ]
+  then
+    echo 1>&2 "error: please set GITHUB_TOKEN in your local environment."
+    exit 1
+fi
+
 # Parse args.
 ARGS=$(getopt --name "$0" --long help,delete,check --options hdc -- "$@") || {
   usage
@@ -34,7 +71,9 @@ while [ $# -gt 0 ]; do
       exit 2
       ;;
     -d|--delete)
-      delete_tag
+      cachet_version=$3
+      delete_release
+      exit 0
       ;;
     -c|--check)
       check_releases
@@ -54,33 +93,11 @@ if [ -z "cachet_version" ]; then
     exit 1
 fi
 
-# GitHub API Token
-token=${GITHUB_TOKEN}
-
-if [ -z "$token" ]
-  then
-    echo 1>&2 "error: please set GITHUB_TOKEN in your local environment."
-    exit 1
-fi
-
 #curl -H "Authorization: token $token" -s https://api.github.com/rate_limit
 
-check_releases(){
-# Get latest releases
-CACHET_APP_LATEST_REL=$(curl -H "Authorization: token $token" -s https://api.github.com/repos/cachethq/cachet/releases/latest | jq -r .name)
-CACHET_DOCKER_LATEST_REL=$(curl -H "Authorization: token $token" -s https://api.github.com/repos/cachethq/docker/releases/latest | jq -r .name)
-
-echo "Latest Cachet release: $CACHET_APP_LATEST_REL"
-echo "Latest Docker release: $CACHET_DOCKER_LATEST_REL"
-
-# Compare versions
-if [ "$CACHET_APP_LATEST_REL" = "$CACHET_DOCKER_LATEST_REL" ]
-  then
-    echo "Releases on GitHub are up to date!"
-fi
-
-}
-
+# Make sure we are on clean branch
+git checkout master
+git checkout -b cachet-$cachet_version
     
 # Generate changelog (requires https://github.com/skywinder/github-changelog-generator)
 if hash github_changelog_generator 2>/dev/null; then
