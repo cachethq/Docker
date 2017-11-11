@@ -17,7 +17,7 @@ check_database_connection() {
   timeout=60
   while ! ${prog} >/dev/null 2>&1
   do
-    timeout=$(( $timeout - 1 ))
+    timeout=$(( timeout - 1 ))
     if [[ "$timeout" -eq 0 ]]; then
       echo
       echo "Could not connect to database server! Aborting..."
@@ -31,7 +31,7 @@ check_database_connection() {
 
 checkdbinitmysql() {
     table=sessions
-    if [[ "$(mysql -N -s -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} ${DB_DATABASE} -P ${DB_PORT} -e \
+    if [[ "$(mysql -N -s -h "${DB_HOST}" -u "${DB_USERNAME}" "${DB_PASSWORD:+-p$DB_PASSWORD}" "${DB_DATABASE}" -P "${DB_PORT}" -e \
         "select count(*) from information_schema.tables where \
             table_schema='${DB_DATABASE}' and table_name='${DB_PREFIX}${table}';")" -eq 1 ]]; then
         echo "Table ${DB_PREFIX}${table} exists! ..."
@@ -45,7 +45,7 @@ checkdbinitmysql() {
 checkdbinitpsql() {
     table=sessions
     export PGPASSWORD=${DB_PASSWORD}
-    if [[ "$(psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USERNAME} -d ${DB_DATABASE} -c "SELECT to_regclass('${DB_PREFIX}${table}');" | grep -c "${DB_PREFIX}${table}")" -eq 1 ]]; then
+    if [[ "$(psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USERNAME}" -d "${DB_DATABASE}" -c "SELECT to_regclass('${DB_PREFIX}${table}');" | grep -c "${DB_PREFIX}${table}")" -eq 1 ]]; then
         echo "Table ${DB_PREFIX}${table} exists! ..."
     else
         echo "Table ${DB_PREFIX}${table} does not exist! ..."
@@ -175,12 +175,12 @@ initialize_system() {
   if [[ "${APP_KEY}" == null ]]; then
     keygen="$(sudo php artisan key:generate)"
     echo "${keygen}"
-    appkey=$(echo ${keygen} | grep -oP '(?<=\[).*(?=\])')
+    appkey=$(echo "${keygen}" | grep -oP '(?<=\[).*(?=\])')
     echo "Please set the 'APP_KEY=${appkey}' environment variable at runtime or in docker-compose.yml and re-launch"
     exit 0
   fi
 
-  sed 's,{{APP_KEY}},'${APP_KEY}',g' -i /var/www/html/.env
+  sed "s,{{APP_KEY}},$APP_KEY,g" -i /var/www/html/.env
 
   rm -rf bootstrap/cache/*
   chmod -R 777 storage
