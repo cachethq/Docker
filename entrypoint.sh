@@ -170,13 +170,12 @@ initialize_system() {
   sed 's,{{NEXMO_SECRET}},'"${NEXMO_SECRET}"',g' -i /var/www/html/.env
   sed 's,{{NEXMO_SMS_FROM}},'"${NEXMO_SMS_FROM}"',g' -i /var/www/html/.env
 
-  sudo sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php7/php-fpm.d/www.conf
+  sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php7/php-fpm.d/www.conf
 
   if [[ "${APP_KEY}" == null ]]; then
-    keygen="$(sudo php artisan key:generate)"
-    echo "${keygen}"
+    keygen="$(php artisan key:generate)"
     appkey=$(echo "${keygen}" | grep -oP '(?<=\[).*(?=\])')
-    echo "Please set the 'APP_KEY=${appkey}' environment variable at runtime or in docker-compose.yml and re-launch"
+    echo "ERROR: Please set the 'APP_KEY=${appkey}' environment variable at runtime or in docker-compose.yml and re-launch"
     exit 0
   fi
 
