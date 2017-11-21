@@ -65,13 +65,14 @@ ARGS=$(getopt --name "$0" --long help,delete,check --options hdc -- "$@") || {
 eval set -- $ARGS
 
 while [ $# -gt 0 ]; do
+  shift
   case "$1" in
     -h|--help)
       usage
       exit 2
       ;;
     -d|--delete)
-      cachet_version=$3
+      cachet_version=$2
       delete_release
       exit 0
       ;;
@@ -88,7 +89,7 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-if [ -z "cachet_version" ]; then
+if [ -z $cachet_version ]; then
     echo 1>&2 "error: no version specified."
     exit 1
 fi
@@ -97,7 +98,7 @@ fi
 
 # Make sure we are on clean branch
 git checkout -b cachet-$cachet_version
-    
+
 # Generate changelog (requires https://github.com/skywinder/github-changelog-generator)
 if hash github_changelog_generator 2>/dev/null; then
   github_changelog_generator --token $token --future-release $cachet_version
