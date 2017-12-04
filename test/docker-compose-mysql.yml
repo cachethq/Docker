@@ -8,12 +8,15 @@ services:
       - MYSQL_USER=mysql
       - MYSQL_PASSWORD=mysql
       - MYSQL_DATABASE=mysql
+  redis:
+    image: redis:alpine
   cachet:
     image: docker_cachet
     ports:
       - 80:8000
     links:
       - mysql:mysql
+      - redis:redis
     environment:
       - DB_DRIVER=mysql
       - DB_HOST=mysql
@@ -22,8 +25,11 @@ services:
       - DB_PASSWORD=mysql
       - DB_PREFIX=chq_
       - APP_KEY=${APP_KEY:-null}
+      - SESSION_DIVER=redis
+      - CACHE_DRIVER=redis
     depends_on:
       - mysql
+      - redis
 
 networks:
   default:
