@@ -195,6 +195,7 @@ start_system() {
   initialize_system
   check_database_connection
   check_configured
+  php artisan migrate
   echo "Starting Cachet! ..."
   php artisan config:cache
   /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
