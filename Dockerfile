@@ -44,7 +44,7 @@ RUN apk add --no-cache --update \
     php7-xml \
     php7-zip \
     php7-zlib \
-    wget sqlite git curl bash grep \
+    wget sqlite bash grep \
     supervisor
 
 # forward request and error logs to docker log collector
@@ -53,17 +53,16 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stdout /var/log/php7/error.log && \
     ln -sf /dev/stderr /var/log/php7/error.log
 
-RUN addgroup -S www-data && \
-    adduser -S -s /bin/bash -G www-data www-data
+RUN adduser -S -s /bin/bash -u 1000 -G root www-data
 
 RUN touch /var/run/nginx.pid /var/run/php5-fpm.pid && \
-    chown -R www-data:www-data /var/run/nginx.pid /var/run/php5-fpm.pid /etc/php7/php-fpm.d
+    chown -R www-data:root /var/run/nginx.pid /var/run/php5-fpm.pid /etc/php7/php-fpm.d
 
 RUN mkdir -p /var/www/html && \
     mkdir -p /usr/share/nginx/cache && \
     mkdir -p /var/cache/nginx && \
     mkdir -p /var/lib/nginx && \
-    chown -R www-data:www-data /var/www /usr/share/nginx/cache /var/cache/nginx /var/lib/nginx/
+    chown -R www-data:root /var/www /usr/share/nginx/cache /var/cache/nginx /var/lib/nginx/
 
 RUN ln -s /usr/bin/php7 /usr/bin/php
 
@@ -75,15 +74,15 @@ RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php')
     php -r "unlink('/tmp/composer-setup.php');"
 
 WORKDIR /var/www/html/
-USER www-data
+USER 1000
 
 RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
     tar xzvf ${cachet_ver}.tar.gz --strip-components=1 && \
-    chown -R www-data /var/www/html && \
+    chown -R www-data:root /var/www/html && \
     rm -r ${cachet_ver}.tar.gz && \
     php /bin/composer.phar global require "hirak/prestissimo:^0.3" && \
     php /bin/composer.phar install --no-dev -o && \
-    rm -rf bootstrap/cache/*
+    rm -rf bootstrap/cache/* 
 
 COPY conf/php-fpm-pool.conf /etc/php7/php-fpm.d/www.conf
 COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
@@ -91,3 +90,8 @@ COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY conf/nginx-site.conf /etc/nginx/conf.d/default.conf
 COPY conf/.env.docker /var/www/html/.env
 COPY entrypoint.sh /sbin/entrypoint.sh
+
+USER root
+RUN chmod g+rwx /var/run/nginx.pid /var/run/php5-fpm.pid && \
+    chmod -R g+rw /var/www /usr/share/nginx/cache /var/cache/nginx /var/lib/nginx/ /etc/php7/php-fpm.d storage
+USER 1000
