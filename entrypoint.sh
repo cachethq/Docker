@@ -182,7 +182,6 @@ initialize_system() {
   sed "s,{{APP_KEY}},$APP_KEY,g" -i /var/www/html/.env
 
   rm -rf bootstrap/cache/*
-  chmod -R 777 storage
 }
 
 init_db() {
