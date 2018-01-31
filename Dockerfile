@@ -44,7 +44,7 @@ RUN apk add --no-cache --update \
     php7-xml \
     php7-zip \
     php7-zlib \
-    wget sqlite bash grep \
+    wget sqlite git curl bash grep \
     supervisor
 
 # forward request and error logs to docker log collector
@@ -53,7 +53,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stdout /var/log/php7/error.log && \
     ln -sf /dev/stderr /var/log/php7/error.log
 
-RUN adduser -S -s /bin/bash -u 1000 -G root www-data
+RUN adduser -S -s /bin/bash -u 1001 -G root www-data
 
 RUN touch /var/run/nginx.pid /var/run/php5-fpm.pid && \
     chown -R www-data:root /var/run/nginx.pid /var/run/php5-fpm.pid /etc/php7/php-fpm.d
@@ -74,7 +74,7 @@ RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php')
     php -r "unlink('/tmp/composer-setup.php');"
 
 WORKDIR /var/www/html/
-USER 1000
+USER 1001
 
 RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
     tar xzvf ${cachet_ver}.tar.gz --strip-components=1 && \
@@ -94,4 +94,4 @@ COPY entrypoint.sh /sbin/entrypoint.sh
 USER root
 RUN chmod g+rwx /var/run/nginx.pid /var/run/php5-fpm.pid && \
     chmod -R g+rw /var/www /usr/share/nginx/cache /var/cache/nginx /var/lib/nginx/ /etc/php7/php-fpm.d storage
-USER 1000
+USER 1001
