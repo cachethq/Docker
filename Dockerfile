@@ -1,4 +1,4 @@
-FROM nginx:1.13.5-alpine
+FROM nginx:1.13.9-alpine
 
 MAINTAINER Alt Three <support@alt-three.com>
 
@@ -7,17 +7,14 @@ CMD ["/sbin/entrypoint.sh"]
 ARG cachet_ver
 ENV cachet_ver ${cachet_ver:-master}
 
-ENV COMPOSER_VERSION 1.4.1
+ENV COMPOSER_VERSION 1.6.3
 
-# Using repo packages instead of compiling from scratch
-ADD https://php.codecasts.rocks/php-alpine.rsa.pub /etc/apk/keys/php-alpine.rsa.pub
-RUN echo "@php http://php.codecasts.rocks/v3.5/php-7.0" >> /etc/apk/repositories
 RUN apk add --no-cache --update \
     postgresql-client \
     postgresql \
     mysql-client \
     php7 \
-    php7-redis@php \
+    php7-redis \
     php7-apcu \
     php7-bcmath \
     php7-dom \
@@ -44,6 +41,7 @@ RUN apk add --no-cache --update \
     php7-xml \
     php7-zip \
     php7-zlib \
+    php7-tokenizer \
     wget sqlite git curl bash grep \
     supervisor
 
@@ -55,16 +53,14 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
 
 RUN adduser -S -s /bin/bash -u 1001 -G root www-data
 
-RUN touch /var/run/nginx.pid /var/run/php5-fpm.pid && \
-    chown -R www-data:root /var/run/nginx.pid /var/run/php5-fpm.pid /etc/php7/php-fpm.d
+RUN touch /var/run/nginx.pid && \
+    chown -R www-data:root /var/run/nginx.pid /etc/php7/php-fpm.d
 
 RUN mkdir -p /var/www/html && \
     mkdir -p /usr/share/nginx/cache && \
     mkdir -p /var/cache/nginx && \
     mkdir -p /var/lib/nginx && \
     chown -R www-data:root /var/www /usr/share/nginx/cache /var/cache/nginx /var/lib/nginx/
-
-RUN ln -s /usr/bin/php7 /usr/bin/php
 
 # Install composer
 RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" && \
@@ -92,6 +88,6 @@ COPY conf/.env.docker /var/www/html/.env
 COPY entrypoint.sh /sbin/entrypoint.sh
 
 USER root
-RUN chmod g+rwx /var/run/nginx.pid /var/run/php5-fpm.pid && \
+RUN chmod g+rwx /var/run/nginx.pid && \
     chmod -R g+rw /var/www /usr/share/nginx/cache /var/cache/nginx /var/lib/nginx/ /etc/php7/php-fpm.d storage
 USER 1001
