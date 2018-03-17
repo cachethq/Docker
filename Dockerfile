@@ -37,6 +37,7 @@ RUN apk add --no-cache --update \
     php7-phar \
     php7-posix \
     php7-session \
+    php7-simplexml \
     php7-soap \
     php7-xml \
     php7-zip \
