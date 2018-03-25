@@ -13,6 +13,8 @@ check_database_connection() {
       prog="/usr/bin/pg_isready"
       prog="${prog} -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USERNAME} -d ${DB_DATABASE} -t 1"
       ;;
+    sqlite)
+      prog="touch /var/www/html/database/database.sqlite"
   esac
   timeout=60
   while ! ${prog} >/dev/null 2>&1
@@ -90,6 +92,14 @@ initialize_system() {
   fi
 
   DB_PORT=${DB_PORT}
+
+  if [[ "${DB_DRIVER}" = "sqlite" ]]; then
+    DB_DATABASE=""
+    DB_HOST=""
+    DB_PORT=""
+    DB_USERNAME=""
+    DB_PASSWORD=""
+  fi
 
   CACHE_DRIVER=${CACHE_DRIVER:-apc}
 
@@ -180,6 +190,9 @@ initialize_system() {
   fi
 
   sed "s,{{APP_KEY}},$APP_KEY,g" -i /var/www/html/.env
+
+  # remove empty lines
+  sed '/^.*=""$/d'  -i /var/www/html/.env
 
   rm -rf bootstrap/cache/*
 }
