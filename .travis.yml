@@ -17,6 +17,7 @@ before_install:
 script:
     - bats test/test.full.bats
     - bats test/test.mysql.bats
+    - bats test/test.sqlite.bats
 
 notifications:
   email: false
