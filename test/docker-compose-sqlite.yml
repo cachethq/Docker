@@ -8,6 +8,7 @@ services:
     environment:
       - DB_DRIVER=sqlite
       - APP_KEY=${APP_KEY:-null}
+      - DEBUG=false
     volumes:
       - cachetdb:/var/www/html/database
 

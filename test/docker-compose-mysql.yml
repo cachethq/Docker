@@ -8,6 +8,7 @@ services:
       - MYSQL_USER=mysql
       - MYSQL_PASSWORD=mysql
       - MYSQL_DATABASE=mysql
+      - DEBUG=false
   cachet:
     image: docker_cachet
     ports:
