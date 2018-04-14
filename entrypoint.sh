@@ -1,7 +1,7 @@
 #!/bin/bash
 set -o errexit -o nounset -o pipefail
 
-[[ "${DEBUG}" == true ]] && set -x
+[ "${DEBUG:-}" == true ] && set -x
 
 check_database_connection() {
   echo "Attempting to connect to database ..."
