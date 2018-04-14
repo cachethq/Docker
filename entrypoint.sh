@@ -79,9 +79,10 @@ initialize_system() {
   DB_DRIVER=${DB_DRIVER:-pgsql}
   DB_HOST=${DB_HOST:-postgres}
   DB_DATABASE=${DB_DATABASE:-cachet}
-  DB_PREFIX=${DB_PREFIX}
+  DB_PREFIX=${DB_PREFIX:-}
   DB_USERNAME=${DB_USERNAME:-postgres}
   DB_PASSWORD=${DB_PASSWORD:-postgres}
+  DB_PORT=${DB_PORT:-}
 
   if [[ "${DB_DRIVER}" = "pgsql" ]]; then
     DB_PORT=${DB_PORT:-5432}
@@ -90,8 +91,6 @@ initialize_system() {
   if [[ "${DB_DRIVER}" = "mysql" ]]; then
     DB_PORT=${DB_PORT:-3306}
   fi
-
-  DB_PORT=${DB_PORT}
 
   if [[ "${DB_DRIVER}" = "sqlite" ]]; then
     DB_DATABASE=""
