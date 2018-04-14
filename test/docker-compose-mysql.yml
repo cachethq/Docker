@@ -6,7 +6,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=mysql
       - MYSQL_USER=mysql
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=mysql test
       - MYSQL_DATABASE=mysql
       - DEBUG=false
   cachet:
@@ -20,7 +20,7 @@ services:
       - DB_HOST=mysql
       - DB_DATABASE=mysql
       - DB_USERNAME=mysql
-      - DB_PASSWORD=mysql
+      - DB_PASSWORD=mysql test
       - DB_PREFIX=chq_
       - APP_KEY=${APP_KEY:-null}
     depends_on:
