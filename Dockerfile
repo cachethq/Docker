@@ -65,8 +65,8 @@ RUN mkdir -p /var/www/html && \
     chown -R www-data:root /var/www /usr/share/nginx/cache /var/cache/nginx /var/lib/nginx/
 
 # Install composer
-RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" && \
-    php -r "copy('https://composer.github.io/installer.sig', '/tmp/composer-setup.sig');" && \
+RUN wget https://getcomposer.org/installer -O /tmp/composer-setup.php && \
+    wget https://composer.github.io/installer.sig -O /tmp/composer-setup.sig && \
     php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !== trim(file_get_contents('/tmp/composer-setup.sig'))) { unlink('/tmp/composer-setup.php'); echo 'Invalid installer' . PHP_EOL; exit(1); }" && \
     php /tmp/composer-setup.php --version=$COMPOSER_VERSION --install-dir=bin && \
     php -r "unlink('/tmp/composer-setup.php');"
@@ -80,7 +80,7 @@ RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
     rm -r ${cachet_ver}.tar.gz && \
     php /bin/composer.phar global require "hirak/prestissimo:^0.3" && \
     php /bin/composer.phar install --no-dev -o && \
-    rm -rf bootstrap/cache/* 
+    rm -rf bootstrap/cache/*
 
 COPY conf/php-fpm-pool.conf /etc/php7/php-fpm.d/www.conf
 COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
