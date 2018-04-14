@@ -1,7 +1,7 @@
 #!/bin/bash
-set -eo pipefail
+set -o errexit -o nounset -o pipefail
 
-[[ "${DEBUG}" == true ]] && set -x
+[ "${DEBUG:-false}" == true ] && set -x
 
 check_database_connection() {
   echo "Attempting to connect to database ..."
@@ -70,7 +70,7 @@ check_configured() {
 initialize_system() {
   echo "Initializing Cachet container ..."
 
-  APP_KEY=${APP_KEY:-null}
+  APP_KEY=${APP_KEY:-}
   APP_ENV=${APP_ENV:-development}
   APP_DEBUG=${APP_DEBUG:-true}
   APP_URL=${APP_URL:-http://localhost}
@@ -79,9 +79,10 @@ initialize_system() {
   DB_DRIVER=${DB_DRIVER:-pgsql}
   DB_HOST=${DB_HOST:-postgres}
   DB_DATABASE=${DB_DATABASE:-cachet}
-  DB_PREFIX=${DB_PREFIX}
+  DB_PREFIX=${DB_PREFIX:-}
   DB_USERNAME=${DB_USERNAME:-postgres}
   DB_PASSWORD=${DB_PASSWORD:-postgres}
+  DB_PORT=${DB_PORT:-}
 
   if [[ "${DB_DRIVER}" = "pgsql" ]]; then
     DB_PORT=${DB_PORT:-5432}
@@ -90,8 +91,6 @@ initialize_system() {
   if [[ "${DB_DRIVER}" = "mysql" ]]; then
     DB_PORT=${DB_PORT:-3306}
   fi
-
-  DB_PORT=${DB_PORT}
 
   if [[ "${DB_DRIVER}" = "sqlite" ]]; then
     DB_DATABASE=""
@@ -103,9 +102,9 @@ initialize_system() {
 
   CACHE_DRIVER=${CACHE_DRIVER:-apc}
 
-  SESSION_DRIVER=${SESSION_DRIVER:-apc}
+  SESSION_DRIVER=${SESSION_DRIVER:-}
   SESSION_DOMAIN=${SESSION_DOMAIN:-$APP_URL}
-  SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE:-false}
+  SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE:-}
 
   QUEUE_DRIVER=${QUEUE_DRIVER:-database}
   CACHET_EMOJI=${CACHET_EMOJI:-false}
@@ -115,21 +114,21 @@ initialize_system() {
   MAIL_DRIVER=${MAIL_DRIVER:-smtp}
   MAIL_HOST=${MAIL_HOST:-localhost}
   MAIL_PORT=${MAIL_PORT:-25}
-  MAIL_USERNAME=${MAIL_USERNAME:-null}
-  MAIL_PASSWORD=${MAIL_PASSWORD:-null}
-  MAIL_ADDRESS=${MAIL_ADDRESS:-null}
-  MAIL_NAME=${MAIL_NAME:-null}
-  MAIL_ENCRYPTION=${MAIL_ENCRYPTION:-null}
+  MAIL_USERNAME=${MAIL_USERNAME:-}
+  MAIL_PASSWORD=${MAIL_PASSWORD:-}
+  MAIL_ADDRESS=${MAIL_ADDRESS:-}
+  MAIL_NAME=${MAIL_NAME:-}
+  MAIL_ENCRYPTION=${MAIL_ENCRYPTION:-}
 
-  REDIS_HOST=${REDIS_HOST:-null}
-  REDIS_DATABASE=${REDIS_DATABASE:-null}
-  REDIS_PORT=${REDIS_PORT:-null}
-  REDIS_PASSWORD=${REDIS_PASSWORD:-null}
+  REDIS_HOST=${REDIS_HOST:-}
+  REDIS_DATABASE=${REDIS_DATABASE:-}
+  REDIS_PORT=${REDIS_PORT:-}
+  REDIS_PASSWORD=${REDIS_PASSWORD:-}
 
-  GITHUB_TOKEN=${GITHUB_TOKEN:-null}
+  GITHUB_TOKEN=${GITHUB_TOKEN:-}
 
-  NEXMO_KEY=${NEXMO_KEY:-null}
-  NEXMO_SECRET=${NEXMO_SECRET:-null}
+  NEXMO_KEY=${NEXMO_KEY:-}
+  NEXMO_SECRET=${NEXMO_SECRET:-}
   NEXMO_SMS_FROM=${NEXMO_SMS_FROM:-Cachet}
 
   PHP_MAX_CHILDREN=${PHP_MAX_CHILDREN:-5}
