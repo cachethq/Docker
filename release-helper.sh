@@ -43,9 +43,10 @@ delete_release () {
     fi
     echo "Removing release $cachet_version"
     release_id=$(curl -H "Authorization: token $token" -s -X GET https://api.github.com/repos/CachetHQ/Docker/releases/tags/$cachet_version | jq -r .id)
-    curl -H "Authorization: token $token" -s -X DELETE https://api.github.com/repos/CachetHQ/Docker/releases/$release_id
-    git tag -d $cachet_version
-    git push origin :$cachet_version
+    curl -H "Authorization: token $token" -s -X DELETE https://api.github.com/repos/CachetHQ/Docker/releases/$release_id || true
+    git tag -d $cachet_version || true
+    git push origin :$cachet_version || true
+    git branch -d cachet-$cachet_version || true
 }
 
 # GitHub API Token
@@ -97,7 +98,12 @@ fi
 #curl -H "Authorization: token $token" -s https://api.github.com/rate_limit
 
 # Make sure we are on clean branch
-git checkout -b cachet-$cachet_version
+if ! git branch --list cachet-$cachet_version; then
+  git checkout -b cachet-$cachet_version
+else
+  echo "Branch cachet-$cachet_version already exists!"
+  git checkout cachet-$cachet_version
+fi
 
 # Generate changelog (requires https://github.com/skywinder/github-changelog-generator)
 if hash github_changelog_generator 2>/dev/null; then
