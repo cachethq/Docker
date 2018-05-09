@@ -1,7 +1,7 @@
 #!/bin/bash
-set -eo pipefail
+set -o errexit -o nounset -o pipefail
 
-[[ "${DEBUG}" == true ]] && set -x
+[ "${DEBUG:-false}" == true ] && set -x
 
 check_database_connection() {
   echo "Attempting to connect to database ..."
@@ -13,11 +13,13 @@ check_database_connection() {
       prog="/usr/bin/pg_isready"
       prog="${prog} -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USERNAME} -d ${DB_DATABASE} -t 1"
       ;;
+    sqlite)
+      prog="touch /var/www/html/database/database.sqlite"
   esac
   timeout=60
   while ! ${prog} >/dev/null 2>&1
   do
-    timeout=$(( $timeout - 1 ))
+    timeout=$(( timeout - 1 ))
     if [[ "$timeout" -eq 0 ]]; then
       echo
       echo "Could not connect to database server! Aborting..."
@@ -31,7 +33,7 @@ check_database_connection() {
 
 checkdbinitmysql() {
     table=sessions
-    if [[ "$(mysql -N -s -h ${DB_HOST} -u ${DB_USERNAME} ${DB_PASSWORD:+-p$DB_PASSWORD} ${DB_DATABASE} -P ${DB_PORT} -e \
+    if [[ "$(mysql -N -s -h "${DB_HOST}" -u "${DB_USERNAME}" "${DB_PASSWORD:+-p$DB_PASSWORD}" "${DB_DATABASE}" -P "${DB_PORT}" -e \
         "select count(*) from information_schema.tables where \
             table_schema='${DB_DATABASE}' and table_name='${DB_PREFIX}${table}';")" -eq 1 ]]; then
         echo "Table ${DB_PREFIX}${table} exists! ..."
@@ -45,7 +47,7 @@ checkdbinitmysql() {
 checkdbinitpsql() {
     table=sessions
     export PGPASSWORD=${DB_PASSWORD}
-    if [[ "$(psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USERNAME} -d ${DB_DATABASE} -c "SELECT to_regclass('${DB_PREFIX}${table}');" | grep -c "${DB_PREFIX}${table}")" -eq 1 ]]; then
+    if [[ "$(psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USERNAME}" -d "${DB_DATABASE}" -c "SELECT to_regclass('${DB_PREFIX}${table}');" | grep -c "${DB_PREFIX}${table}")" -eq 1 ]]; then
         echo "Table ${DB_PREFIX}${table} exists! ..."
     else
         echo "Table ${DB_PREFIX}${table} does not exist! ..."
@@ -68,7 +70,7 @@ check_configured() {
 initialize_system() {
   echo "Initializing Cachet container ..."
 
-  APP_KEY=${APP_KEY:-null}
+  APP_KEY=${APP_KEY:-}
   APP_ENV=${APP_ENV:-development}
   APP_DEBUG=${APP_DEBUG:-true}
   APP_URL=${APP_URL:-http://localhost}
@@ -77,9 +79,10 @@ initialize_system() {
   DB_DRIVER=${DB_DRIVER:-pgsql}
   DB_HOST=${DB_HOST:-postgres}
   DB_DATABASE=${DB_DATABASE:-cachet}
-  DB_PREFIX=${DB_PREFIX}
+  DB_PREFIX=${DB_PREFIX:-}
   DB_USERNAME=${DB_USERNAME:-postgres}
   DB_PASSWORD=${DB_PASSWORD:-postgres}
+  DB_PORT=${DB_PORT:-}
 
   if [[ "${DB_DRIVER}" = "pgsql" ]]; then
     DB_PORT=${DB_PORT:-5432}
@@ -89,13 +92,19 @@ initialize_system() {
     DB_PORT=${DB_PORT:-3306}
   fi
 
-  DB_PORT=${DB_PORT}
+  if [[ "${DB_DRIVER}" = "sqlite" ]]; then
+    DB_DATABASE=""
+    DB_HOST=""
+    DB_PORT=""
+    DB_USERNAME=""
+    DB_PASSWORD=""
+  fi
 
   CACHE_DRIVER=${CACHE_DRIVER:-apc}
 
-  SESSION_DRIVER=${SESSION_DRIVER:-cookie}
+  SESSION_DRIVER=${SESSION_DRIVER:-}
   SESSION_DOMAIN=${SESSION_DOMAIN:-$APP_URL}
-  SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE:-false}
+  SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE:-}
 
   QUEUE_DRIVER=${QUEUE_DRIVER:-database}
   CACHET_EMOJI=${CACHET_EMOJI:-false}
@@ -105,21 +114,21 @@ initialize_system() {
   MAIL_DRIVER=${MAIL_DRIVER:-smtp}
   MAIL_HOST=${MAIL_HOST:-localhost}
   MAIL_PORT=${MAIL_PORT:-25}
-  MAIL_USERNAME=${MAIL_USERNAME:-null}
-  MAIL_PASSWORD=${MAIL_PASSWORD:-null}
-  MAIL_ADDRESS=${MAIL_ADDRESS:-null}
-  MAIL_NAME=${MAIL_NAME:-null}
-  MAIL_ENCRYPTION=${MAIL_ENCRYPTION:-null}
+  MAIL_USERNAME=${MAIL_USERNAME:-}
+  MAIL_PASSWORD=${MAIL_PASSWORD:-}
+  MAIL_ADDRESS=${MAIL_ADDRESS:-}
+  MAIL_NAME=${MAIL_NAME:-}
+  MAIL_ENCRYPTION=${MAIL_ENCRYPTION:-}
 
-  REDIS_HOST=${REDIS_HOST:-null}
-  REDIS_DATABASE=${REDIS_DATABASE:-null}
-  REDIS_PORT=${REDIS_PORT:-null}
-  REDIS_PASSWORD=${REDIS_PASSWORD:-null}
+  REDIS_HOST=${REDIS_HOST:-}
+  REDIS_DATABASE=${REDIS_DATABASE:-}
+  REDIS_PORT=${REDIS_PORT:-}
+  REDIS_PASSWORD=${REDIS_PASSWORD:-}
 
-  GITHUB_TOKEN=${GITHUB_TOKEN:-null}
+  GITHUB_TOKEN=${GITHUB_TOKEN:-}
 
-  NEXMO_KEY=${NEXMO_KEY:-null}
-  NEXMO_SECRET=${NEXMO_SECRET:-null}
+  NEXMO_KEY=${NEXMO_KEY:-}
+  NEXMO_SECRET=${NEXMO_SECRET:-}
   NEXMO_SMS_FROM=${NEXMO_SMS_FROM:-Cachet}
 
   PHP_MAX_CHILDREN=${PHP_MAX_CHILDREN:-5}
@@ -179,10 +188,21 @@ initialize_system() {
   sed 's,{{NEXMO_SECRET}},'"${NEXMO_SECRET}"',g' -i /var/www/html/.env
   sed 's,{{NEXMO_SMS_FROM}},'"${NEXMO_SMS_FROM}"',g' -i /var/www/html/.env
 
-  sudo sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php7/php-fpm.d/www.conf
+  sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php7/php-fpm.d/www.conf
+
+  if [[ "${APP_KEY}" == null ]]; then
+    keygen="$(php artisan key:generate)"
+    appkey=$(echo "${keygen}" | grep -oP '(?<=\[).*(?=\])')
+    echo "ERROR: Please set the 'APP_KEY=${appkey}' environment variable at runtime or in docker-compose.yml and re-launch"
+    exit 0
+  fi
+
+  sed "s,{{APP_KEY}},$APP_KEY,g" -i /var/www/html/.env
+
+  # remove empty lines
+  sed '/^.*=""$/d'  -i /var/www/html/.env
 
   rm -rf bootstrap/cache/*
-  chmod -R 777 storage
 }
 
 init_db() {
@@ -195,6 +215,7 @@ start_system() {
   initialize_system
   check_database_connection
   check_configured
+  php artisan migrate
   echo "Starting Cachet! ..."
   php artisan config:cache
   /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf

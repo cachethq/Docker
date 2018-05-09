@@ -79,7 +79,7 @@ Use `make test` to manually run the tests.
 
 # Development of Cachet using this docker environment
 
-1.  Clone the official repo of CachetHQ/Docker
+1.  Clone the official repo of CachetHQ/Docker:
 
   ```shell
   git clone https://github.com/cachethq/Docker.git cachet-docker
@@ -87,36 +87,33 @@ Use `make test` to manually run the tests.
   git tag -l
   git checkout $LATEST_TAG
   ```
-2. Clone the official repo of CachetHQ/Cachet here and do composer install
+2. Clone the official repo of CachetHQ/Cachet here and do composer install:
 
   ```shell
   git clone https://github.com/CachetHQ/Cachet.git
   ```
 
-3. Setup the Cachet project
+3. Setup the Cachet project:
+
+Note: This requires [Composer](https://getcomposer.org/) be installed on your Docker host.  
 
  ```shell
- cd Cachet
+cd Cachet
 composer install
 cp ../conf/.env.docker ./.env
 cd ..
 ```
 
-4. Edit the docker-compose.yml file
+4. Edit the docker-compose.yml file to bind mount the repo as a volume:
 
   ```yaml
-  replace
-    build: .
-  with
-    image: cachethq/docker
-
-  replace
-    - /var/www
-  with
-    - ./Cachet/:/var/www/html/
+ cachet:
+    volumes:
+      - ./Cachet/:/var/www/html/
+    ...  
   ```
 
-5. Build and run the docker compose
+5. Build and run the container:
 
   ```shell
   docker-compose up
