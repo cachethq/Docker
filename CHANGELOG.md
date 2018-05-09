@@ -1,5 +1,97 @@
 # Change Log
 
+## [v2.3.14](https://github.com/CachetHQ/Docker/tree/v2.3.14) (2018-05-08)
+[Full Changelog](https://github.com/CachetHQ/Docker/compare/v2.3.13...v2.3.14)
+
+**Implemented enhancements:**
+
+- Use wget instead of php to download [\#289](https://github.com/CachetHQ/Docker/pull/289) ([djdefi](https://github.com/djdefi))
+
+**Fixed bugs:**
+
+- Set less defaults in entrypoint [\#288](https://github.com/CachetHQ/Docker/pull/288) ([djdefi](https://github.com/djdefi))
+
+**Closed issues:**
+
+- Don't write custom defaults to the .env file [\#287](https://github.com/CachetHQ/Docker/issues/287)
+- Build the docker-image beyond a proxy [\#286](https://github.com/CachetHQ/Docker/issues/286)
+- sqlite backend directly from environment [\#282](https://github.com/CachetHQ/Docker/issues/282)
+- Change Cachet Documentation [\#274](https://github.com/CachetHQ/Docker/issues/274)
+
+**Merged pull requests:**
+
+- added CI tests for sqlite [\#285](https://github.com/CachetHQ/Docker/pull/285) ([camandel](https://github.com/camandel))
+- sqlite backend directly from environment [\#283](https://github.com/CachetHQ/Docker/pull/283) ([camandel](https://github.com/camandel))
+- Install missing php7-fileinfo extension [\#281](https://github.com/CachetHQ/Docker/pull/281) ([nstapelbroek](https://github.com/nstapelbroek))
+- Update local dev readme copy [\#280](https://github.com/CachetHQ/Docker/pull/280) ([djdefi](https://github.com/djdefi))
+- Resolve missing simplexml support [\#279](https://github.com/CachetHQ/Docker/pull/279) ([DavidCarrington](https://github.com/DavidCarrington))
+- Updated Nginx, Composer to latest version and removed external php repo [\#276](https://github.com/CachetHQ/Docker/pull/276) ([mthota15](https://github.com/mthota15))
+- Make Cachet runnable under arbitrary OpenShift user [\#270](https://github.com/CachetHQ/Docker/pull/270) ([cit1zen](https://github.com/cit1zen))
+
+## [v2.3.13](https://github.com/CachetHQ/Docker/tree/v2.3.13) (2018-01-29)
+[Full Changelog](https://github.com/CachetHQ/Docker/compare/v2.3.12...v2.3.13)
+
+**Implemented enhancements:**
+
+- PHP 7 support [\#168](https://github.com/CachetHQ/Docker/issues/168)
+- Drop sudo / improve layers [\#260](https://github.com/CachetHQ/Docker/pull/260) ([djdefi](https://github.com/djdefi))
+- Make shellcheck happy [\#257](https://github.com/CachetHQ/Docker/pull/257) ([djdefi](https://github.com/djdefi))
+- Enable session cookie [\#245](https://github.com/CachetHQ/Docker/pull/245) ([djdefi](https://github.com/djdefi))
+- Sends Cachet error logs to stdout, so they are more visible [\#242](https://github.com/CachetHQ/Docker/pull/242) ([djdefi](https://github.com/djdefi))
+- Show full APP\_KEY variable in entrypoint output [\#240](https://github.com/CachetHQ/Docker/pull/240) ([djdefi](https://github.com/djdefi))
+- Add php7 redis package [\#234](https://github.com/CachetHQ/Docker/pull/234) ([djdefi](https://github.com/djdefi))
+- Bump base image to nginx:1.13.2-alpine [\#217](https://github.com/CachetHQ/Docker/pull/217) ([djdefi](https://github.com/djdefi))
+
+**Fixed bugs:**
+
+- Disable nginx caching via environment variable? [\#219](https://github.com/CachetHQ/Docker/issues/219)
+- Don't cache components URI [\#220](https://github.com/CachetHQ/Docker/pull/220) ([djdefi](https://github.com/djdefi))
+
+**Closed issues:**
+
+- Documentation on how to integrate Lets Encrypt/Certbot with Docker Image [\#269](https://github.com/CachetHQ/Docker/issues/269)
+- Looping during docker-compose up with MySQL [\#265](https://github.com/CachetHQ/Docker/issues/265)
+- Change to MySQL from PostgreSQL [\#263](https://github.com/CachetHQ/Docker/issues/263)
+- Anyone even tried to test the image? [\#259](https://github.com/CachetHQ/Docker/issues/259)
+- Update release helper to release from master [\#254](https://github.com/CachetHQ/Docker/issues/254)
+- Cachet 2.3.13 dockerhub image [\#250](https://github.com/CachetHQ/Docker/issues/250)
+- Subscribers Text Field Not Showing [\#244](https://github.com/CachetHQ/Docker/issues/244)
+- Only getting HTTP 500 on docker image, no logs [\#237](https://github.com/CachetHQ/Docker/issues/237)
+- 500 Error [\#236](https://github.com/CachetHQ/Docker/issues/236)
+- Update Docker Image in DockerHub [\#235](https://github.com/CachetHQ/Docker/issues/235)
+- Running docker-compose with image instead of build shows no page [\#233](https://github.com/CachetHQ/Docker/issues/233)
+-  Version in "./docker-compose.yml" is unsupported [\#229](https://github.com/CachetHQ/Docker/issues/229)
+- Error 500 [\#226](https://github.com/CachetHQ/Docker/issues/226)
+- CRIT uncaptured python exception when using invalid mail provider config in Docker container [\#225](https://github.com/CachetHQ/Docker/issues/225)
+- Internal Server Error on manually starting docker container for cachet [\#223](https://github.com/CachetHQ/Docker/issues/223)
+- php7-redis is missing [\#221](https://github.com/CachetHQ/Docker/issues/221)
+- Big error after first start [\#213](https://github.com/CachetHQ/Docker/issues/213)
+- php-fpm entered FATAL state, too many start retries too quick [\#209](https://github.com/CachetHQ/Docker/issues/209)
+- Docker-Compose Cachet Container Crashes on Start [\#201](https://github.com/CachetHQ/Docker/issues/201)
+- Email Not Sending Out, Subscribe Button Missing [\#125](https://github.com/CachetHQ/Docker/issues/125)
+
+**Merged pull requests:**
+
+- Use file sessions driver by default [\#273](https://github.com/CachetHQ/Docker/pull/273) ([djdefi](https://github.com/djdefi))
+- Run migration before starting up app [\#268](https://github.com/CachetHQ/Docker/pull/268) ([shuichiro-makigaki](https://github.com/shuichiro-makigaki))
+- Fix variable for session domain in .env file [\#266](https://github.com/CachetHQ/Docker/pull/266) ([shuichiro-makigaki](https://github.com/shuichiro-makigaki))
+- Create CODEOWNERS [\#256](https://github.com/CachetHQ/Docker/pull/256) ([djdefi](https://github.com/djdefi))
+- Update release-helper.sh [\#255](https://github.com/CachetHQ/Docker/pull/255) ([djdefi](https://github.com/djdefi))
+- Backport releasehelper [\#253](https://github.com/CachetHQ/Docker/pull/253) ([djdefi](https://github.com/djdefi))
+- Backport23 [\#252](https://github.com/CachetHQ/Docker/pull/252) ([djdefi](https://github.com/djdefi))
+- Use explicit localhost IP in configs [\#246](https://github.com/CachetHQ/Docker/pull/246) ([djdefi](https://github.com/djdefi))
+- Update Tagged Build Version to v2.3.12 [\#243](https://github.com/CachetHQ/Docker/pull/243) ([mightyfree](https://github.com/mightyfree))
+- Backports to 2.3 [\#241](https://github.com/CachetHQ/Docker/pull/241) ([djdefi](https://github.com/djdefi))
+- Note about logs and debugging [\#239](https://github.com/CachetHQ/Docker/pull/239) ([djdefi](https://github.com/djdefi))
+- Note about app key [\#238](https://github.com/CachetHQ/Docker/pull/238) ([djdefi](https://github.com/djdefi))
+- Bump base image 1.13.5-alpine [\#231](https://github.com/CachetHQ/Docker/pull/231) ([djdefi](https://github.com/djdefi))
+- Fixing clone quick start step [\#230](https://github.com/CachetHQ/Docker/pull/230) ([NickBusey](https://github.com/NickBusey))
+- Backports 2.3 [\#228](https://github.com/CachetHQ/Docker/pull/228) ([djdefi](https://github.com/djdefi))
+- Updated supervisord.conf [\#224](https://github.com/CachetHQ/Docker/pull/224) ([FalkW](https://github.com/FalkW))
+- Force Linux line endings on entrypoint.sh [\#222](https://github.com/CachetHQ/Docker/pull/222) ([misenhower](https://github.com/misenhower))
+- All vars used in `sed` commands wrapped in double quotes; [\#218](https://github.com/CachetHQ/Docker/pull/218) ([gcox](https://github.com/gcox))
+- Add changelog generation step into release helper script [\#216](https://github.com/CachetHQ/Docker/pull/216) ([djdefi](https://github.com/djdefi))
+
 ## [v2.3.12](https://github.com/CachetHQ/Docker/tree/v2.3.12) (2017-06-29)
 [Full Changelog](https://github.com/CachetHQ/Docker/compare/v2.3.11...v2.3.12)
 
@@ -28,7 +120,7 @@
 - fixing mysql ignores DB\_PORT envvar at connection [\#205](https://github.com/CachetHQ/Docker/pull/205) ([naorlivne](https://github.com/naorlivne))
 - Revert "The right git repo" [\#204](https://github.com/CachetHQ/Docker/pull/204) ([jbrooksuk](https://github.com/jbrooksuk))
 - The right git repo [\#203](https://github.com/CachetHQ/Docker/pull/203) ([riemers](https://github.com/riemers))
-- Update Nginx 1.12 [\#202](https://github.com/CachetHQ/Docker/pull/202) ([butuh](https://github.com/butuh))
+- Update Nginx 1.12 [\#202](https://github.com/CachetHQ/Docker/pull/202) ([MRidwanKurniawan](https://github.com/MRidwanKurniawan))
 
 ## [v2.3.11](https://github.com/CachetHQ/Docker/tree/v2.3.11) (2017-04-16)
 [Full Changelog](https://github.com/CachetHQ/Docker/compare/v2.3.10...v2.3.11)
@@ -237,7 +329,7 @@
 
 **Merged pull requests:**
 
-- Fix for APP\_KEY not being set in .env file [\#71](https://github.com/CachetHQ/Docker/pull/71) ([Jamie-Owen](https://github.com/Jamie-Owen))
+- Fix for APP\_KEY not being set in .env file [\#71](https://github.com/CachetHQ/Docker/pull/71) ([jamie-owen](https://github.com/jamie-owen))
 - Fixes the crontab syntax [\#70](https://github.com/CachetHQ/Docker/pull/70) ([jbrooksuk](https://github.com/jbrooksuk))
 - Update and simplify release process [\#65](https://github.com/CachetHQ/Docker/pull/65) ([djdefi](https://github.com/djdefi))
 
