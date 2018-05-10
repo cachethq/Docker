@@ -202,11 +202,19 @@ init_db() {
   check_configured
 }
 
+migrate_db() {
+  force=""
+  if [[ "${FORCE_MIGRATION:-false}" == true ]]; then
+    force="--force"
+  fi
+  php artisan migrate ${force}
+}
+
 start_system() {
   initialize_system
   check_database_connection
   check_configured
-  php artisan migrate
+  migrate_db
   echo "Starting Cachet! ..."
   php artisan config:cache
   /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
