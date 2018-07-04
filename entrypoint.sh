@@ -185,10 +185,10 @@ initialize_system() {
   
   sed 's,{{TRUSTED_PROXIES}},'"${TRUSTED_PROXIES}"',g' -i /var/www/html/.env
   
-  if [[ "${APP_KEY}" == null ]]; then
+  if [[ -z "${APP_KEY}" ]]; then
     keygen="$(php artisan key:generate)"
-    appkey=$(echo "${keygen}" | grep -oP '(?<=\[).*(?=\])')
-    echo "ERROR: Please set the 'APP_KEY=${appkey}' environment variable at runtime or in docker-compose.yml and re-launch"
+    APP_KEY=$(echo "${keygen}" | grep -oP '(?<=\[).*(?=\])')
+    echo "ERROR: Please set the 'APP_KEY=${APP_KEY}' environment variable at runtime or in docker-compose.yml and re-launch"
     exit 0
   fi
 
