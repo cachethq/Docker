@@ -98,7 +98,8 @@ fi
 #curl -H "Authorization: token $token" -s https://api.github.com/rate_limit
 
 # Make sure we are on clean branch
-if ! git branch --list cachet-$cachet_version; then
+if [[ !$(git branch --list cachet-$cachet_version) ]]; then
+  echo "Creating new branch cachet-$cachet_version"
   git checkout -b cachet-$cachet_version
 else
   echo "Branch cachet-$cachet_version already exists!"
