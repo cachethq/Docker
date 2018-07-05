@@ -116,6 +116,7 @@ echo "Creating tag for $cachet_version"
 sed s/master/$cachet_version/g -i Dockerfile
 git commit -am "Cachet $cachet_version release"
 git tag -a $cachet_version -m "Cachet Release $cachet_version"
+git push origin cachet-$cachet_version
 git push origin $cachet_version
 
 # Create GitHub release
