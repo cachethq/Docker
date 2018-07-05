@@ -66,7 +66,7 @@ ARGS=$(getopt --name "$0" --long help,delete,check --options hdc -- "$@") || {
 eval set -- $ARGS
 
 while [ $# -gt 0 ]; do
-  shift
+  #shift
   case "$1" in
     -h|--help)
       usage
