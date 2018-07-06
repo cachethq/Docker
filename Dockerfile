@@ -4,9 +4,12 @@ MAINTAINER Alt Three <support@alt-three.com>
 
 EXPOSE 8000
 CMD ["/sbin/entrypoint.sh"]
-ARG cachet_ver
 
-ENV cachet_ver ${cachet_ver:-v2.3.14}
+ARG cachet_ver
+ARG archive_url
+
+ENV cachet_ver ${cachet_ver:-v2.3.15}
+ENV archive_url ${archive_url:-https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz}
 
 ENV COMPOSER_VERSION 1.6.3
 
@@ -75,8 +78,8 @@ RUN wget https://getcomposer.org/installer -O /tmp/composer-setup.php && \
 WORKDIR /var/www/html/
 USER 1001
 
-RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
-    tar xzvf ${cachet_ver}.tar.gz --strip-components=1 && \
+RUN wget ${archive_url} && \
+    tar xzf ${cachet_ver}.tar.gz --strip-components=1 && \
     chown -R www-data:root /var/www/html && \
     rm -r ${cachet_ver}.tar.gz && \
     php /bin/composer.phar global require "hirak/prestissimo:^0.3" && \

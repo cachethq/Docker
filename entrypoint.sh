@@ -132,6 +132,8 @@ initialize_system() {
   NEXMO_SMS_FROM=${NEXMO_SMS_FROM:-Cachet}
 
   PHP_MAX_CHILDREN=${PHP_MAX_CHILDREN:-5}
+  
+  TRUSTED_PROXIES=${TRUSTED_PROXIES:-}
 
   # configure env file
   if [[ "${APP_KEY}" == null ]]; then
@@ -189,11 +191,13 @@ initialize_system() {
   sed 's,{{NEXMO_SMS_FROM}},'"${NEXMO_SMS_FROM}"',g' -i /var/www/html/.env
 
   sed 's,{{PHP_MAX_CHILDREN}},'"${PHP_MAX_CHILDREN}"',g' -i /etc/php7/php-fpm.d/www.conf
-
-  if [[ "${APP_KEY}" == null ]]; then
+  
+  sed 's,{{TRUSTED_PROXIES}},'"${TRUSTED_PROXIES}"',g' -i /var/www/html/.env
+  
+  if [[ -z "${APP_KEY}" ]]; then
     keygen="$(php artisan key:generate)"
-    appkey=$(echo "${keygen}" | grep -oP '(?<=\[).*(?=\])')
-    echo "ERROR: Please set the 'APP_KEY=${appkey}' environment variable at runtime or in docker-compose.yml and re-launch"
+    APP_KEY=$(echo "${keygen}" | grep -oP '(?<=\[).*(?=\])')
+    echo "ERROR: Please set the 'APP_KEY=${APP_KEY}' environment variable at runtime or in docker-compose.yml and re-launch"
     exit 0
   fi
 
@@ -211,11 +215,19 @@ init_db() {
   check_configured
 }
 
+migrate_db() {
+  force=""
+  if [[ "${FORCE_MIGRATION:-false}" == true ]]; then
+    force="--force"
+  fi
+  php artisan migrate ${force}
+}
+
 start_system() {
   initialize_system
   check_database_connection
   check_configured
-  php artisan migrate
+  migrate_db
   echo "Starting Cachet! ..."
   php artisan config:cache
   /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
