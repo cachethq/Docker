@@ -57,16 +57,17 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stdout /var/log/php7/error.log && \
     ln -sf /dev/stderr /var/log/php7/error.log
 
-RUN adduser -S -s /bin/bash -u 1001 -G root www-data
+RUN addgroup -g 1001 -S www-data && \
+    adduser -s /bin/bash -u 1001 -D -S -G www-data www-data
 
 RUN touch /var/run/nginx.pid && \
-    chown -R www-data:root /var/run/nginx.pid /etc/php7/php-fpm.d
+    chown -R www-data:www-data /var/run/nginx.pid /etc/php7/php-fpm.d
 
 RUN mkdir -p /var/www/html && \
     mkdir -p /usr/share/nginx/cache && \
     mkdir -p /var/cache/nginx && \
     mkdir -p /var/lib/nginx && \
-    chown -R www-data:root /var/www /usr/share/nginx/cache /var/cache/nginx /var/lib/nginx/
+    chown -R www-data:www-data /var/www /usr/share/nginx/cache /var/cache/nginx /var/lib/nginx/
 
 # Install composer
 RUN wget https://getcomposer.org/installer -O /tmp/composer-setup.php && \
@@ -80,7 +81,7 @@ USER 1001
 
 RUN wget ${archive_url} && \
     tar xzf ${cachet_ver}.tar.gz --strip-components=1 && \
-    chown -R www-data:root /var/www/html && \
+    chown -R www-data:www-data /var/www/html && \
     rm -r ${cachet_ver}.tar.gz && \
     php /bin/composer.phar global require "hirak/prestissimo:^0.3" && \
     php /bin/composer.phar install --no-dev -o && \
