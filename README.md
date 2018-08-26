@@ -1,8 +1,8 @@
 # Cachet Docker Image
 
-This is the official repository of the [Docker image](https://hub.docker.com/r/cachethq/docker/) for [Cachet](https://github.com/cachethq/Cachet).
+This is the official repository of the [Docker image](https://hub.docker.com/r/cachethq/docker/) for [Cachet](https://github.com/CachetHQ/Cachet).
 
-[Cachet](https://github.com/cachethq/Cachet) is a beautiful and powerful open source status page system, a free replacement for services such as StatusPage.io, Status.io and others.
+[Cachet](https://github.com/CachetHQ/Cachet) is a beautiful and powerful open source status page system, a free replacement for services such as StatusPage.io, Status.io and others.
 
 For full documentation, visit the [Installing Cachet with Docker](https://docs.cachethq.io/docs/get-started-with-docker) page.
 
@@ -47,7 +47,7 @@ Please use a [tagged Cachet Docker image release](https://github.com/CachetHQ/Do
 
 # Debugging
 
-* The services such as Cachet, supervisord, nginx, and php-fpm log to `stdout` and `sdterr`, and are visible in the Docker runtime output. 
+* The services such as Cachet, supervisord, nginx, and php-fpm log to `stdout` and `stderr`, and are visible in the Docker runtime output. 
 
 * Setting the `DEBUG` Docker environment variable within the `docker-compose.yml` file or at runtime to `true` will enable debugging of the container entrypoint init script.
 
@@ -63,7 +63,7 @@ Use `make test` to manually run the tests.
 1.  Clone the official repo of CachetHQ/Docker:
 
   ```shell
-  git clone https://github.com/cachethq/Docker.git cachet-docker
+  git clone https://github.com/CachetHQ/Docker.git cachet-docker
   cd cachet-docker
   git tag -l
   git checkout $LATEST_TAG
