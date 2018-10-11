@@ -30,6 +30,7 @@ RUN apk add --no-cache --update \
     php7-iconv \
     php7-intl \
     php7-json \
+    sqlite \
     php7-mbstring \
     php7-mcrypt \
     php7-mysqlnd \
@@ -42,9 +43,11 @@ RUN apk add --no-cache --update \
     php7-phar \
     php7-posix \
     php7-session \
+    php7-sqlite3 \
     php7-simplexml \
     php7-soap \
     php7-xml \
+    php7-xmlwriter \
     php7-zip \
     php7-zlib \
     php7-tokenizer \
