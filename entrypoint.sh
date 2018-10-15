@@ -83,6 +83,7 @@ initialize_system() {
   DB_USERNAME=${DB_USERNAME:-postgres}
   DB_PASSWORD=${DB_PASSWORD:-postgres}
   DB_PORT=${DB_PORT:-}
+  DB_PREFIX=${DB_PREFIX:-}
 
   if [[ "${DB_DRIVER}" = "pgsql" ]]; then
     DB_PORT=${DB_PORT:-5432}
@@ -149,6 +150,7 @@ initialize_system() {
   sed 's,{{DB_USERNAME}},'"${DB_USERNAME}"',g' -i /var/www/html/.env
   sed 's,{{DB_PASSWORD}},'"${DB_PASSWORD}"',g' -i /var/www/html/.env
   sed 's,{{DB_PORT}},'"${DB_PORT}"',g' -i /var/www/html/.env
+  sed 's,{{DB_PREFIX}},'"${DB_PREFIX}"',g' -i /var/www/html/.env
 
   sed 's,{{CACHE_DRIVER}},'"${CACHE_DRIVER}"',g' -i /var/www/html/.env
 
