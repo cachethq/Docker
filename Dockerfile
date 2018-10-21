@@ -1,4 +1,4 @@
-FROM nginx:1.13.9-alpine
+FROM nginx:1.15.5-alpine
 
 MAINTAINER Alt Three <support@alt-three.com>
 
