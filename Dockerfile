@@ -1,7 +1,5 @@
 FROM nginx:1.13.9-alpine
 
-MAINTAINER Alt Three <support@alt-three.com>
-
 EXPOSE 8000
 CMD ["/sbin/entrypoint.sh"]
 
