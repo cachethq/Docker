@@ -1,7 +1,5 @@
 FROM nginx:1.13.9-alpine
 
-MAINTAINER Alt Three <support@alt-three.com>
-
 EXPOSE 8000
 CMD ["/sbin/entrypoint.sh"]
 
@@ -30,6 +28,7 @@ RUN apk add --no-cache --update \
     php7-iconv \
     php7-intl \
     php7-json \
+    sqlite \
     php7-mbstring \
     php7-mcrypt \
     php7-mysqlnd \
@@ -42,9 +41,11 @@ RUN apk add --no-cache --update \
     php7-phar \
     php7-posix \
     php7-session \
+    php7-sqlite3 \
     php7-simplexml \
     php7-soap \
     php7-xml \
+    php7-xmlwriter \
     php7-zip \
     php7-zlib \
     php7-tokenizer \
@@ -83,7 +84,7 @@ RUN wget ${archive_url} && \
     chown -R www-data:root /var/www/html && \
     rm -r ${cachet_ver}.tar.gz && \
     php /bin/composer.phar global require "hirak/prestissimo:^0.3" && \
-    php /bin/composer.phar install --no-dev -o && \
+    php /bin/composer.phar install -o && \
     rm -rf bootstrap/cache/*
 
 COPY conf/php-fpm-pool.conf /etc/php7/php-fpm.d/www.conf
