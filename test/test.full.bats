@@ -102,7 +102,7 @@ export APP_KEY="base64:v2LwHrdgnE+RavEXdnF8LgWIibjvEcFkU2qaX5Ji708="
 }
 
 @test "[$TEST_FILE] Cleanup test containers" {
-	command docker-compose logs docker_cachet_1
+	command docker-compose logs cachet
 	docker_clean docker_cachet_1
   	docker_clean docker_postgres_1
 }
