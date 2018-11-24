@@ -3,7 +3,7 @@ sudo: required
 env:
     global:
         - DOCKER_COMPOSE_VERSION=1.11.2
-        - APP_KEY="base64:v2LwHrdgnE+RavEXdnF8LgWIibjvEcFkU2qaX5Ji708="
+        - APP_KEY='base64:v2LwHrdgnE+RavEXdnF8LgWIibjvEcFkU2qaX5Ji708='
 services:
         - docker
 
