@@ -6,6 +6,7 @@ update-dependencies:
 	docker pull postgres:9.5
 
 test:
+	export APP_KEY="base64:omOzwjXIwR01CrmdBk6sLfUXOQVx8ZkAaBmO05BOx+4="
 	bats test
 
 compose-build:
