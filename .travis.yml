@@ -15,9 +15,7 @@ before_install:
     - docker pull appropriate/curl:latest
 
 script:
-    - bats test/test.full.bats
-    - bats test/test.mysql.bats
-    - bats test/test.sqlite.bats
+    - make test
 
 notifications:
   email: false
