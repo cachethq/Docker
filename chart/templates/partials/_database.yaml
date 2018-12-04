@@ -1,0 +1,14 @@
+{{- define "dbInfo" -}}
+- name: DB_HOST
+  value: {{ .Release.Name }}-postgresql
+- name: DB_DRIVER
+  value: pgsql
+- name: DB_PORT
+  value: {{ .Values.postgresql.port | quote }}
+- name: DB_DATABASE
+  value: {{ .Values.postgresql.postgresqlDatabase }}
+- name: DB_USERNAME
+  value: {{ .Values.postgresql.postgresqlUsername }}
+- name: DB_PASSWORD
+  value: {{ .Values.postgresql.postgresqlPassword }}
+{{- end -}}

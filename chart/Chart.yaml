@@ -1,0 +1,18 @@
+name: cachet
+version: 0.0.1
+appVersion: 2.3.14
+description: The open source status page system.
+home: http://cachethq.io/
+icon: http://cachethq.io/img/logo.svg
+keywords:
+- status
+- monitoring
+- incident
+- reporting
+maintainers:
+- name: gregdhill
+  email: greg.hill@monax.io
+sources:
+- https://github.com/CachetHQ/Cachet
+apiVersion: v1
+deprecated: false

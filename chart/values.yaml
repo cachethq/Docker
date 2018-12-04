@@ -1,0 +1,56 @@
+image:
+  repository: cachethq/docker
+  tag: 2.3.14
+  pullPolicy: IfNotPresent
+
+appKey: ""
+
+postgresql:
+  enabled: true
+  postgresqlDatabase: cachethq
+  postgresqlUsername: cachet
+  postgresqlPassword: cachet
+  port: 5432
+  image:
+    tag: "9.6"
+  persistence:
+    annotations:
+      resourcePolicy: keep
+
+# see: https://docs.cachethq.io/docs/configuring-mail
+email:
+  type: smtp
+  host: smtp.mailserver.net
+  port: 587
+  userName: apikey
+  fromName: "cachethq"
+  fromEmail: "cachethq.io"
+  credentialsSecret: "secret-credentials"
+
+replicaCount: 1
+
+service:
+  type: ClusterIP
+  externalPort: 80
+  internalPort: 8000
+
+resources:
+  limits:
+    cpu: 400m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+ingress:
+  enabled: true
+  hosts:
+    - status.cachethq.io
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  tls:
+    - secretName: status-tls
+      hosts:
+        - status.cachethq.io
