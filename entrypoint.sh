@@ -204,7 +204,7 @@ initialize_system() {
 
 init_db() {
   echo "Initializing Cachet database ..."
-  php artisan app:install
+  php artisan cachet:install
   check_configured
 }
 
