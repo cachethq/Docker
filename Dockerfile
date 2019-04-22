@@ -6,7 +6,7 @@ CMD ["/sbin/entrypoint.sh"]
 ARG cachet_ver
 ARG archive_url
 
-ENV cachet_ver ${cachet_ver:-master}
+ENV cachet_ver ${cachet_ver:-2.4}
 ENV archive_url ${archive_url:-https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz}
 
 ENV COMPOSER_VERSION 1.6.3
@@ -84,7 +84,9 @@ RUN wget ${archive_url} && \
     chown -R www-data:root /var/www/html && \
     rm -r ${cachet_ver}.tar.gz && \
     php /bin/composer.phar global require "hirak/prestissimo:^0.3" && \
-    php /bin/composer.phar install -o && \
+    php /bin/composer.phar install --no-dev -o && \
+    php /bin/composer.phar update barryvdh/laravel-debugbar && \
+    php /bin/composer.phar dump-autoload && \
     rm -rf bootstrap/cache/*
 
 COPY conf/php-fpm-pool.conf /etc/php7/php-fpm.d/www.conf
