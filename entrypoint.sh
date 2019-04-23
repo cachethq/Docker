@@ -189,7 +189,7 @@ initialize_system() {
   
   if [[ -z "${APP_KEY}" || "${APP_KEY}" = "null" ]]; then
     keygen="$(php artisan key:generate --show)"
-    APP_KEY=$(echo "${keygen}" | cut -d ":" -f 2)
+    APP_KEY=$(echo "${keygen}")
     echo "ERROR: Please set the 'APP_KEY=${APP_KEY}' environment variable at runtime or in docker-compose.yml and re-launch"
     exit 0
   fi

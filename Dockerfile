@@ -84,9 +84,7 @@ RUN wget ${archive_url} && \
     chown -R www-data:root /var/www/html && \
     rm -r ${cachet_ver}.tar.gz && \
     php /bin/composer.phar global require "hirak/prestissimo:^0.3" && \
-    php /bin/composer.phar install --no-dev -o && \
-    php /bin/composer.phar update barryvdh/laravel-debugbar && \
-    php /bin/composer.phar dump-autoload && \
+    php /bin/composer.phar install -o && \
     rm -rf bootstrap/cache/*
 
 COPY conf/php-fpm-pool.conf /etc/php7/php-fpm.d/www.conf
