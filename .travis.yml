@@ -3,8 +3,6 @@ sudo: required
 env:
     global:
         - DOCKER_COMPOSE_VERSION=1.11.2
-        - DEBUG=true
-        
 services:
         - docker
 
