@@ -103,8 +103,8 @@ initialize_system() {
 
   CACHE_DRIVER=${CACHE_DRIVER:-apc}
 
-  SESSION_DRIVER=${SESSION_DRIVER:-}
-  SESSION_DOMAIN=${SESSION_DOMAIN:-$APP_URL}
+  SESSION_DRIVER=${SESSION_DRIVER:-apc}
+  SESSION_DOMAIN=${SESSION_DOMAIN:-apc}
   SESSION_SECURE_COOKIE=${SESSION_SECURE_COOKIE:-}
 
   QUEUE_DRIVER=${QUEUE_DRIVER:-database}
@@ -187,9 +187,9 @@ initialize_system() {
   
   sed 's,{{TRUSTED_PROXIES}},'"${TRUSTED_PROXIES}"',g' -i /var/www/html/.env
   
-  if [[ -z "${APP_KEY}" ]]; then
-    keygen="$(php artisan key:generate)"
-    APP_KEY=$(echo "${keygen}" | grep -oP '(?<=\[).*(?=\])')
+  if [[ -z "${APP_KEY}" || "${APP_KEY}" = "null" ]]; then
+    keygen="$(php artisan key:generate --show)"
+    APP_KEY=$(echo "${keygen}")
     echo "ERROR: Please set the 'APP_KEY=${APP_KEY}' environment variable at runtime or in docker-compose.yml and re-launch"
     exit 0
   fi
@@ -204,7 +204,7 @@ initialize_system() {
 
 init_db() {
   echo "Initializing Cachet database ..."
-  php artisan app:install
+  php artisan cachet:install --no-interaction
   check_configured
 }
 
