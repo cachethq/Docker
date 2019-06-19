@@ -29,6 +29,7 @@ services:
       - APP_KEY=${APP_KEY:-null}
       - APP_LOG=errorlog
       - DEBUG=false
+      - PORT=8000
     depends_on:
       - postgres
     restart: on-failure
