@@ -1,0 +1,61 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: cachet-status-page
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: cachet-status-page
+    spec:
+      hostname: cachet
+      volumes:
+      - name: postgresql-data
+        hostPath:
+          path: /opt/etc/postgresql/data 
+      containers:
+      - name: postgres
+        image: postgres:9.5
+        env:
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "postgres"
+        volumeMounts:
+        - name: postgresql-data
+          mountPath: /var/lib/postgresql/data 
+      - name: cachet
+        image: cachethq/docker:latest
+        ports:
+        - containerPort: 8000        
+        env:
+        - name: DB_DRIVER
+          value: "pgsql"
+        - name: DB_HOST
+          value: "cachet"
+        - name: DB_DATABASE
+          value: "postgres"
+        - name: DB_USERNAME
+          value: "postgres"
+        - name: DB_PASSWORD
+          value: "postgres"
+        - name: "APP_KEY"
+          value: "base64:{#keyhere}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cachet-svc
+  labels:
+    app: cachet-status-page
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    protocol: TCP
+    targetPort: 82
+    nodePort: 308082
+    port: 8000
+  selector:
+    app: cachet-status-page
