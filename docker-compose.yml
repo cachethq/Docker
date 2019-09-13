@@ -19,6 +19,10 @@ services:
     links:
       - postgres:postgres
     environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - APP_LOG=errorlog
+      - APP_KEY=${APP_KEY:-null}
       - DB_DRIVER=pgsql
       - DB_HOST=postgres
       - DB_PORT=5432
@@ -26,9 +30,6 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
       - DB_PREFIX=chq_
-      - APP_KEY=${APP_KEY:-null}
-      - APP_LOG=errorlog
-      - DEBUG=false
     depends_on:
       - postgres
     restart: on-failure
