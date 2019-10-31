@@ -19,7 +19,7 @@ export APP_KEY="base64:v2LwHrdgnE+RavEXdnF8LgWIibjvEcFkU2qaX5Ji708="
 }
 
 @test "[$TEST_FILE] check for postgres database startup" {
-  docker_wait_for_log docker_postgres_1 120 "LOG:  autovacuum launcher started"
+  docker_wait_for_log docker_postgres_1 120 "LOG:  database system is ready to accept connections"
 }
 
 @test "[$TEST_FILE] check for empty sessions table" {
