@@ -1,4 +1,4 @@
-FROM nginx:1.15.12-alpine
+FROM nginx:1.17.5-alpine
 
 EXPOSE 8000
 CMD ["/sbin/entrypoint.sh"]
