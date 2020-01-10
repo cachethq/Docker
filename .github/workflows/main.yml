@@ -1,0 +1,15 @@
+name: Lint Dockerfile
+
+on: push
+
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v1
+
+      - name: Lint Dockerfile
+        uses: brpaz/hadolint-action@master
+        with:
+          dockerfile: "Dockerfile"
