@@ -28,6 +28,8 @@ services:
       - DB_PREFIX=chq_
       - APP_KEY=${APP_KEY:-null}
       - APP_LOG=errorlog
+      - APP_ENV=${APP_ENV:-production}
+      - APP_DEBUG=false
       - DEBUG=false
     depends_on:
       - postgres
