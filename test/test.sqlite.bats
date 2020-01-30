@@ -4,8 +4,6 @@ load docker_helpers
 load "lib/batslib"
 load "lib/output"
 
-export APP_KEY="base64:v2LwHrdgnE+RavEXdnF8LgWIibjvEcFkU2qaX5Ji708="
-
 @test "[$TEST_FILE] docker-compose up" {
   command docker-compose -f test/docker-compose-sqlite.yml up -d
 }
