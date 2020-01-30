@@ -3,6 +3,10 @@
 	type docker &>/dev/null || ( echo "docker is not available"; exit 1 )
 )>&2
 
+# ENV vars for tests
+export APP_ENV=development
+export APP_KEY="base64:v2LwHrdgnE+RavEXdnF8LgWIibjvEcFkU2qaX5Ji708="
+
 TEST_FILE=$(basename $BATS_TEST_FILENAME .bats)
 
 # stop all containers with the "bats-type" label (matching the optionally supplied value)
