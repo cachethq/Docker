@@ -6,6 +6,7 @@ LABEL maintainer="Alt Three <support@alt-three.com>"
 RUN apk add --no-cache \
 	bash \
 	nginx \
+	mysql-client \
 	postgresql-client \
 	supervisor
 
