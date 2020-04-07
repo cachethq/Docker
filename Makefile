@@ -2,7 +2,7 @@ SILENT :
 .PHONY : test
 
 update-dependencies:
-	docker pull appropriate/curl:latest
+	docker pull curlimages/curl:latest
 	docker pull postgres:9.5
 
 test:
@@ -15,4 +15,4 @@ compose-up:
 	docker-compose up
 
 build:
-	docker build -t cachet/docker	.
+	docker build -t cachet/docker .
