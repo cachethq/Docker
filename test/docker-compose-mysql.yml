@@ -2,7 +2,7 @@ version: "3"
 
 services:
   mysql:
-    image: mysql:8.0.18
+    image: mariadb:bionic
     environment:
       - MYSQL_ROOT_PASSWORD=mysql
       - MYSQL_USER=mysql
