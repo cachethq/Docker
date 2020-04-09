@@ -13,7 +13,7 @@ load "lib/output"
 }
 
 @test "[$TEST_FILE] check for database startup" {
-  docker_wait_for_log test_mysql_1 120 "[Server] /usr/sbin/mysqld: ready for connections."
+  docker_wait_for_log test_mysql_1 120 "mysqld: ready for connections."
 }
 
 @test "[$TEST_FILE] check for empty sessions table" {
