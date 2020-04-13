@@ -1,5 +1,5 @@
 #!/bin/bash
-set -o errexit -o nounset -o pipefail
+set -euo pipefail
 
 [ "${DEBUG:-false}" == true ] && set -x
 
@@ -204,7 +204,7 @@ initialize_system() {
 
 init_db() {
   echo "Initializing Cachet database ..."
-  php artisan cachet:install --no-interaction
+  php artisan app:install --no-interaction
   check_configured
 }
 
