@@ -13,7 +13,7 @@ services:
     build:
       context: .
       args:
-        - cachet_ver=2.4
+        - cachet_ver=2.4.2
     ports:
       - 80:8000
     links:
@@ -29,7 +29,7 @@ services:
       - APP_KEY=${APP_KEY:-null}
       - APP_LOG=errorlog
       - APP_ENV=${APP_ENV:-production}
-      - APP_DEBUG=false
+      - APP_DEBUG=true
       - DEBUG=false
     depends_on:
       - postgres
