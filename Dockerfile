@@ -12,23 +12,19 @@ ENV archive_url ${archive_url:-https://github.com/cachethq/Cachet/archive/${cach
 ENV COMPOSER_VERSION 1.9.0
 
 RUN apk add --no-cache --update \
-    postgresql-client \
-    postgresql \
     mysql-client \
     php7 \
-    php7-redis \
     php7-apcu \
     php7-bcmath \
-    php7-dom \
     php7-ctype \
     php7-curl \
-    php7-fpm \
+    php7-dom \
     php7-fileinfo \
+    php7-fpm \
     php7-gd \
     php7-iconv \
     php7-intl \
     php7-json \
-    sqlite \
     php7-mbstring \
     php7-mcrypt \
     php7-mysqlnd \
@@ -40,15 +36,20 @@ RUN apk add --no-cache --update \
     php7-pdo_sqlite \
     php7-phar \
     php7-posix \
+    php7-redis \
     php7-session \
-    php7-sqlite3 \
     php7-simplexml \
     php7-soap \
+    php7-sqlite3 \
+    php7-tokenizer \
     php7-xml \
     php7-xmlwriter \
     php7-zip \
     php7-zlib \
-    php7-tokenizer \
+    postfix \
+    postgresql \
+    postgresql-client \
+    sqlite \
     wget sqlite git curl bash grep \
     supervisor
 
