@@ -50,6 +50,7 @@ RUN apk add --no-cache --update \
     postgresql \
     postgresql-client \
     sqlite \
+    sudo \
     wget sqlite git curl bash grep \
     supervisor
 
@@ -61,8 +62,12 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
 
 RUN adduser -S -s /bin/bash -u 1001 -G root www-data
 
+RUN echo "www-data	ALL=(ALL:ALL)	NOPASSWD:SETENV:	/usr/sbin/postfix" >> /etc/sudoers
+
 RUN touch /var/run/nginx.pid && \
-    chown -R www-data:root /var/run/nginx.pid /etc/php7/php-fpm.d
+    chown -R www-data:root /var/run/nginx.pid
+
+RUN chown -R www-data:root /etc/php7/php-fpm.d
 
 RUN mkdir -p /var/www/html && \
     mkdir -p /usr/share/nginx/cache && \

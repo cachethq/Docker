@@ -67,6 +67,12 @@ check_configured() {
   esac
 }
 
+check_sendmail() {
+	if [[ "${MAIL_DRIVER:-}" == "sendmail" ]]; then
+		sudo /usr/sbin/postfix start
+	fi
+}
+
 initialize_system() {
   echo "Initializing Cachet container ..."
 
@@ -231,6 +237,7 @@ start_system() {
   /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
 }
 
+check_sendmail
 start_system
 
 exit 0
