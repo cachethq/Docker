@@ -13,7 +13,7 @@ set -e
 
 usage () {
     grep "^#/" <"$0" | cut -c4-
-    exit ${1:-2}
+    exit "${1:-2}"
 }
 
 [ $# -eq 0 ] && usage 1
@@ -37,16 +37,16 @@ fi
 }
 
 delete_release () {
-    if [ -z $cachet_version ]; then
+    if [ -z "$cachet_version" ]; then
       echo 1>&2 "error: no version specified."
       exit 1
     fi
     echo "Removing release $cachet_version"
-    release_id=$(curl -H "Authorization: token $token" -s -X GET https://api.github.com/repos/CachetHQ/Docker/releases/tags/$cachet_version | jq -r .id)
-    curl -H "Authorization: token $token" -s -X DELETE https://api.github.com/repos/CachetHQ/Docker/releases/$release_id || true
-    git tag -d $cachet_version || true
-    git push origin :$cachet_version || true
-    git branch -d cachet-$cachet_version || true
+    release_id=$(curl -H "Authorization: token $token" -s -X GET https://api.github.com/repos/CachetHQ/Docker/releases/tags/"$cachet_version" | jq -r .id)
+    curl -H "Authorization: token $token" -s -X DELETE https://api.github.com/repos/CachetHQ/Docker/releases/"$release_id" || true
+    git tag -d "$cachet_version" || true
+    git push origin :"$cachet_version" || true
+    git branch -d cachet-"$cachet_version" || true
 }
 
 # GitHub API Token
@@ -59,14 +59,14 @@ if [ -z "$token" ]
 fi
 
 # Parse args.
-ARGS=$(getopt --name "$0" --long help,delete,check --options hdc -- "$@") || {
+ARGS=$(getopt --name "$0" --long help,delete,check,update: --options hdcu: -- "$@") || {
   usage
   exit 2
 }
-eval set -- $ARGS
+eval set -- "$ARGS"
 
 while [ $# -gt 0 ]; do
-  #shift
+  shift
   case "$1" in
     -h|--help)
       usage
@@ -81,8 +81,14 @@ while [ $# -gt 0 ]; do
       check_releases
       exit 0
       ;;
-    --)
+    -u|--update)
       cachet_version=$2
+      echo "Updating to Cachet version: $2"
+      break
+      exit 0
+      ;;
+    --)
+      export cachet_version=$2
       shift
       break
       ;;
@@ -90,7 +96,7 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-if [ -z $cachet_version ]; then
+if [ -z "$cachet_version" ]; then
     echo 1>&2 "error: no version specified."
     exit 1
 fi
@@ -98,26 +104,26 @@ fi
 #curl -H "Authorization: token $token" -s https://api.github.com/rate_limit
 
 # Make sure we are on clean branch
-if [[ !$(git branch --list cachet-$cachet_version) ]]; then
+if [[ ! $(git branch --list cachet-"$cachet_version") ]]; then
   echo "Creating new branch cachet-$cachet_version"
-  git checkout -b cachet-$cachet_version
+  git checkout -b cachet-"$cachet_version"
 else
   echo "Branch cachet-$cachet_version already exists!"
-  git checkout cachet-$cachet_version
+  git checkout cachet-"$cachet_version"
 fi
 
 # Generate changelog (requires https://github.com/skywinder/github-changelog-generator)
 if hash github_changelog_generator 2>/dev/null; then
-  github_changelog_generator --token $token --future-release $cachet_version
+  github_changelog_generator -u CachetHQ --project Docker --token "$token" --future-release "$cachet_version"
 fi
 
 # Modify Dockerfile, commit, tag, and push
 echo "Creating tag for $cachet_version"
-sed s/master/$cachet_version/g -i Dockerfile
+gsed s/2.4/"$cachet_version"/g -i Dockerfile
 git commit -am "Cachet $cachet_version release"
-git tag -a $cachet_version -m "Cachet Release $cachet_version"
-git push origin cachet-$cachet_version
-git push origin $cachet_version
+git tag -a "$cachet_version" -m "Cachet Release $cachet_version"
+git push origin cachet-"$cachet_version"
+git push origin "$cachet_version"
 
 # Create GitHub release
-curl -H "Authorization: token $token" -s -H "Content-Type: application/json" -d '{"tag_name":"'${cachet_version}'","name":"'${cachet_version}'","body":"Cachet Release '${cachet_version}'","draft":false,"prerelease":false}' -X POST https://api.github.com/repos/CachetHQ/Docker/releases
+curl -H "Authorization: token $token" -s -H "Content-Type: application/json" -d '{"tag_name":"'"${cachet_version}"'","name":"'"${cachet_version}"'","body":"Cachet Release '"${cachet_version}"'","draft":false,"prerelease":false}' -X POST https://api.github.com/repos/CachetHQ/Docker/releases
