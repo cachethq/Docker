@@ -22,11 +22,14 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Install bats
+        run: sudo apt-get install bats
+        
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       # Runs a set of commands using the runners shell
-      - name: Run bash autobated test suite (bats)
+      - name: Run bash automated test suite (bats)
         run: |
           docker pull curlimages/curl:latest
           bats test/test.full.bats
