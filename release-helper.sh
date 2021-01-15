@@ -113,7 +113,7 @@ else
   git checkout cachet-"$cachet_version"
 fi
 
-# Generate changelog (requires https://github.com/skywinder/github-changelog-generator)
+# Generate changelog (requires https://github.com/github-changelog-generator/github-changelog-generator)
 if hash github_changelog_generator 2>/dev/null; then
   github_changelog_generator -u CachetHQ --project Docker --token "$token" --future-release "$cachet_version"
 fi
