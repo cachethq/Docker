@@ -23,7 +23,7 @@ Cachet is a BSD-3-licensed open source project. If you'd like to support future 
 
 3. To build an image containing a specific Cachet release, set the [`cachet_ver` ARG in the docker-compose.yml](/docker-compose.yml)
 
-  The *master* branch and *cachethq/docker:latest* Docker automated build are a work in progress / development version of the upstream https://github.com/CachetHQ/Cachet project. As such, *master* or *latest* should not be used in a production environment as it can change at anytime.
+  The *main* branch and *cachethq/docker:latest* Docker automated build are a work in progress / development version of the upstream https://github.com/CachetHQ/Cachet project. As such, *main* or *latest* should not be used in a production environment as it can change at anytime.
 
   We strongly recommend specifying a stable [Cachet Release](https://github.com/CachetHQ/Cachet/releases) at build time as mentioned above.
 
