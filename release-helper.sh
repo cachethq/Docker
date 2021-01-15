@@ -21,6 +21,34 @@ usage () {
 cachet_version=
 main_version=2.4
 
+do_release () {
+
+# Make sure we are on clean branch
+if [[ ! $(git branch --list cachet-"$cachet_version") ]]; then
+  echo "Creating new branch cachet-$cachet_version"
+  git checkout -b cachet-"$cachet_version"
+else
+  echo "Branch cachet-$cachet_version already exists!"
+  git checkout cachet-"$cachet_version"
+fi
+
+# Generate changelog (requires https://github.com/skywinder/github-changelog-generator)
+if hash github_changelog_generator 2>/dev/null; then
+  github_changelog_generator -u CachetHQ --project Docker --token "$token" --future-release "$cachet_version"
+fi
+
+# Modify Dockerfile, commit, tag, and push
+echo "Creating tag for $cachet_version"
+gsed s/$main_version/"$cachet_version"/g -i Dockerfile
+git commit -am "Cachet $cachet_version release"
+git tag -a "$cachet_version" -m "Cachet Release $cachet_version"
+git push origin cachet-"$cachet_version"
+git push origin "$cachet_version"
+
+# Create GitHub release
+curl -H "Authorization: token $token" -s -H "Content-Type: application/json" -d '{"tag_name":"'"${cachet_version}"'","name":"'"${cachet_version}"'","body":"Cachet Release '"${cachet_version}"'","draft":false,"prerelease":false}' -X POST https://api.github.com/repos/CachetHQ/Docker/releases
+}
+
 check_releases () {
 # Get latest releases
 CACHET_APP_LATEST_REL=$(curl -H "Authorization: token $token" -s https://api.github.com/repos/cachethq/cachet/releases/latest | jq -r .name)
@@ -33,6 +61,10 @@ echo "Latest Docker release: $CACHET_DOCKER_LATEST_REL"
 if [ "$CACHET_APP_LATEST_REL" = "$CACHET_DOCKER_LATEST_REL" ]
   then
     echo "Releases on GitHub are up to date!"
+  else 
+    echo "Docker at "$CACHET_DOCKER_LATEST_REL" -- Releasing latest app release $CACHET_APP_LATEST_REL" 
+    cachet_version="$CACHET_APP_LATEST_REL"
+    do_release
 fi
 
 }
@@ -85,11 +117,13 @@ while [ $# -gt 0 ]; do
     -u|--update)
       cachet_version=$2
       echo "Updating to Cachet version: $2"
+      do_release
       break
       exit 0
       ;;
     --)
-      export cachet_version=$2
+      cachet_version=$2
+      do_release
       shift
       break
       ;;
@@ -101,30 +135,3 @@ if [ -z "$cachet_version" ]; then
     echo 1>&2 "error: no version specified."
     exit 1
 fi
-
-#curl -H "Authorization: token $token" -s https://api.github.com/rate_limit
-
-# Make sure we are on clean branch
-if [[ ! $(git branch --list cachet-"$cachet_version") ]]; then
-  echo "Creating new branch cachet-$cachet_version"
-  git checkout -b cachet-"$cachet_version"
-else
-  echo "Branch cachet-$cachet_version already exists!"
-  git checkout cachet-"$cachet_version"
-fi
-
-# Generate changelog (requires https://github.com/skywinder/github-changelog-generator)
-if hash github_changelog_generator 2>/dev/null; then
-  github_changelog_generator -u CachetHQ --project Docker --token "$token" --future-release "$cachet_version"
-fi
-
-# Modify Dockerfile, commit, tag, and push
-echo "Creating tag for $cachet_version"
-gsed s/$main_version/"$cachet_version"/g -i Dockerfile
-git commit -am "Cachet $cachet_version release"
-git tag -a "$cachet_version" -m "Cachet Release $cachet_version"
-git push origin cachet-"$cachet_version"
-git push origin "$cachet_version"
-
-# Create GitHub release
-curl -H "Authorization: token $token" -s -H "Content-Type: application/json" -d '{"tag_name":"'"${cachet_version}"'","name":"'"${cachet_version}"'","body":"Cachet Release '"${cachet_version}"'","draft":false,"prerelease":false}' -X POST https://api.github.com/repos/CachetHQ/Docker/releases
