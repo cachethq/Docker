@@ -210,7 +210,7 @@ initialize_system() {
 
 init_db() {
   echo "Initializing Cachet database ..."
-  php artisan cachet:install --no-interaction
+  php artisan app:install --no-interaction
   check_configured
 }
 
