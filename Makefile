@@ -24,4 +24,4 @@ build:
 	docker build -t ${REPOSITORY}:${VERSION} --label GITREV=${GITREV} --label BUILD_TIME=${BUILD_TIME} --build-arg cachet_ver=${VERSION} .
 
 push: build
-	docker push -t ${REPOSITORY}:${VERSION}
+	docker push ${REPOSITORY}:${VERSION}
