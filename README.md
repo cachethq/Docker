@@ -1,5 +1,11 @@
 # Cachet Docker Image
 
+This is a Klarrio fork of the Cachet docker images repository.
+To build use the make commands. The component must be released and the binary mush exist in GitHub.
+The produced docker build image should be pushed to the docker registry.
+
+## Documentation
+
 This is the official repository of the [Docker image](https://hub.docker.com/r/cachethq/docker/) for [Cachet](https://github.com/CachetHQ/Cachet).
 
 [Cachet](https://github.com/CachetHQ/Cachet) is a beautiful and powerful open source status page system, a free replacement for services such as StatusPage.io, Status.io and others.
