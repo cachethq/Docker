@@ -81,6 +81,7 @@ initialize_system() {
   APP_DEBUG=${APP_DEBUG:-true}
   APP_URL=${APP_URL:-http://localhost}
   APP_LOG=${APP_LOG:-errorlog}
+  PORT=${PORT:-8000}
 
   DB_DRIVER=${DB_DRIVER:-pgsql}
   DB_HOST=${DB_HOST:-postgres}
@@ -234,6 +235,7 @@ start_system() {
   seed_db
   echo "Starting Cachet! ..."
   php artisan config:cache
+  envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
   /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
 }
 

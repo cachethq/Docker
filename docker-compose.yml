@@ -31,6 +31,7 @@ services:
       - APP_ENV=${APP_ENV:-production}
       - APP_DEBUG=false
       - DEBUG=false
+      - PORT=8000
     depends_on:
       - postgres
     restart: on-failure
