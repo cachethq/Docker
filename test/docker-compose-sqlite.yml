@@ -2,7 +2,7 @@ version: "3"
 
 services:
   cachet:
-    image: docker_cachet
+    image: cachetdocker_cachet
     ports:
       - 80:8000
     environment:
@@ -15,7 +15,7 @@ services:
 networks:
   default:
     external:
-      name: docker_default
+      name: cachetdocker_default
 
 volumes:
   cachetdb:

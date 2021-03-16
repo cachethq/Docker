@@ -10,7 +10,7 @@ function docker_clean {
 
 # get the ip of docker container $1
 function docker_ip {
-	docker inspect --format '{{ .NetworkSettings.Networks.docker_default.IPAddress }}' $1
+	docker inspect --format '{{ .NetworkSettings.Networks.cachetdocker_default.IPAddress }}' $1
 }
 
 # get the id of docker container $1

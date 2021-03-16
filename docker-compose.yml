@@ -13,7 +13,7 @@ services:
     build:
       context: .
       args:
-        - cachet_ver=2.4
+        - cachet_ver=2.5
     ports:
       - 80:8000
     links:

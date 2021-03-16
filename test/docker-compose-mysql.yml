@@ -10,7 +10,7 @@ services:
       - MYSQL_DATABASE=mysql
       - DEBUG=false
   cachet:
-    image: docker_cachet
+    image: cachetdocker_cachet
     ports:
       - 80:8000
     links:
@@ -29,4 +29,4 @@ services:
 networks:
   default:
     external:
-      name: docker_default
+      name: cachetdocker_default
