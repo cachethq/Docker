@@ -4,12 +4,11 @@ SILENT :
 
 REPOSITORY := $(shell cat REPO)
 VERSION := $(shell cat VERSION)
+REVISION := $(shell cat REVISION)
 BUILD_TIME := $(shell date +%FT%T%z)
 GITREV := $(shell git rev-parse HEAD)
 
-# Read and preapend `-` to the iteration if any, else return `` (nil)
-REVISION := $(shell sed  '1s;^;-;' REVISION 2> /dev/null  || printf "" )
-FULL_VERSION := ${VERSION}${REVISION}
+FULL_VERSION := ${VERSION}-${REVISION}
 
 update-dependencies:
 	docker pull curlimages/curl:latest
