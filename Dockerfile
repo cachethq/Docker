@@ -1,4 +1,4 @@
-FROM nginx:1.21.3-alpine
+FROM nginx:1.21.4-alpine
 
 EXPOSE 8000
 CMD ["/sbin/entrypoint.sh"]
@@ -49,8 +49,11 @@ RUN apk add --no-cache --update \
     php7-zip \
     php7-zlib \
     php7-tokenizer \
-    wget sqlite git curl bash grep \
+    wget sqlite git bash grep \
     supervisor
+
+# apk add --no-cache curl~=7.79.0
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.15/main/ curl=7.79.1-r0
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
