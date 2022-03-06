@@ -7,9 +7,9 @@ ARG cachet_ver
 ARG archive_url
 
 ENV cachet_ver ${cachet_ver}
-ENV archive_url ${archive_url:-https://github.com/klarrio/Cachet/archive/${cachet_ver}.tar.gz}
+ENV archive_url ${archive_url:-https://github.com/klarrio/Cachet/archive/refs/tags/${cachet_ver}.tar.gz}
 
-ENV COMPOSER_VERSION 1.9.0
+ENV COMPOSER_VERSION 2.2.7
 
 RUN apk add --no-cache --update \
     postgresql-client \
@@ -86,8 +86,8 @@ RUN wget ${archive_url} && \
     tar xzf ${cachet_ver}.tar.gz --strip-components=1 && \
     chown -R www-data:root /var/www/html && \
     rm -r ${cachet_ver}.tar.gz && \
-    php /bin/composer.phar global require "hirak/prestissimo:^0.3" && \
-    php /bin/composer.phar install -o && \
+    php /bin/composer.phar install --ignore-platform-reqs && \
+    # php /bin/composer.phar install -o && \
     rm -rf bootstrap/cache/*
 
 COPY conf/php-fpm-pool.conf /etc/php7/php-fpm.d/www.conf
