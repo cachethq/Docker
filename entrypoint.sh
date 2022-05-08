@@ -3,6 +3,10 @@ set -o errexit -o nounset -o pipefail
 
 [ "${DEBUG:-false}" == true ] && set -x
 
+if [[ -z "${DB_DRIVER+xxx}" || -z "$DB_DRIVER" ]]; then
+  DB_DRIVER="sqlite"
+fi
+
 check_database_connection() {
   echo "Attempting to connect to database ..."
   case "${DB_DRIVER}" in
@@ -14,6 +18,7 @@ check_database_connection() {
       prog="${prog} -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USERNAME} -d ${DB_DATABASE} -t 1"
       ;;
     sqlite)
+      touch /var/www/html/database/database.sqlite
       prog="touch /var/www/html/database/database.sqlite"
   esac
   timeout=60
