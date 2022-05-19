@@ -110,7 +110,7 @@ initialize_system() {
   QUEUE_DRIVER=${QUEUE_DRIVER:-database}
   CACHET_EMOJI=${CACHET_EMOJI:-false}
   CACHET_BEACON=${CACHET_BEACON:-true}
-  CACHET_AUTO_TWITTER=${CACHET_AUTO_TWITTER:-true}
+  CACHET_AUTO_TWITTER=${CACHET_AUTO_TWITTER:-false}
 
   MAIL_DRIVER=${MAIL_DRIVER:-smtp}
   MAIL_HOST=${MAIL_HOST:-localhost}
@@ -152,7 +152,7 @@ initialize_system() {
   sed 's,{{DB_PORT}},'"${DB_PORT}"',g' -i /var/www/html/.env
   sed 's,{{DB_PREFIX}},'"${DB_PREFIX}"',g' -i /var/www/html/.env
 
-  sed 's,{{CACHE_DRIVER}},'"${CACHE_DRIVER}"',g' -i /var/www/html/.env
+  sed 's,{{CACHE_DRIVER}},'"apc"',g' -i /var/www/html/.env
 
   sed 's,{{SESSION_DRIVER}},'"${SESSION_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{SESSION_DOMAIN}},'"${SESSION_DOMAIN}"',g' -i /var/www/html/.env
@@ -161,7 +161,7 @@ initialize_system() {
   sed 's,{{QUEUE_DRIVER}},'"${QUEUE_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{CACHET_EMOJI}},'"${CACHET_EMOJI}"',g' -i /var/www/html/.env
   sed 's,{{CACHET_BEACON}},'"${CACHET_BEACON}"',g' -i /var/www/html/.env
-  sed 's,{{CACHET_AUTO_TWITTER}},'"${CACHET_AUTO_TWITTER}"',g' -i /var/www/html/.env
+  sed 's,{{CACHET_AUTO_TWITTER}},'"false"',g' -i /var/www/html/.env
 
   sed 's,{{MAIL_DRIVER}},'"${MAIL_DRIVER}"',g' -i /var/www/html/.env
   sed 's,{{MAIL_HOST}},'"${MAIL_HOST}"',g' -i /var/www/html/.env

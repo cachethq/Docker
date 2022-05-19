@@ -7,9 +7,9 @@ ARG cachet_ver
 ARG archive_url
 
 ENV cachet_ver ${cachet_ver}
-ENV archive_url ${archive_url:-https://github.com/klarrio/Cachet/archive/${cachet_ver}.tar.gz}
+ENV archive_url ${archive_url:-https://github.com/klarrio/Cachet/archive/refs/tags/${cachet_ver}.tar.gz}
 
-ENV COMPOSER_VERSION 1.9.0
+ENV COMPOSER_VERSION 2.2.7
 
 RUN apk add --no-cache --update \
     postgresql-client \
@@ -53,7 +53,7 @@ RUN apk add --no-cache --update \
     supervisor
 
 # apk add --no-cache curl~=7.79.0
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.15/main/ curl=7.79.1-r0
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.15/main/ curl=7.79.1-r0 libxml2=2.9.13-r0 libcrypto1.1=1.1.1n-r0 libssl1.1=1.1.1n-r0 libretls=3.3.3p1-r3 libxslt=1.1.35-r0
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
@@ -85,10 +85,7 @@ USER 1001
 RUN wget ${archive_url} && \
     tar xzf ${cachet_ver}.tar.gz --strip-components=1 && \
     chown -R www-data:root /var/www/html && \
-    rm -r ${cachet_ver}.tar.gz && \
-    php /bin/composer.phar global require "hirak/prestissimo:^0.3" && \
-    php /bin/composer.phar install -o && \
-    rm -rf bootstrap/cache/*
+    rm -r ${cachet_ver}.tar.gz
 
 COPY conf/php-fpm-pool.conf /etc/php7/php-fpm.d/www.conf
 COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
@@ -96,6 +93,9 @@ COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY conf/nginx-site.conf /etc/nginx/conf.d/default.conf
 COPY conf/.env.docker /var/www/html/.env
 COPY entrypoint.sh /sbin/entrypoint.sh
+
+RUN php /bin/composer.phar install --ignore-platform-reqs && \
+    rm -rf bootstrap/cache/*
 
 USER root
 RUN chmod g+rwx /var/run/nginx.pid && \
