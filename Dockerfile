@@ -54,14 +54,14 @@ RUN apk add --no-cache --update \
 
 # apk add --no-cache curl~=7.79.0
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.16/main/ \
-    curl=7.83.1-r1 \
+    curl=7.80.0-r1 \
     libxml2=2.9.14-r0 \
     libcrypto1.1=1.1.1n-r0 \
     libssl1.1=1.1.1n-r0 \
     libretls=3.5.2-r0 \
     libxslt=1.1.35-r0 \
     freetype=2.12.1-r0 \
-    libcurl=7.83.1-r1 \
+    libcurl=7.80.0-r1 \
     xz-libs=5.2.5-r1
 
 # forward request and error logs to docker log collector
