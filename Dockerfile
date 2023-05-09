@@ -54,7 +54,7 @@ RUN apk add --no-cache --update \
 
 # apk add --no-cache curl~=7.79.0
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.16/main/ \
-    curl=7.80.0-r1 \
+    curl=7.80.0-r6 \
     libxml2=2.9.14-r0 \
     libcrypto1.1=1.1.1n-r0 \
     libssl1.1=1.1.1n-r0 \
