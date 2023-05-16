@@ -62,7 +62,9 @@ RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.16/m
     libxslt=1.1.35-r0 \
     freetype=2.12.1-r0 \
     libcurl=8.0.1-r0 \
-    xz-libs=5.2.5-r1
+    xz-libs=5.2.5-r1 \
+    pcre2=10.40-r0 \
+    zlib=1.2.12-r3
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
